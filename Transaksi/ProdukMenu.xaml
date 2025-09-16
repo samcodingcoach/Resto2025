@@ -1,12 +1,80 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Resto2025.Transaksi.ProdukMenu"
+             x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False"
              Title="ProdukMenu">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid ColumnDefinitions="0.70*,0.30*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
+
+        <Frame Grid.Column="0" BackgroundColor="Transparent" Padding="10">
+
+            <Grid ColumnDefinitions="0.25*,0.25*,0.25*,0.25*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10">
+                
+                <!--MENU NAVBAR-->
+                
+                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="KONSUMEN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                </Frame>
+                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="1" Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="MODE PESANAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                </Frame>
+                <Frame Padding="10" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="2" Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="MENU PRODUK" HorizontalOptions="EndAndExpand" TextColor="White" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                </Frame>
+                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="3" Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="PEMBAYARAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                </Frame>
+                
+                <!--PRODUKLIST-->
+                <!--FRAME-->
+
+                <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+                    
+                    <!--FILTER KATEGORI MENU DAN SEARCH-->
+                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*">
+                        <!--KATEGORI MENU-->
+                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
+                            <Picker Title="Pilih Kategori" FontSize="Subtitle">
+                                <Picker.Items>
+                                    <x:String>Makanan</x:String>
+                                    <x:String>Minuman</x:String>
+                                    
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                        <!--SEARCH-->
+                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
+                            <StackLayout Orientation="Horizontal">
+                                <Entry Placeholder="Cari Menu. Ex: Nasi Goreng"></Entry>
+                                <!--simbol search-->
+                            </StackLayout>
+                        </Border>
+
+                        <!--PRODUK LIST-->
+                       
+                        
+                    </Grid>
+                    
+                </Frame>
+                
+            </Grid>
+            
+        
+        
+        </Frame>
+
+        <Frame Grid.Column="1">
+
+        </Frame>
+
+    </Grid>
+    
 </ContentPage>
