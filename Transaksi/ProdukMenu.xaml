@@ -39,7 +39,7 @@
                 <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
                     
                     <!--FILTER KATEGORI MENU DAN SEARCH-->
-                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*">
+                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10">
                         <!--KATEGORI MENU-->
                         <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
                             <Picker Title="Pilih Kategori" FontSize="Subtitle">
@@ -55,11 +55,52 @@
                             <StackLayout Orientation="Horizontal">
                                 <Entry Placeholder="Cari Menu. Ex: Nasi Goreng"></Entry>
                                 <!--simbol search-->
+                                <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
                             </StackLayout>
                         </Border>
 
                         <!--PRODUK LIST-->
-                       
+                        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                            <StackLayout>
+                                <Grid VerticalOptions="Center" HorizontalOptions="Center">
+
+                                    <Border WidthRequest="180" HeightRequest="200" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="White">
+                                        <Border.Shadow>
+                                            <Shadow Brush="Black" Offset="5,5" Radius="15" Opacity="0.1" />
+                                        </Border.Shadow>
+
+                                        <Grid RowDefinitions="*, Auto">
+
+                                            <Grid Grid.Row="0">
+                                                <Image Source="pecel.jpg" Aspect="AspectFill" />
+
+                                                <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+                                                    <HorizontalStackLayout Spacing="4">
+                                                        
+                                                        <!--icon stok-->
+                                                        <Image Source="goods.png" HeightRequest="12" VerticalOptions="Center"/>
+                                                        <Label Text="50" TextColor="White" FontSize="12" VerticalOptions="Center"/>
+                                                    </HorizontalStackLayout>
+                                                </Border>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*, Auto">
+
+                                                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                    <Label Text="Nasi Pecel Mbok..." FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" TextColor="#075E54"/>
+                                                    <Label Text="Rp 29.900" TextColor="#FF2D2D" FontAttributes="Bold" FontSize="13"/>
+                                                </VerticalStackLayout>
+
+                                                <VerticalStackLayout Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" Spacing="4">
+                                                    <Image Source="cart.png" HeightRequest="24"></Image>
+                                                    <Label Text="● ●" FontSize="10" TextColor="LightGray" HorizontalOptions="Center"/>
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </StackLayout>
+                        </Grid>
                         
                     </Grid>
                     
