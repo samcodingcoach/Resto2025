@@ -4,7 +4,8 @@ using Android.Runtime;
 
 namespace Resto2025
 {
-    [Application]
+
+    [Application(UsesCleartextTraffic = true)]
     public class MainApplication : MauiApplication
     {
         public MainApplication(IntPtr handle, JniHandleOwnership ownership)
