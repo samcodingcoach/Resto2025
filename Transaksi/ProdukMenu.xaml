@@ -56,46 +56,60 @@
                         </Border>
 
                         <!--PRODUK LIST-->
-                        <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                            <StackLayout>
-                                <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                                    <Border WidthRequest="180" HeightRequest="200" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="White">
-                                        <Border.Shadow>
-                                            <Shadow Brush="Black" Offset="5,5" Radius="15" Opacity="0.1" />
-                                        </Border.Shadow>
+                       
 
-                                        <Grid RowDefinitions="*, Auto">
+                                <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout Orientation="Vertical"
+                                             Span="5"
+                                             VerticalItemSpacing="10"
+                                             HorizontalItemSpacing="10" />
+                                    </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalOptions="Center" Padding="15">
 
-                                            <Grid Grid.Row="0">
-                                                <Image Source="pecel.jpg" Aspect="AspectFill" />
+                                        <Border WidthRequest="160" HeightRequest="200" 
+                                            StrokeShape="RoundRectangle 10" 
+                                            StrokeThickness="0" 
+                                            BackgroundColor="White">    
 
-                                                <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
-                                                    <HorizontalStackLayout Spacing="4">
-                                                        
-                                                        <!--icon stok-->
-                                                        <Image Source="goods.png" HeightRequest="12" VerticalOptions="Center"/>
-                                                        <Label Text="50" TextColor="White" FontSize="12" VerticalOptions="Center"/>
-                                                    </HorizontalStackLayout>
-                                                </Border>
+                                            <Border.Shadow>
+                                                <Shadow Brush="Black" Offset="-2,1" Radius="5" Opacity="0.1" />
+                                            </Border.Shadow>
+
+                                            <Grid RowDefinitions="*, Auto">
+                                                <Grid Grid.Row="0">
+                                                    <Image Aspect="AspectFill">
+                                                        <Image.Source>
+                                                            <UriImageSource Uri="{Binding url_gambar}" CacheValidity="30.00:00:00" />
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+                                                        <HorizontalStackLayout Spacing="4">
+                                                            <Image Source="goods.png" HeightRequest="12" VerticalOptions="Center"/>
+                                                            <Label Text="{Binding stok}" TextColor="White" FontSize="12" VerticalOptions="Center"/>
+                                                        </HorizontalStackLayout>
+                                                    </Border>
+                                                </Grid>
+                                                <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*, Auto">
+                                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                        <Label Text="{Binding nama_produk}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" TextColor="#075E54"/>
+                                                        <Label Text="{Binding new_harga_jual}" TextColor="#FF2D2D" FontAttributes="Bold" FontSize="13"/>
+                                                    </VerticalStackLayout>
+                                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" Spacing="4">
+                                                        <Image Source="cart.png" HeightRequest="24"></Image>
+                                                        <Label Text="● ●" FontSize="10" TextColor="LightGray" HorizontalOptions="Center"/>
+                                                    </VerticalStackLayout>
+                                                </Grid>
                                             </Grid>
-
-                                            <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*, Auto">
-
-                                                <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                                    <Label Text="Nasi Pecel Mbok..." FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" TextColor="#075E54"/>
-                                                    <Label Text="Rp 29.900" TextColor="#FF2D2D" FontAttributes="Bold" FontSize="13"/>
-                                                </VerticalStackLayout>
-
-                                                <VerticalStackLayout Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" Spacing="4">
-                                                    <Image Source="cart.png" HeightRequest="24"></Image>
-                                                    <Label Text="● ●" FontSize="10" TextColor="LightGray" HorizontalOptions="Center"/>
-                                                </VerticalStackLayout>
-                                            </Grid>
-                                        </Grid>
-                                    </Border>
-                                </Grid>
-                            </StackLayout>
-                        </Grid>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                            
+                        
                         
                     </Grid>
                     
