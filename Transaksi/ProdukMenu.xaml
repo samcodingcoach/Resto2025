@@ -168,7 +168,7 @@
                                 
                             </StackLayout>
                             <!--LIST ITEM DETAIL-->
-                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15" Padding="0" RowSpacing="12" VerticalOptions="Center">
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15" Padding="0" RowSpacing="12" VerticalOptions="Start">
 
                                 <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
                                     <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
@@ -234,17 +234,36 @@
 
                     </Grid>
                     <!--TOTALSUB-->
-                    <Grid Grid.Column="0"  Grid.Row="9" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Grid Grid.Column="0"  Grid.Row="9" ColumnDefinitions="*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
+                        <StackLayout Grid.Column="0">
+                            <Label Text="Subtotal" TextColor="#B3B3B3" FontFamily="FontBold" ></Label>
+                            <Label Text="Produk + Takeaway+ Admin - (Potongan + Promosi)" TextColor="#B3b3b3"></Label>
+                        </StackLayout>
 
-                        <Label Text="Subtotal" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="GUEST (NON MEMBER)" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#075E54" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
                     <!--PPN-->
+                    <Grid Grid.Column="0"  Grid.Row="10" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="tax.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="PPN / PB 10%" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#075E54" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
 
                     <!--SUBMIT CEKOUT-->
+                    <Frame Grid.Column="0" Grid.Row="11" Padding="10" BorderColor="Transparent">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                            <Switch IsToggled="True" HorizontalOptions="Start" OnColor="OrangeRed" VerticalOptions="Center" Grid.Column="0"/>
+                            <Label Text="Pembayaran Langsung" TextColor="#333333" Grid.Column="1" VerticalOptions="Center"></Label>
+                            <Button ImageSource="checkout19.png" Text="Rp 1.450.000" TextColor="White" FontFamily="FontBold" FontSize="Subtitle"  Grid.Column="2"></Button>
+                        </Grid>
+                    </Frame>
+                    
                 </Grid>
             </Frame>
         </Frame>
