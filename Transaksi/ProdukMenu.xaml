@@ -111,7 +111,7 @@
         <!--KOLOM KANAN--> 
         <Frame Grid.Column="1" Padding="0">
             <Frame BackgroundColor="#F9F9F9" Padding="20" Margin="10" BorderColor="Transparent" >
-                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
+                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
                 
                     <!--KONSUMEN-->
                     <Grid Grid.Column="0"  Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
@@ -194,8 +194,57 @@
 
                         </Grid>
                     </Frame>
-                    
-                    
+
+                    <!--SUBTOTAL-->
+                    <!--PRODUK-->
+                    <Grid Grid.Column="0"  Grid.Row="5" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="food.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Produk" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 500.000" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+
+                    <!--TAKEAWAY-->
+                    <Grid Grid.Column="0"  Grid.Row="6" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="bag_takeaway.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Takeaway" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 30.000" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--ADMIN-->
+                    <Grid Grid.Column="0"  Grid.Row="7" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="admin.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Konsumen" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--POTONGAN-->
+                    <Grid Grid.Column="0"  Grid.Row="8" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="diskon2.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Potongan" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--TOTALSUB-->
+                    <Grid Grid.Column="0"  Grid.Row="9" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+
+                        <Label Text="Subtotal" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="GUEST (NON MEMBER)" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--PPN-->
+
+                    <!--SUBMIT CEKOUT-->
                 </Grid>
             </Frame>
         </Frame>
