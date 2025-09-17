@@ -112,8 +112,23 @@
         
         </Frame>
         <!--KOLOM KANAN--> 
-        <Frame Grid.Column="1">
-            
+        <Frame Grid.Column="1" Padding="0">
+            <Frame BackgroundColor="#F9F9F9" Padding="10" Margin="10" BorderColor="Transparent" >
+                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                
+                    <!--KONSUMEN-->
+                    <Grid Grid.Column="0"  Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="customer.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Konsumen" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="GUEST (NON MEMBER)" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+
+
+                </Grid>
+            </Frame>
         </Frame>
 
     </Grid>
