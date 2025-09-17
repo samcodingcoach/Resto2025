@@ -4,7 +4,7 @@
              x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False"
              Title="ProdukMenu">
 
-    <Grid ColumnDefinitions="0.70*,0.30*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
+    <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
         <!--KOLOM KIRI-->
         <Frame Grid.Column="0" BackgroundColor="Transparent" Padding="10">
 
@@ -63,7 +63,6 @@
                         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                             <StackLayout>
                                 <Grid VerticalOptions="Center" HorizontalOptions="Center">
-
                                     <Border WidthRequest="180" HeightRequest="200" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="White">
                                         <Border.Shadow>
                                             <Shadow Brush="Black" Offset="5,5" Radius="15" Opacity="0.1" />
@@ -107,14 +106,12 @@
                 </Frame>
                 
             </Grid>
-            
-        
-        
+
         </Frame>
         <!--KOLOM KANAN--> 
         <Frame Grid.Column="1" Padding="0">
-            <Frame BackgroundColor="#F9F9F9" Padding="10" Margin="10" BorderColor="Transparent" >
-                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+            <Frame BackgroundColor="#F9F9F9" Padding="20" Margin="10" BorderColor="Transparent" >
+                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="10">
                 
                     <!--KONSUMEN-->
                     <Grid Grid.Column="0"  Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
@@ -125,8 +122,129 @@
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
+                    <!--MODE PESANAN-->
+                    <Grid Grid.Column="0"  Grid.Row="1" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="modepsanan.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Mode Pesanan" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Dine In #10" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--METODE PEMBAYARAN-->
+                    <Grid Grid.Column="0"  Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="wallet.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Metode Pembayaran" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Tunai/Transfer/QRIS" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    
+                    <!--PROMOSI-->
+                    <Grid Grid.Column="0"  Grid.Row="3" ColumnDefinitions="Auto,Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="diskon.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <!--SELECT PROMOSI-->
+                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10"  Grid.Column="1">
+                            <Picker Title="Pilih Promosi" FontSize="Medium">
+                                
+                            </Picker>
+                        </Border>
+                        <Label Text="Rp 50.000" HorizontalTextAlignment="End" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <!--<BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>-->
+
+                    </Grid>
+
+                    <!--LIST KERANJANG-->
+                    <Frame Padding="15" Grid.Column="0" Grid.Row="4" BorderColor="Transparent">
+                        <Grid ColumnDefinitions="*" RowDefinitions="Auto,*" RowSpacing="12">
+                            
+                            <StackLayout Orientation="Horizontal" Spacing="15" Grid.Row="0">
+                                <Image Source="cart_green.png" HeightRequest="16"></Image>
+                                <Label Text="KERANJANG PESANAN" FontSize="Caption" TextColor="#075E54" FontFamily="FontBold"></Label>
+                                <!--TOTAL ITEM-->
+                                <Label Text="TOTAL ITEM (100)" FontSize="Caption"  HorizontalOptions="EndAndExpand" TextColor="#b3b3b3" FontFamily="FontRegular"></Label>
+                                
+                            </StackLayout>
+                            <!--LIST ITEM DETAIL-->
+                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15" Padding="0" RowSpacing="12" VerticalOptions="Center">
+
+                                <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                    <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                                </Border>
+                                
+                                <!--DETAIL-->
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Label Text="Makanan" TextColor="LightGray" FontSize="10"/>
+                                    <Label Text="Nasi Goreng Enak Bener" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                                    <Label Text="Rp 100.000" TextColor="#075E54" FontFamily="FontBold" FontSize="11" TranslationY="-2"/>
+                                </VerticalStackLayout>
+
+                                <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="24" Source="takeaway.png">
+                                   
+                                </Image>
+
+                                <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
+                                    <Label Text="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+
+                                <Label Grid.Column="4" Text="Rp 200.000" TextColor="#075E54" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="End"/>
+                            </Grid>
+
+                        </Grid>
+                    </Frame>
+
+                    <!--SUBTOTAL-->
+                    <!--PRODUK-->
+                    <Grid Grid.Column="0"  Grid.Row="5" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="food.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Produk" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 500.000" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+
+                    <!--TAKEAWAY-->
+                    <Grid Grid.Column="0"  Grid.Row="6" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="bag_takeaway.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Takeaway" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 30.000" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--ADMIN-->
+                    <Grid Grid.Column="0"  Grid.Row="7" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="admin.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Konsumen" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--POTONGAN-->
+                    <Grid Grid.Column="0"  Grid.Row="8" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="diskon2.png" HeightRequest="24" Grid.Column="0"></Image>
+                        <Label Text="Potongan" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--TOTALSUB-->
+                    <Grid Grid.Column="0"  Grid.Row="9" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
 
+                        <Label Text="Subtotal" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="GUEST (NON MEMBER)" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
+
+                    </Grid>
+                    <!--PPN-->
+
+                    <!--SUBMIT CEKOUT-->
                 </Grid>
             </Frame>
         </Frame>
