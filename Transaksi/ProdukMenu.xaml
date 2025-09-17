@@ -5,7 +5,7 @@
              Title="ProdukMenu">
 
     <Grid ColumnDefinitions="0.70*,0.30*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
-
+        <!--KOLOM KIRI-->
         <Frame Grid.Column="0" BackgroundColor="Transparent" Padding="10">
 
             <Grid ColumnDefinitions="0.25*,0.25*,0.25*,0.25*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10">
@@ -111,9 +111,9 @@
         
         
         </Frame>
-
+        <!--KOLOM KANAN--> 
         <Frame Grid.Column="1">
-
+            
         </Frame>
 
     </Grid>
