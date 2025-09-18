@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -55,8 +56,8 @@ public partial class ProdukMenu : ContentPage
         public int id_meja { get; set; } = 0; 
         public int in_used { get; set; } = 0;
         public string nomor_meja { get; set; } = string.Empty;
-        public float pos_x { get; set; } = 0;
-        public float pos_y { get; set; } = 0;
+        public string pos_x { get; set; } = string.Empty;
+        public string pos_y { get; set; } = string.Empty;
         public Color warna { get; set; } = Color.FromRgba("075E54"); // Warna default, warna in used = #FF2D2D
     }
 
@@ -217,15 +218,32 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioTakeaway_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        RadioDine.IsChecked = false;
+
+        
+        if (!e.Value) return;
+       
         ID_MEJA = "0";
-        RadioTakeaway.IsChecked = true;
+       
+
     }
 
     private void RadioDine_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        RadioTakeaway.IsChecked = false;
-        RadioDine.IsChecked = true;
+
+        if (!e.Value) return;
+        
+        get_meja();
+    }
+
+    // Event handler saat salah satu meja di-tap
+    private void OnMejaTapped(object sender, TappedEventArgs e)
+    {
+        if (e.Parameter is list_meja mejaYangDiTap)
+        {
+            // Lakukan sesuatu dengan data meja yang di-tap
+            DisplayAlert("Info Meja", $"Anda memilih meja nomor: {mejaYangDiTap.nomor_meja}\nStatus: {(mejaYangDiTap.in_used == 1 ? "Terpakai" : "Tersedia")}", "OK");
+            ID_MEJA = mejaYangDiTap.id_meja.ToString();
+        }
     }
 
     private async void get_meja()
@@ -243,9 +261,55 @@ public partial class ProdukMenu : ContentPage
 
 
             int mejaInUsed = listMeja.Count(m => m.in_used == 1);
-            
-          
-            //TampilkanMeja(listMeja);
+
+            // ================= PENGEMBANGAN DIMULAI DI SINI =================
+
+            // 1. Bersihkan denah sebelum menambahkan meja baru (untuk refresh)
+            DenahMejaLayout.Children.Clear();
+
+            // 2. Looping setiap data meja dari API
+            foreach (var meja in listMeja)
+            {
+                // 3. Tentukan warna berdasarkan status 'in_used'
+                Color warnaMeja = meja.in_used == 1 ? Color.FromArgb("#E53935") : Color.FromArgb("#37474F"); // Merah jika dipakai, hijau tua jika tidak
+
+                // 4. Buat elemen UI untuk meja (Border + Label)
+                var labelNomor = new Label
+                {
+                    Text = meja.nomor_meja.PadLeft(2, '0'), // Format jadi "01", "02", dst.
+                    TextColor = Colors.White,
+                    FontSize = 24,
+                    FontAttributes = FontAttributes.Bold,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                var borderMeja = new Border
+                {
+                    WidthRequest = 80,
+                    HeightRequest = 80,
+                    StrokeShape = new RoundRectangle { CornerRadius = 8 },
+                    BackgroundColor = warnaMeja,
+                    Content = labelNomor
+                };
+
+                // 5. Tambahkan gesture recognizer untuk event klik/tap
+                var tapGesture = new TapGestureRecognizer();
+                tapGesture.CommandParameter = meja; // Kirim seluruh objek 'meja' saat di-tap
+                tapGesture.Tapped += OnMejaTapped;
+                borderMeja.GestureRecognizers.Add(tapGesture);
+
+                // 6. Konversi posisi X dan Y dari string ke double
+                double x = double.Parse(meja.pos_x);
+                double y = double.Parse(meja.pos_y);
+
+                // 7. Atur posisi dan ukuran elemen di AbsoluteLayout
+                AbsoluteLayout.SetLayoutBounds(borderMeja, new Rect(x, y, 60, 60));
+
+                // 8. Tambahkan elemen meja ke layout
+                DenahMejaLayout.Children.Add(borderMeja);
+            }
+            // ================= PENGEMBANGAN SELESAI =================
         }
         else
         {

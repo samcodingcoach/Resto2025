@@ -126,7 +126,7 @@
 
                         </Grid>
                          <!--MODE PESANAN-->
-                        <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModePesanan" ColumnSpacing="10" Padding="0" VerticalOptions="Start" IsVisible="False">
+                        <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModePesanan" RowDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10" Padding="0"  IsVisible="False">
                             <!-- Kolom 1 -->
                             <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="10" StrokeThickness="0.1">
                                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
@@ -136,7 +136,7 @@
                                     <Label Text="TAKEAWAY" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
 
                                     <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="True" x:Name="RadioTakeaway" CheckedChanged="RadioTakeaway_CheckedChanged" />
+                                        <RadioButton IsChecked="True" GroupName="TipePesanan"  x:Name="RadioTakeaway" CheckedChanged="RadioTakeaway_CheckedChanged" />
                                     </StackLayout>
                                 </Grid>
                             </Border>
@@ -149,9 +149,15 @@
                                     <Label Text="DINE IN" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
 
                                     <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="False" x:Name="RadioDine" CheckedChanged="RadioDine_CheckedChanged"/>
+                                        <RadioButton IsChecked="False" x:Name="RadioDine"  GroupName="TipePesanan"  CheckedChanged="RadioDine_CheckedChanged"/>
                                     </StackLayout>
                                 </Grid>
+                            </Border>
+                            
+                            <!--Daftar Meja-->
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" StrokeThickness="0.1">
+                                <AbsoluteLayout x:Name="DenahMejaLayout">
+                                </AbsoluteLayout>
                             </Border>
                         </Grid>
 
