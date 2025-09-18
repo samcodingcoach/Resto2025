@@ -40,82 +40,113 @@
                 <!--FRAME-->
 
                 <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
-                    
-                    <!--PRODUK MENU NAV TRIGGER--> <!--FILTER KATEGORI MENU DAN SEARCH-->
-                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
-                        <!--KATEGORI MENU-->
-                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
-                            <Picker Title="Pilih Kategori" FontSize="Subtitle" x:Name="Picker_Kategori" SelectedIndexChanged="Picker_Kategori_SelectedIndexChanged" >
-                                
-                            </Picker>
-                        </Border>
-                        <!--SEARCH-->
-                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
-                            <StackLayout Orientation="Horizontal">
-                                <Entry Placeholder="Cari Menu. Ex: Nasi Goreng" x:Name="T_Search"></Entry>
-                                <!--simbol search-->
-                                <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
-                            </StackLayout>
-                        </Border>
+                    <Grid RowDefinitions="*" ColumnDefinitions="*" Padding="0">
+                        <!--PRODUK MENU NAV TRIGGER-->
+                        <!--FILTER KATEGORI MENU DAN SEARCH-->
+                        <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
+                            <!--KATEGORI MENU-->
+                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
+                                <Picker Title="Pilih Kategori" FontSize="Subtitle" x:Name="Picker_Kategori" SelectedIndexChanged="Picker_Kategori_SelectedIndexChanged" >
 
-                        <!--PRODUK LIST-->
+                                </Picker>
+                            </Border>
+                            <!--SEARCH-->
+                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
+                                <StackLayout Orientation="Horizontal">
+                                    <Entry Placeholder="Cari Menu. Ex: Nasi Goreng" x:Name="T_Search"></Entry>
+                                    <!--simbol search-->
+                                    <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
+                                </StackLayout>
+                            </Border>
+
+                            <!--PRODUK LIST-->
 
 
-                        <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                            <CollectionView.ItemsLayout>
-                                <GridItemsLayout Orientation="Vertical"
+                            <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                                <CollectionView.ItemsLayout>
+                                    <GridItemsLayout Orientation="Vertical"
                                             Span="5"
                                             VerticalItemSpacing="10"
                                             HorizontalItemSpacing="10" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid HorizontalOptions="Center" Padding="15">
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid HorizontalOptions="Center" Padding="15">
 
-                                        <Border WidthRequest="160" HeightRequest="200" 
+                                            <Border WidthRequest="160" HeightRequest="200" 
                                             StrokeShape="RoundRectangle 10" 
                                             StrokeThickness="0" 
                                             BackgroundColor="White">
 
-                                            <Border.Shadow>
-                                                <Shadow Brush="Black" Offset="-2,1" Radius="5" Opacity="0.1" />
-                                            </Border.Shadow>
+                                                <Border.Shadow>
+                                                    <Shadow Brush="Black" Offset="-2,1" Radius="5" Opacity="0.1" />
+                                                </Border.Shadow>
 
-                                            <Grid RowDefinitions="*, Auto">
-                                                <Grid Grid.Row="0">
-                                                    <Image Aspect="AspectFill">
-                                                        <Image.Source>
-                                                            <UriImageSource Uri="{Binding url_gambar}" CacheValidity="30.00:00:00" />
-                                                        </Image.Source>
-                                                    </Image>
-                                                    <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
-                                                        <HorizontalStackLayout Spacing="4">
-                                                            <Image Source="goods.png" HeightRequest="12" VerticalOptions="Center"/>
-                                                            <Label Text="{Binding stok}" TextColor="White" FontSize="12" VerticalOptions="Center"/>
-                                                        </HorizontalStackLayout>
-                                                    </Border>
+                                                <Grid RowDefinitions="*, Auto">
+                                                    <Grid Grid.Row="0">
+                                                        <Image Aspect="AspectFill">
+                                                            <Image.Source>
+                                                                <UriImageSource Uri="{Binding url_gambar}" CacheValidity="30.00:00:00" />
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
+                                                            <HorizontalStackLayout Spacing="4">
+                                                                <Image Source="goods.png" HeightRequest="12" VerticalOptions="Center"/>
+                                                                <Label Text="{Binding stok}" TextColor="White" FontSize="12" VerticalOptions="Center"/>
+                                                            </HorizontalStackLayout>
+                                                        </Border>
+                                                    </Grid>
+                                                    <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*, Auto">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <Label Text="{Binding nama_produk}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" TextColor="#075E54"/>
+                                                            <Label Text="{Binding new_harga_jual}" TextColor="#FF2D2D" FontAttributes="Bold" FontSize="13"/>
+                                                        </VerticalStackLayout>
+                                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" Spacing="4">
+                                                            <Image Source="cart.png" HeightRequest="24"></Image>
+                                                            <Label Text="● ●" FontSize="10" TextColor="LightGray" HorizontalOptions="Center"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*, Auto">
-                                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                                        <Label Text="{Binding nama_produk}" FontAttributes="Bold" FontSize="14" LineBreakMode="TailTruncation" TextColor="#075E54"/>
-                                                        <Label Text="{Binding new_harga_jual}" TextColor="#FF2D2D" FontAttributes="Bold" FontSize="13"/>
-                                                    </VerticalStackLayout>
-                                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="End" HorizontalOptions="End" Spacing="4">
-                                                        <Image Source="cart.png" HeightRequest="24"></Image>
-                                                        <Label Text="● ●" FontSize="10" TextColor="LightGray" HorizontalOptions="Center"/>
-                                                    </VerticalStackLayout>
-                                                </Grid>
-                                            </Grid>
-                                        </Border>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
 
 
+
+                        </Grid>
+
+                        <Grid ColumnDefinitions="0.5*,0.5*" ColumnSpacing="10" Padding="0" VerticalOptions="Start">
+                            <!-- Kolom 1 -->
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="10" StrokeThickness="0.1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+
+                                    <Image Source="takeaway.png" HeightRequest="32" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0"></Image>
+
+                                    <Label Text="TAKEAWAY" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
+
+                                    <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
+                                        <RadioButton IsChecked="True"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                            <!-- Kolom 2 -->
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="1" Padding="10" StrokeThickness="0.1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+
+                                    <Image Source="takeaway.png" HeightRequest="32" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0"></Image>
+
+                                    <Label Text="DINE IN" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
+
+                                    <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
+                                        <RadioButton IsChecked="False"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                        </Grid>
 
                     </Grid>
-                    
                 </Frame>
                 
             </Grid>
