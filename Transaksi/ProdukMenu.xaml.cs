@@ -18,6 +18,7 @@ public partial class ProdukMenu : ContentPage
 
     private List<list_produk> _listproduk;
     private List<list_meja> listMeja = new List<list_meja>();
+    private List<list_metodepembayaran> _listmetodepembayaran = new List<list_metodepembayaran>();
 
     public ProdukMenu()
 	{
@@ -26,10 +27,8 @@ public partial class ProdukMenu : ContentPage
 
         _listproduk = new List<list_produk>();
         get_listproduk();
+        get_metode_pembayaran();
     }
-
-
-
 
     public class data_kategori()
     {
@@ -61,6 +60,51 @@ public partial class ProdukMenu : ContentPage
         public string pos_y { get; set; } = string.Empty;
         public Color warna { get; set; } = Color.FromRgba("075E54"); // Warna default, warna in used = #FF2D2D
     }
+
+    public class list_metodepembayaran
+    {
+        public string id_bayar { get; set; } = string.Empty;
+        public string kategori { get; set; } = string.Empty;
+        public string no_rek { get; set; } = string.Empty;
+        public double biaya_admin { get; set; } = 0;
+        public string keterangan { get; set; } = string.Empty;
+        public string pramusaji { get; set; } = string.Empty;
+        public string aktif { get; set; } = string.Empty;
+
+    }
+
+    private async void get_metode_pembayaran()
+    {
+        string url = App.API_HOST + "pembayaran/list_metodebayar.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            List<list_metodepembayaran> rowData = JsonConvert.DeserializeObject<List<list_metodepembayaran>>(json);
+
+            _listmetodepembayaran.Clear(); // Hapus list sebelum diisi
+
+           
+            for (int i = 0; i < rowData.Count; i++)
+            {
+
+                _listmetodepembayaran.Add(rowData[i]); 
+            }
+
+           
+            lv_metodepembayaran.ItemsSource = _listmetodepembayaran;
+
+        }
+        else
+        {
+            // Tangani error di sini, misalnya dengan alert
+        }
+
+    }
+
+
 
     private async Task get_listproduk()
     {
@@ -104,8 +148,6 @@ public partial class ProdukMenu : ContentPage
             //T_TotalVariatif.Text = $"Total {kategori}: {rowData.Count.ToString()} Produk";
         }
     }
-
-
 
     private async void get_data_kategori()
     {
@@ -174,6 +216,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = true;
         GridProduk.IsVisible = false;
+        lv_metodepembayaran.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#FFFFFF");
         NavModePesanan.BackgroundColor = Color.FromArgb("#075E54");
@@ -183,6 +226,9 @@ public partial class ProdukMenu : ContentPage
 
         LNavKonsumen.TextColor = Color.FromArgb("#333");
         NavKonsumen.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavPembayaran.TextColor = Color.FromArgb("#333");
+        NavPembayaran.BackgroundColor = Color.FromRgba("#F2F2F2");
 
     }
 
@@ -201,6 +247,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = true;
+        lv_metodepembayaran.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
         NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
@@ -210,11 +257,34 @@ public partial class ProdukMenu : ContentPage
 
         LNavKonsumen.TextColor = Color.FromArgb("#333");
         NavKonsumen.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavPembayaran.TextColor = Color.FromArgb("#333");
+        NavPembayaran.BackgroundColor = Color.FromRgba("#F2F2F2");
     }
 
-    private void Tap_Pembayaran_Tapped(object sender, TappedEventArgs e)
+    private async void Tap_Pembayaran_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
 
+        GridModePesanan.IsVisible = false;
+        GridProduk.IsVisible = false;
+        lv_metodepembayaran.IsVisible = true;
+
+        LNavModePesanan.TextColor = Color.FromArgb("#333");
+        NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavProduk.TextColor = Color.FromArgb("#333");
+        NavProduk.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavKonsumen.TextColor = Color.FromArgb("#333");
+        NavKonsumen.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavPembayaran.TextColor = Color.FromArgb("#FFFFFF");
+        NavPembayaran.BackgroundColor = Color.FromRgba("#075E54");
     }
 
     private void RadioTakeaway_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -241,7 +311,6 @@ public partial class ProdukMenu : ContentPage
         Summary_ModePesanan.Text = "Dine-In";
     }
 
-    // Event handler saat salah satu meja di-tap
     private void OnMejaTapped(object sender, TappedEventArgs e)
     {
         // Pastikan parameter dan elemen yang di-tap valid

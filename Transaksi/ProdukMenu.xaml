@@ -162,23 +162,30 @@
                         </Grid>
 
                         <!--PEMBAYARAN-->
-                        <Grid ColumnDefinitions="*" x:Name="GridMetodePembayaran" RowDefinitions="*" Padding="0"  IsVisible="True">
-                            <Border BackgroundColor="White" VerticalOptions="Start" StrokeShape="RoundRectangle 10" Grid.Column="0"  StrokeThickness="0.1">
-                                <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                       <ListView HasUnevenRows="True" x:Name="lv_metodepembayaran" SeparatorVisibility="None" SelectionMode="None" IsVisible="False">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Border Margin="0,0,0,15" BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0"  StrokeThickness="0.1">
+                                            <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" RowDefinitions="Auto">
+                                                <Image Source="{Binding kategori,StringFormat='{0}.png'}" HeightRequest="32" VerticalOptions="Center"  Grid.Column="0"></Image>
 
-                                    <Image Source="cash.png" HeightRequest="32" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0"></Image>
+                                                <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                                    <Label Text="{Binding kategori}" TextTransform="Uppercase" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                                                    <Label Text="{Binding no_rek, StringFormat='No.Rek : {0}'}" FontFamily="FontRegular" VerticalOptions="Center"></Label>
+                                                </StackLayout>
 
-                                    <StackLayout Grid.Column="1" VerticalOptions="Center">
-                                        <Label Text="Tunai" TextTransform="Uppercase" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
-                                        <Label Text="Nomor Rekening: " FontFamily="FontRegular" VerticalOptions="Center"></Label>
-                                    </StackLayout>
+                                                <StackLayout Grid.Column="2" VerticalOptions="Center">
+                                                    <RadioButton IsChecked="False" GroupName="TipePembayaran"  x:Name="RadioTipePembayaran" CheckedChanged="RadioTipePembayaran_CheckedChanged"  />
+                                                </StackLayout>
 
-                                    <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="False" GroupName="TipePembayaran"  x:Name="RadioTipePembayaran" CheckedChanged="RadioTipePembayaran_CheckedChanged"  />
-                                    </StackLayout>
-                                </Grid>
-                            </Border>
-                        </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                      
                     </Grid>
                 </Frame>
                 
