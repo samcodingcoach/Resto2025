@@ -17,6 +17,8 @@ public partial class ProdukMenu : ContentPage
     public string ID_MEJA = "0";
     public string ID_BAYAR = "1"; // Default Tunai
     public double BIAYA_ADMIN = 0;
+    
+    public string NOMORHP = string.Empty;
 
     private List<list_produk> _listproduk;
     private List<list_meja> listMeja = new List<list_meja>();
@@ -75,6 +77,59 @@ public partial class ProdukMenu : ContentPage
 
     }
 
+
+
+    public class list_konsumen
+    {
+        public string id_konsumen { get; set; } = string.Empty;
+        public string nama_konsumen { get; set; } = string.Empty;
+    }
+
+    private async void get_konsumen()
+    {
+        try
+        {
+            string url = App.API_HOST + "konsumen/search_konsumen.php?nomor=" + NOMORHP;
+            using (HttpClient client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<list_konsumen> rowData = JsonConvert.DeserializeObject<List<list_konsumen>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        list_konsumen row = rowData[0];
+                        string nama = row.nama_konsumen;
+                        ID_KONSUMEN = row.id_konsumen;
+                    }
+                    else
+                    {
+                        // Handle jumlah kosong dan grandtotal kosong
+                        await DisplayAlert("Informasi", "Konsumen dengan nomor HP tersebut tidak ditemukan.", "OK");
+                        ID_KONSUMEN = "1";
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Gagal Terhubung", $"Tidak dapat mengambil data dari server. Status: {response.StatusCode}", "OK");
+                }
+            
+            }
+        }
+
+        catch (Exception ex)
+        {
+           await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+
+
+
     private async void get_metode_pembayaran()
     {
         string url = App.API_HOST + "pembayaran/list_metodebayar.php";
@@ -105,8 +160,6 @@ public partial class ProdukMenu : ContentPage
         }
 
     }
-
-
 
     private async Task get_listproduk()
     {
