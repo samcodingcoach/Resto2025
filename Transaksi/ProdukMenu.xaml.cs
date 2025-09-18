@@ -346,4 +346,9 @@ public partial class ProdukMenu : ContentPage
             await DisplayAlert("Error", "Gagal memuat data meja", "OK");
         }
     }
+
+    private void RadioTipePembayaran_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+
+    }
 }
