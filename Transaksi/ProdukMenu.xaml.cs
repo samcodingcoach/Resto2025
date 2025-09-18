@@ -11,6 +11,7 @@ namespace Resto2025.Transaksi;
 
 public partial class ProdukMenu : ContentPage
 {
+    private Border borderMejaTerpilih;
     public string ID_KATEGORI = string.Empty;
     public string ID_KONSUMEN = "1"; // Default ID_KONSUMEN GUEST
     public string ID_MEJA = "0";
@@ -218,31 +219,60 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioTakeaway_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-
-        
+      
         if (!e.Value) return;
-       
+        DenahMejaContainer.IsVisible = false;
+        if (borderMejaTerpilih != null)
+        {
+          
+            borderMejaTerpilih.BackgroundColor = Color.FromArgb("#37474F");
+            borderMejaTerpilih = null;
+        }
         ID_MEJA = "0";
-       
-
+        Summary_ModePesanan.Text = "Takeaway";
     }
 
     private void RadioDine_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-
-        if (!e.Value) return;
         
+        if (!e.Value) return;
+        DenahMejaContainer.IsVisible = true;      
         get_meja();
+        Summary_ModePesanan.Text = "Dine-In";
     }
 
     // Event handler saat salah satu meja di-tap
     private void OnMejaTapped(object sender, TappedEventArgs e)
     {
-        if (e.Parameter is list_meja mejaYangDiTap)
+        // Pastikan parameter dan elemen yang di-tap valid
+        if (e.Parameter is list_meja mejaYangDiTap && sender is Border borderBaru)
         {
-            // Lakukan sesuatu dengan data meja yang di-tap
-            DisplayAlert("Info Meja", $"Anda memilih meja nomor: {mejaYangDiTap.nomor_meja}\nStatus: {(mejaYangDiTap.in_used == 1 ? "Terpakai" : "Tersedia")}", "OK");
+            // 1. Jika meja sudah terpakai, tampilkan pesan dan hentikan proses
+            if (mejaYangDiTap.in_used == 1)
+            {
+                DisplayAlert("Informasi", "Meja ini sudah terpakai.", "OK");
+                return;
+            }
+
+            // 2. KEMBALIKAN WARNA MEJA LAMA:
+            // Jika sebelumnya sudah ada meja yang dipilih (misal: meja 08)...
+            if (borderMejaTerpilih != null)
+            {
+                // ...kembalikan warnanya ke warna "tersedia" (abu-abu/hijau tua)
+                borderMejaTerpilih.BackgroundColor = Color.FromArgb("#37474F");
+            }
+
+            // 3. ATUR WARNA MEJA BARU:
+            // Ubah warna meja yang baru di-tap (misal: meja 09) menjadi warna "dipesan"
+            borderBaru.BackgroundColor = Color.FromArgb("#075E54");
+
+            // 4. UPDATE MEMORI:
+            // Sekarang, jadikan meja yang baru di-tap ini sebagai "meja terpilih"
+            borderMejaTerpilih = borderBaru;
+
+            // Simpan ID Meja yang baru dipilih
             ID_MEJA = mejaYangDiTap.id_meja.ToString();
+            Summary_ModePesanan.Text = $"Dine In - Meja #{mejaYangDiTap.nomor_meja.PadLeft(2, '0')}";
         }
     }
 

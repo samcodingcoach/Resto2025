@@ -155,7 +155,7 @@
                             </Border>
                             
                             <!--Daftar Meja-->
-                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" StrokeThickness="0.1">
+                            <Border BackgroundColor="White" x:Name="DenahMejaContainer"  StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" StrokeThickness="0.1">
                                 <AbsoluteLayout x:Name="DenahMejaLayout">
                                 </AbsoluteLayout>
                             </Border>
@@ -186,7 +186,7 @@
 
                         <Image Source="modepsanan.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Mode Pesanan" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="Dine In #10" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Takeaway" x:Name="Summary_ModePesanan" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
