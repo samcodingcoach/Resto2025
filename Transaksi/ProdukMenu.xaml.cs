@@ -15,6 +15,8 @@ public partial class ProdukMenu : ContentPage
     public string ID_KATEGORI = string.Empty;
     public string ID_KONSUMEN = "1"; // Default ID_KONSUMEN GUEST
     public string ID_MEJA = "0";
+    public string ID_BAYAR = "1"; // Default Tunai
+    public double BIAYA_ADMIN = 0;
 
     private List<list_produk> _listproduk;
     private List<list_meja> listMeja = new List<list_meja>();
@@ -418,6 +420,29 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioTipePembayaran_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
+        if (e.Value == false)
+        {
+            return;
+        }
 
+        var radioButton = sender as RadioButton;
+        if (radioButton == null)
+        {
+            return;
+        }
+
+        
+        var selectedItem = radioButton.BindingContext as list_metodepembayaran;
+        if (selectedItem == null)
+        {
+            return;
+        }
+       
+        ID_BAYAR = selectedItem.id_bayar;
+        string kategori = selectedItem.kategori;
+        BIAYA_ADMIN = selectedItem.biaya_admin;
+
+        Summary_MetodeBayar.Text = kategori;
+        Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN.ToString("N0")}"; 
     }
 }

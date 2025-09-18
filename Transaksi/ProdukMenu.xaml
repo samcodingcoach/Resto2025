@@ -220,7 +220,7 @@
 
                         <Image Source="wallet.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Metode Pembayaran" TextColor="#B3B3B3" FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="Tunai/Transfer/QRIS" LineBreakMode="TailTruncation" FontSize="Caption" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Tunai" x:Name="Summary_MetodeBayar" LineBreakMode="TailTruncation" FontSize="Caption" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
@@ -300,11 +300,12 @@
 
                     </Grid>
                     <!--ADMIN-->
+                    
                     <Grid Grid.Column="0"  Grid.Row="7" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
                         <Image Source="admin.png" HeightRequest="14" Grid.Column="0"></Image>
-                        <Label Text="Konsumen" TextColor="#B3B3B3" FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="Rp 0" LineBreakMode="TailTruncation" FontSize="Caption" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Admin" TextColor="#B3B3B3" FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="Rp 0" x:Name="Summary_BiayaAdmin" LineBreakMode="TailTruncation" FontSize="Caption" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
