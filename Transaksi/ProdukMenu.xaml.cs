@@ -153,4 +153,19 @@ public partial class ProdukMenu : ContentPage
     {
 
     }
+
+    private void Tap_Konsumen_Tapped(object sender, TappedEventArgs e)
+    {
+
+    }
+
+    private void Tap_Produk_Tapped(object sender, TappedEventArgs e)
+    {
+
+    }
+
+    private void Tap_Pembayaran_Tapped(object sender, TappedEventArgs e)
+    {
+
+    }
 }

@@ -12,7 +12,10 @@
                 
                 <!--MENU NAVBAR-->
                 
-                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
+                <Frame Padding="10" x:Name="NavKonsumen" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tap_Konsumen" Tapped="Tap_Konsumen_Tapped"/>
+                    </Frame.GestureRecognizers>
                     <StackLayout>
                         <Label Text="KONSUMEN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
@@ -25,12 +28,18 @@
                         <Label Text="MODE PESANAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
-                <Frame Padding="10" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="2" Grid.Row="0">
+                <Frame Padding="10" x:Name="NavProduk" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="2" Grid.Row="0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tap_Produk" Tapped="Tap_Produk_Tapped"/>
+                    </Frame.GestureRecognizers>
                     <StackLayout>
                         <Label Text="MENU PRODUK" HorizontalOptions="EndAndExpand" TextColor="White" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
-                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="3" Grid.Row="0">
+                <Frame Padding="10" x:Name="NavPembayaran" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="3" Grid.Row="0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tap_Pembayaran" Tapped="Tap_Pembayaran_Tapped"/>
+                    </Frame.GestureRecognizers>
                     <StackLayout>
                         <Label Text="PEMBAYARAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
