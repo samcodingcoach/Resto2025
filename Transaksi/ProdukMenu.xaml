@@ -84,13 +84,16 @@
                                     <Label Text="Nomor Handphone" TextColor="#333" FontFamily="FontBold"></Label>
                                     <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
                                         <StackLayout Orientation="Horizontal">
-                                            
-                                            <Entry Placeholder="Nomor handphone member: 08xx" MaxLength="15" x:Name="T_SearchNomor" Keyboard="Telephone" TextChanged="T_SearchNomor_TextChanged"></Entry>
+                                            <Entry Completed="T_SearchNomor_Completed" Placeholder="Nomor handphone member: 08xx" MaxLength="15" x:Name="T_SearchNomor" Keyboard="Telephone" TextChanged="T_SearchNomor_TextChanged"></Entry>
                                             <!--simbol search-->
                                             <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
                                         </StackLayout>
                                     </Border>
 
+                                    <HorizontalStackLayout VerticalOptions="Center" Spacing="10" x:Name="InfoSearch" IsVisible="False">
+                                        <Image Source="check_green.png" HeightRequest="15" x:Name="image_info"></Image>
+                                        <Label Text="konsumen berhasil ditemukan." FontSize="Caption" x:Name="text_info"></Label>
+                                    </HorizontalStackLayout>
                                 </StackLayout>
                             </Border>
                         </Grid>
@@ -199,8 +202,17 @@
 
                             <!--Daftar Meja-->
                             <Border BackgroundColor="White" x:Name="DenahMejaContainer"  StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="10" StrokeThickness="0.1">
-                                <AbsoluteLayout x:Name="DenahMejaLayout">
-                                </AbsoluteLayout>
+                                <ScrollView Orientation="Both">
+
+                                    <AbsoluteLayout x:Name="DenahMejaLayout">
+
+                                        <AbsoluteLayout.GestureRecognizers>
+                                            <PinchGestureRecognizer PinchUpdated="OnPinchUpdated" />
+                                        </AbsoluteLayout.GestureRecognizers>
+
+                                    </AbsoluteLayout>
+
+                                </ScrollView>
                             </Border>
                         </Grid>
 

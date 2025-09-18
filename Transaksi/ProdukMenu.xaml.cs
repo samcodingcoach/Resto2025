@@ -12,6 +12,9 @@ namespace Resto2025.Transaksi;
 public partial class ProdukMenu : ContentPage
 {
     private Border borderMejaTerpilih;
+    private double currentScale = 1;
+    private double startScale = 1;
+
     public string ID_KATEGORI = string.Empty;
     public string ID_KONSUMEN = "1"; // Default ID_KONSUMEN GUEST
     public string ID_MEJA = "0";
@@ -105,13 +108,21 @@ public partial class ProdukMenu : ContentPage
                         list_konsumen row = rowData[0];
                         string nama = row.nama_konsumen;
                         ID_KONSUMEN = row.id_konsumen;
+                        
+
+                        
+                        image_info.Source = ImageSource.FromFile("check_green.png");
+                        text_info.Text = $"Konsumen Ditemukan: {nama}";
+
                     }
                     else
                     {
                         // Handle jumlah kosong dan grandtotal kosong
-                        await DisplayAlert("Informasi", "Konsumen dengan nomor HP tersebut tidak ditemukan.", "OK");
+                        image_info.Source = ImageSource.FromFile("not_found.png");
+                        text_info.Text = $"Konsumen tidak ditemuakan";
                         ID_KONSUMEN = "1";
                     }
+                    InfoSearch.IsVisible = true;
                 }
                 else
                 {
@@ -397,6 +408,26 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
+    private void OnPinchUpdated(object sender, PinchGestureUpdatedEventArgs e)
+    {
+        if (e.Status == GestureStatus.Started)
+        {
+            // Simpan skala saat ini sebagai titik awal
+            startScale = DenahMejaLayout.Scale;
+        }
+        if (e.Status == GestureStatus.Running)
+        {
+            // Hitung skala baru
+            currentScale += (e.Scale - 1) * startScale;
+            // Batasi agar tidak terlalu kecil atau terlalu besar
+            currentScale = Math.Max(0.5, currentScale); // Minimal zoom 50%
+            currentScale = Math.Min(3, currentScale);   // Maksimal zoom 300%
+
+            // Terapkan skala baru ke AbsoluteLayout
+            DenahMejaLayout.Scale = currentScale;
+        }
+    }
+
     private async void get_meja()
     {
         string url = App.API_HOST + "meja/list_meja.php";
@@ -406,61 +437,81 @@ public partial class ProdukMenu : ContentPage
         if (response.IsSuccessStatusCode)
         {
             string json = await response.Content.ReadAsStringAsync();
-            listMeja = JsonConvert.DeserializeObject<List<list_meja>>(json);
+            var listMeja = JsonConvert.DeserializeObject<List<list_meja>>(json);
 
-            int totalMeja = listMeja.Count;
-
-
-            int mejaInUsed = listMeja.Count(m => m.in_used == 1);
-
-            // ================= PENGEMBANGAN DIMULAI DI SINI =================
-
-            // 1. Bersihkan denah sebelum menambahkan meja baru (untuk refresh)
-            DenahMejaLayout.Children.Clear();
-
-            // 2. Looping setiap data meja dari API
-            foreach (var meja in listMeja)
+            // PENAMBAHAN 1: Handle jika tidak ada data meja dari API
+            if (listMeja == null || !listMeja.Any())
             {
-                // 3. Tentukan warna berdasarkan status 'in_used'
-                Color warnaMeja = meja.in_used == 1 ? Color.FromArgb("#E53935") : Color.FromArgb("#37474F"); // Merah jika dipakai, hijau tua jika tidak
-
-                // 4. Buat elemen UI untuk meja (Border + Label)
-                var labelNomor = new Label
-                {
-                    Text = meja.nomor_meja.PadLeft(2, '0'), // Format jadi "01", "02", dst.
-                    TextColor = Colors.White,
-                    FontSize = 24,
-                    FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center,
-                    VerticalOptions = LayoutOptions.Center
-                };
-
-                var borderMeja = new Border
-                {
-                    WidthRequest = 80,
-                    HeightRequest = 80,
-                    StrokeShape = new RoundRectangle { CornerRadius = 8 },
-                    BackgroundColor = warnaMeja,
-                    Content = labelNomor
-                };
-
-                // 5. Tambahkan gesture recognizer untuk event klik/tap
-                var tapGesture = new TapGestureRecognizer();
-                tapGesture.CommandParameter = meja; // Kirim seluruh objek 'meja' saat di-tap
-                tapGesture.Tapped += OnMejaTapped;
-                borderMeja.GestureRecognizers.Add(tapGesture);
-
-                // 6. Konversi posisi X dan Y dari string ke double
-                double x = double.Parse(meja.pos_x);
-                double y = double.Parse(meja.pos_y);
-
-                // 7. Atur posisi dan ukuran elemen di AbsoluteLayout
-                AbsoluteLayout.SetLayoutBounds(borderMeja, new Rect(x, y, 60, 60));
-
-                // 8. Tambahkan elemen meja ke layout
-                DenahMejaLayout.Children.Add(borderMeja);
+                DenahMejaLayout.Children.Clear(); // Bersihkan jika ada sisa
+                await DisplayAlert("Informasi", "Tidak ada data meja yang tersedia.", "OK");
+                return;
             }
-            // ================= PENGEMBANGAN SELESAI =================
+
+            // PENAMBAHAN 2: Lakukan semua pembaruan UI di Main Thread untuk keamanan
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                // 1. Bersihkan denah dan reset properti layout sebelum menambahkan yang baru
+                DenahMejaLayout.Children.Clear();
+                DenahMejaLayout.Scale = 1; // Reset zoom ke posisi normal
+                currentScale = 1; // Reset variabel zoom
+                startScale = 1;
+
+                // Variabel untuk menghitung ukuran total denah yang dibutuhkan
+                double maxPosX = 0;
+                double maxPosY = 0;
+
+                // 2. Looping setiap data meja dari API
+                foreach (var meja in listMeja)
+                {
+                    // 3. Tentukan warna berdasarkan status 'in_used'
+                    // Pastikan membandingkan dengan string "1", bukan integer 1
+                    Color warnaMeja = meja.in_used == 1 ? Color.FromArgb("#E53935") : Color.FromArgb("#37474F");
+
+                    // 4. Buat elemen UI untuk meja (Border + Label)
+                    var labelNomor = new Label
+                    {
+                        Text = meja.nomor_meja.PadLeft(2, '0'),
+                        TextColor = Colors.White,
+                        FontSize = 24,
+                        FontAttributes = FontAttributes.Bold,
+                        HorizontalOptions = LayoutOptions.Center,
+                        VerticalOptions = LayoutOptions.Center
+                    };
+
+                    var borderMeja = new Border
+                    {
+                        WidthRequest = 60,
+                        HeightRequest = 60,
+                        StrokeShape = new RoundRectangle { CornerRadius = 8 },
+                        BackgroundColor = warnaMeja,
+                        Content = labelNomor
+                    };
+
+                    // 5. Tambahkan gesture recognizer untuk event klik/tap
+                    var tapGesture = new TapGestureRecognizer();
+                    tapGesture.CommandParameter = meja;
+                    tapGesture.Tapped += OnMejaTapped;
+                    borderMeja.GestureRecognizers.Add(tapGesture);
+
+                    // 6. Konversi posisi X dan Y dari string ke double
+                    double x = double.Parse(meja.pos_x);
+                    double y = double.Parse(meja.pos_y);
+
+                    // 7. Atur posisi dan ukuran elemen di AbsoluteLayout
+                    AbsoluteLayout.SetLayoutBounds(borderMeja, new Rect(x, y, 60, 60));
+
+                    // 8. Tambahkan elemen meja ke layout
+                    DenahMejaLayout.Children.Add(borderMeja);
+
+                    // Perbarui posisi maksimum untuk kalkulasi ukuran canvas
+                    if (x + 60 > maxPosX) maxPosX = x + 60;
+                    if (y + 60 > maxPosY) maxPosY = y + 60;
+                }
+
+                // SETELAH LOOP: Atur ukuran AbsoluteLayout agar ScrollView berfungsi
+                DenahMejaLayout.WidthRequest = maxPosX + 20; // +20 untuk padding ekstra
+                DenahMejaLayout.HeightRequest = maxPosY + 20;
+            });
         }
         else
         {
@@ -537,5 +588,25 @@ public partial class ProdukMenu : ContentPage
 
         // 5. Daftarkan kembali event handler
         entry.TextChanged += T_SearchNomor_TextChanged;
+    }
+
+    private async void T_SearchNomor_Completed(object sender, EventArgs e)
+    {
+        var entry = (Entry)sender;
+        string input = entry.Text ?? "";
+
+        // Hilangkan karakter '-'
+        string nomor = input.Replace("-", "");
+
+        // Validasi: harus diawali '08' dan minimal 11 angka
+        if (!nomor.StartsWith("08") || nomor.Length < 11)
+        {
+            await DisplayAlert("Validasi Nomor HP", "Nomor HP harus diawali '08' dan minimal 11 angka.", "OK");
+            entry.Focus();
+            return;
+        }
+
+        NOMORHP = nomor;
+        get_konsumen();
     }
 }
