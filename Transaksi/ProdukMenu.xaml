@@ -51,6 +51,49 @@
                 <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
                     <Grid RowDefinitions="*" ColumnDefinitions="*" Padding="0">
                         <!--PRODUK MENU NAV TRIGGER-->
+                        <!--KONSUMEN-->
+                        <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModeKonsumen" RowDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10" Padding="0"  IsVisible="True">
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="10" StrokeThickness="0.1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+
+                                    <Image Source="guest.png" HeightRequest="32" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0"></Image>
+
+                                    <Label Text="GUEST" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
+
+                                    <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
+                                        <RadioButton IsChecked="False" GroupName="TipeKonsumen"  x:Name="RadioGuest" CheckedChanged="RadioGuest_CheckedChanged" />
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+
+                            <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="1" Padding="10" StrokeThickness="0.1">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+
+                                    <Image Source="member.png" HeightRequest="32" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="0"></Image>
+
+                                    <Label Text="MEMBER" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
+
+                                    <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
+                                        <RadioButton IsChecked="False" x:Name="RadioMember"  GroupName="TipeKonsumen"  CheckedChanged="RadioMember_CheckedChanged"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                            <!--SEARCH KONSUMEN-->
+                            <Border BackgroundColor="White" x:Name="FormSearchKonsumen"  StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="15" StrokeThickness="0.1">
+                                <StackLayout Spacing="7">
+                                    <Label Text="Nomor Handphone" TextColor="#333" FontFamily="FontBold"></Label>
+                                    <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
+                                        <StackLayout Orientation="Horizontal">
+                                            
+                                            <Entry Placeholder="Nomor handphone member: 08xx" MaxLength="15" x:Name="T_SearchNomor" Keyboard="Telephone" TextChanged="T_SearchNomor_TextChanged"></Entry>
+                                            <!--simbol search-->
+                                            <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
+                                        </StackLayout>
+                                    </Border>
+
+                                </StackLayout>
+                            </Border>
+                        </Grid>
                         <!--FILTER KATEGORI MENU DAN SEARCH-->
                         <Grid ColumnDefinitions="0.20*,0.80*" x:Name="GridProduk" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
                             <!--KATEGORI MENU-->

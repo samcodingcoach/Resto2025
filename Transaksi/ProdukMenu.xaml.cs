@@ -127,9 +127,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-
-
-
     private async void get_metode_pembayaran()
     {
         string url = App.API_HOST + "pembayaran/list_metodebayar.php";
@@ -497,5 +494,48 @@ public partial class ProdukMenu : ContentPage
 
         Summary_MetodeBayar.Text = kategori;
         Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN.ToString("N0")}"; 
+    }
+
+    private void RadioGuest_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+
+    }
+
+    private void RadioMember_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+
+    }
+
+    private void T_SearchNomor_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        // Ambil Entry yang sedang digunakan
+        var entry = (Entry)sender;
+        var text = e.NewTextValue ?? "";
+
+        // 1. Mencegah infinite loop saat kita mengubah teks secara programatik
+        entry.TextChanged -= T_SearchNomor_TextChanged;
+
+        // 2. Hapus semua karakter non-digit (seperti tanda '-')
+        string digitsOnly = new string(text.Where(char.IsDigit).ToArray());
+
+        // 3. Terapkan format XXXX-XXXX-XXXX
+        string formattedText = digitsOnly;
+        if (digitsOnly.Length > 8)
+        {
+            // Format menjadi 0812-3456-7890
+            formattedText = $"{digitsOnly.Substring(0, 4)}-{digitsOnly.Substring(4, 4)}-{digitsOnly.Substring(8)}";
+        }
+        else if (digitsOnly.Length > 4)
+        {
+            // Format menjadi 0812-3456
+            formattedText = $"{digitsOnly.Substring(0, 4)}-{digitsOnly.Substring(4)}";
+        }
+
+        // 4. Update teks di Entry dan posisikan kursor di akhir
+        entry.Text = formattedText;
+        entry.CursorPosition = formattedText.Length;
+
+        // 5. Daftarkan kembali event handler
+        entry.TextChanged += T_SearchNomor_TextChanged;
     }
 }
