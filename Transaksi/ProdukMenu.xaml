@@ -11,13 +11,13 @@
             <Grid ColumnDefinitions="0.25*,0.25*,0.25*,0.25*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10">
                 
                 <!--MENU NAVBAR-->
-                
-                <Frame Padding="10" x:Name="NavKonsumen" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
+
+                <Frame Padding="10" x:Name="NavKonsumen" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer x:Name="Tap_Konsumen" Tapped="Tap_Konsumen_Tapped"/>
                     </Frame.GestureRecognizers>
                     <StackLayout>
-                        <Label Text="KONSUMEN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                        <Label Text="KONSUMEN" x:Name="LNavKonsumen"  TextColor="White" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
                 <Frame Padding="10" x:Name="NavModePesanan" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="1" Grid.Row="0">
@@ -25,15 +25,15 @@
                         <TapGestureRecognizer x:Name="Tap_ModePesanan" Tapped="Tap_ModePesanan_Tapped"/>
                     </Frame.GestureRecognizers>
                     <StackLayout>
-                        <Label Text="MODE PESANAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                        <Label Text="MODE PESANAN" x:Name="LNavModePesanan" TextColor="#333" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
-                <Frame Padding="10" x:Name="NavProduk" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="2" Grid.Row="0">
+                <Frame Padding="10" x:Name="NavProduk" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="2" Grid.Row="0">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer x:Name="Tap_Produk" Tapped="Tap_Produk_Tapped"/>
                     </Frame.GestureRecognizers>
                     <StackLayout>
-                        <Label Text="MENU PRODUK" HorizontalOptions="EndAndExpand" TextColor="White" FontFamily="FontBold"></Label>
+                        <Label Text="MENU PRODUK" x:Name="LNavProduk" HorizontalOptions="EndAndExpand" TextColor="#333" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
                 <Frame Padding="10" x:Name="NavPembayaran" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="3" Grid.Row="0">
@@ -41,7 +41,7 @@
                         <TapGestureRecognizer x:Name="Tap_Pembayaran" Tapped="Tap_Pembayaran_Tapped"/>
                     </Frame.GestureRecognizers>
                     <StackLayout>
-                        <Label Text="PEMBAYARAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
+                        <Label Text="PEMBAYARAN" x:Name="LNavPembayaran" TextColor="#333" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
                 
@@ -52,7 +52,7 @@
                     <Grid RowDefinitions="*" ColumnDefinitions="*" Padding="0">
                         <!--PRODUK MENU NAV TRIGGER-->
                         <!--FILTER KATEGORI MENU DAN SEARCH-->
-                        <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
+                        <Grid ColumnDefinitions="0.20*,0.80*" x:Name="GridProduk" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
                             <!--KATEGORI MENU-->
                             <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
                                 <Picker Title="Pilih Kategori" FontSize="Subtitle" x:Name="Picker_Kategori" SelectedIndexChanged="Picker_Kategori_SelectedIndexChanged" >
@@ -125,8 +125,8 @@
 
 
                         </Grid>
-
-                        <Grid ColumnDefinitions="0.5*,0.5*" ColumnSpacing="10" Padding="0" VerticalOptions="Start">
+                         <!--MODE PESANAN-->
+                        <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModePesanan" ColumnSpacing="10" Padding="0" VerticalOptions="Start" IsVisible="False">
                             <!-- Kolom 1 -->
                             <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="10" StrokeThickness="0.1">
                                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
@@ -136,7 +136,7 @@
                                     <Label Text="TAKEAWAY" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
 
                                     <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="True"/>
+                                        <RadioButton IsChecked="True" x:Name="RadioTakeaway" CheckedChanged="RadioTakeaway_CheckedChanged" />
                                     </StackLayout>
                                 </Grid>
                             </Border>
@@ -149,7 +149,7 @@
                                     <Label Text="DINE IN" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
 
                                     <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="False"/>
+                                        <RadioButton IsChecked="False" x:Name="RadioDine" CheckedChanged="RadioDine_CheckedChanged"/>
                                     </StackLayout>
                                 </Grid>
                             </Border>

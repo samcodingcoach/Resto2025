@@ -15,6 +15,8 @@ public partial class ProdukMenu : ContentPage
     public string ID_MEJA = "0";
 
     private List<list_produk> _listproduk;
+    private List<list_meja> listMeja = new List<list_meja>();
+
     public ProdukMenu()
 	{
 		InitializeComponent();
@@ -46,6 +48,16 @@ public partial class ProdukMenu : ContentPage
         public string new_harga_jual { get; set; } = string.Empty;
         public double opacity_produk { get; set; } = 1;
         public bool enabled_produk { get; set; } = true;
+    }
+
+    public class list_meja
+    {
+        public int id_meja { get; set; } = 0; 
+        public int in_used { get; set; } = 0;
+        public string nomor_meja { get; set; } = string.Empty;
+        public float pos_x { get; set; } = 0;
+        public float pos_y { get; set; } = 0;
+        public Color warna { get; set; } = Color.FromRgba("075E54"); // Warna default, warna in used = #FF2D2D
     }
 
     private async Task get_listproduk()
@@ -149,8 +161,26 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private void Tap_ModePesanan_Tapped(object sender, TappedEventArgs e)
+    private async void Tap_ModePesanan_Tapped(object sender, TappedEventArgs e)
     {
+
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        GridModePesanan.IsVisible = true;
+        GridProduk.IsVisible = false;
+
+        LNavModePesanan.TextColor = Color.FromArgb("#FFFFFF");
+        NavModePesanan.BackgroundColor = Color.FromArgb("#075E54");
+
+        LNavProduk.TextColor = Color.FromArgb("#333");
+        NavProduk.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavKonsumen.TextColor = Color.FromArgb("#333");
+        NavKonsumen.BackgroundColor = Color.FromArgb("#F2F2F2");
 
     }
 
@@ -159,13 +189,67 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-    private void Tap_Produk_Tapped(object sender, TappedEventArgs e)
+    private async void Tap_Produk_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
 
+        GridModePesanan.IsVisible = false;
+        GridProduk.IsVisible = true;
+
+        LNavModePesanan.TextColor = Color.FromArgb("#333");
+        NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavProduk.TextColor = Color.FromArgb("#FFFFFF");
+        NavProduk.BackgroundColor = Color.FromArgb("#075E54");
+
+        LNavKonsumen.TextColor = Color.FromArgb("#333");
+        NavKonsumen.BackgroundColor = Color.FromArgb("#F2F2F2");
     }
 
     private void Tap_Pembayaran_Tapped(object sender, TappedEventArgs e)
     {
 
+    }
+
+    private void RadioTakeaway_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        RadioDine.IsChecked = false;
+        ID_MEJA = "0";
+        RadioTakeaway.IsChecked = true;
+    }
+
+    private void RadioDine_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        RadioTakeaway.IsChecked = false;
+        RadioDine.IsChecked = true;
+    }
+
+    private async void get_meja()
+    {
+        string url = App.API_HOST + "meja/list_meja.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            listMeja = JsonConvert.DeserializeObject<List<list_meja>>(json);
+
+            int totalMeja = listMeja.Count;
+
+
+            int mejaInUsed = listMeja.Count(m => m.in_used == 1);
+            
+          
+            //TampilkanMeja(listMeja);
+        }
+        else
+        {
+            await DisplayAlert("Error", "Gagal memuat data meja", "OK");
+        }
     }
 }
