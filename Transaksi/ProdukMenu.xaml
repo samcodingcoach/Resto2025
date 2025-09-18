@@ -17,7 +17,10 @@
                         <Label Text="KONSUMEN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
                 </Frame>
-                <Frame Padding="10" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="1" Grid.Row="0">
+                <Frame Padding="10" x:Name="NavModePesanan" BackgroundColor="#F2F2F2" BorderColor="Transparent" Grid.Column="1" Grid.Row="0">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tap_ModePesanan" Tapped="Tap_ModePesanan_Tapped"/>
+                    </Frame.GestureRecognizers>
                     <StackLayout>
                         <Label Text="MODE PESANAN" HorizontalOptions="EndAndExpand" FontFamily="FontBold"></Label>
                     </StackLayout>
@@ -38,8 +41,8 @@
 
                 <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
                     
-                    <!--FILTER KATEGORI MENU DAN SEARCH-->
-                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10">
+                    <!--PRODUK MENU NAV TRIGGER--> <!--FILTER KATEGORI MENU DAN SEARCH-->
+                    <Grid ColumnDefinitions="0.20*,0.80*" ColumnSpacing="10" Padding="0" RowDefinitions="Auto,*" RowSpacing="10" IsVisible="False">
                         <!--KATEGORI MENU-->
                         <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="0">
                             <Picker Title="Pilih Kategori" FontSize="Subtitle" x:Name="Picker_Kategori" SelectedIndexChanged="Picker_Kategori_SelectedIndexChanged" >
@@ -49,22 +52,22 @@
                         <!--SEARCH-->
                         <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
                             <StackLayout Orientation="Horizontal">
-                                <Entry Placeholder="Cari Menu. Ex: Nasi Goreng"></Entry>
+                                <Entry Placeholder="Cari Menu. Ex: Nasi Goreng" x:Name="T_Search"></Entry>
                                 <!--simbol search-->
                                 <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
                             </StackLayout>
                         </Border>
 
                         <!--PRODUK LIST-->
-                       
 
-                                <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
-                                    <CollectionView.ItemsLayout>
-                                        <GridItemsLayout Orientation="Vertical"
-                                             Span="5"
-                                             VerticalItemSpacing="10"
-                                             HorizontalItemSpacing="10" />
-                                    </CollectionView.ItemsLayout>
+
+                        <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical"
+                                            Span="5"
+                                            VerticalItemSpacing="10"
+                                            HorizontalItemSpacing="10" />
+                            </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid HorizontalOptions="Center" Padding="15">
@@ -72,7 +75,7 @@
                                         <Border WidthRequest="160" HeightRequest="200" 
                                             StrokeShape="RoundRectangle 10" 
                                             StrokeThickness="0" 
-                                            BackgroundColor="White">    
+                                            BackgroundColor="White">
 
                                             <Border.Shadow>
                                                 <Shadow Brush="Black" Offset="-2,1" Radius="5" Opacity="0.1" />
@@ -108,9 +111,9 @@
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-                            
-                        
-                        
+
+
+
                     </Grid>
                     
                 </Frame>

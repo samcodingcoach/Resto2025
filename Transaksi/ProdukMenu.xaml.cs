@@ -12,6 +12,7 @@ public partial class ProdukMenu : ContentPage
 {
     public string ID_KATEGORI = string.Empty;
     public string ID_KONSUMEN = "1"; // Default ID_KONSUMEN GUEST
+    public string ID_MEJA = "0";
 
     private List<list_produk> _listproduk;
     public ProdukMenu()
@@ -88,9 +89,6 @@ public partial class ProdukMenu : ContentPage
 
             //T_TotalVariatif.Text = $"Total {kategori}: {rowData.Count.ToString()} Produk";
         }
-
-
-
     }
 
 
@@ -151,7 +149,8 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
+    private void Tap_ModePesanan_Tapped(object sender, TappedEventArgs e)
+    {
 
-
-   
+    }
 }
