@@ -20,7 +20,8 @@ public partial class ProdukMenu : ContentPage
     public string ID_MEJA = "0";
     public string ID_BAYAR = "1"; // Default Tunai
     public double BIAYA_ADMIN = 0;
-    
+    public double PERSENTASE_PPN = 0;
+
     public string NOMORHP = string.Empty;
 
     private List<list_produk> _listproduk;
@@ -35,6 +36,7 @@ public partial class ProdukMenu : ContentPage
         _listproduk = new List<list_produk>();
         get_listproduk();
         get_metode_pembayaran();
+        get_ppn();
     }
 
     public class data_kategori()
@@ -80,13 +82,66 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-
-
     public class list_konsumen
     {
         public string id_konsumen { get; set; } = string.Empty;
         public string nama_konsumen { get; set; } = string.Empty;
     }
+
+
+
+    public class list_ppn
+    {
+        public string id_ppn { get; set; } = string.Empty;
+        public double nilai_ppn { get; set; } = 0;
+        public string keterangan { get; set; } = string.Empty;
+
+    }
+
+
+   
+    private async void get_ppn()
+    {
+        try
+        {
+            string url = App.API_HOST + "ppn/ppn_aktif.php";
+            using (HttpClient client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<list_ppn> rowData = JsonConvert.DeserializeObject<List<list_ppn>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        list_ppn row = rowData[0];
+                        PPNText.Text = row.keterangan;
+                        PERSENTASE_PPN = row.nilai_ppn;
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Gagal Terhubung", $"Tidak dapat mengambil data dari server. Status: {response.StatusCode}", "OK");
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
+
+
+
 
     private async void get_konsumen()
     {

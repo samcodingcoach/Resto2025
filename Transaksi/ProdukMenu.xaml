@@ -426,7 +426,7 @@
                     <Grid Grid.Column="0"  Grid.Row="10" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto" RowSpacing="5">
 
                         <Image Source="tax.png" HeightRequest="14" Grid.Column="0"></Image>
-                        <Label Text="PPN / PB 10%" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
+                        <Label Text="" x:Name="PPNText" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
                         <Label Text="Rp 0" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#075E54" FontFamily="FontBold" Grid.Column="2"></Label>
                        
                         
