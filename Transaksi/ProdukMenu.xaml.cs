@@ -106,13 +106,13 @@ public partial class ProdukMenu : ContentPage
                     if (rowData != null && rowData.Count > 0)
                     {
                         list_konsumen row = rowData[0];
-                        string nama = row.nama_konsumen;
+                        SummaryNamaKonsumen.Text = row.nama_konsumen;
                         ID_KONSUMEN = row.id_konsumen;
                         
 
                         
                         image_info.Source = ImageSource.FromFile("check_green.png");
-                        text_info.Text = $"Konsumen Ditemukan: {nama}";
+                        text_info.Text = $"Konsumen Ditemukan: {row.nama_konsumen}";
 
                     }
                     else
@@ -231,6 +231,53 @@ public partial class ProdukMenu : ContentPage
             await DisplayAlert("Error", "Gagal mendapatkan data kategori", "OK");
         }
     }
+
+    //save new konsumen
+
+
+    private async void simpan_konsumen()
+    {
+        //staffID sementara nanti ganti sama temp login
+        
+        var data = new Dictionary<string, string>
+                {
+                    { "nama_konsumen", ENamaKonsumen.Text },
+                    { "no_hp", ENomorHp.Text.Replace("-","") },
+                    { "email", EEmail.Text },
+                    { "alamat", EAlamat.Text }
+                };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "konsumen/new_konsumen.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject["status"] == "duplikat")
+        {
+            InfoKonsumenRegister.IsVisible = true;
+            text_infokonsumenregister.Text = "Nomor HP sudah terdaftar, silahkan gunakan nomor lain.";
+            image_infokonsumenregister.Source = ImageSource.FromFile("not_found.png");
+        }
+        else if (responseObject["status"] == "success")
+        {
+
+            InfoKonsumenRegister.IsVisible = true;
+            text_infokonsumenregister.Text = responseObject["message"];
+            image_infokonsumenregister.Source = ImageSource.FromFile("not_found.png");
+            ID_KONSUMEN = responseObject["id_konsumen"];
+
+            //kosongkan form
+            ENamaKonsumen.Text = string.Empty;
+            ENomorHp.Text = string.Empty;
+            EAlamat.Text = string.Empty;
+            EEmail.Text = string.Empty;
+
+        }
+    }
+
 
     private async void Picker_Kategori_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -631,10 +678,32 @@ public partial class ProdukMenu : ContentPage
 
     private async void BDaftarMember_Clicked(object sender, EventArgs e)
     {
+        // 1. Validasi Nama Konsumen
+        if (string.IsNullOrWhiteSpace(ENamaKonsumen.Text))
+        {
+            await DisplayAlert("Validasi Gagal", "Nama konsumen tidak boleh kosong.", "OK");
+            ENamaKonsumen.Focus();
+            return; // Hentikan eksekusi jika kosong
+        }
 
+        // 2. Validasi Nomor HP
+        if (string.IsNullOrWhiteSpace(ENomorHp.Text))
+        {
+            await DisplayAlert("Validasi Gagal", "Nomor HP tidak boleh kosong.", "OK");
+            ENomorHp.Focus();
+            return; // Hentikan eksekusi jika kosong
+        }
 
-        // lakukan validasi inputan kosong ENamaKonsumen.Text, ENomorHp.Text, EEmail.Text
+        // 3. Validasi Email
+        if (string.IsNullOrWhiteSpace(EEmail.Text))
+        {
+            await DisplayAlert("Validasi Gagal", "Email tidak boleh kosong.", "OK");
+            EEmail.Focus();
+            return; // Hentikan eksekusi jika kosong
+        }
 
+        // Jika semua validasi lolos, lanjutkan proses pendaftaran di sini
+        simpan_konsumen();
 
     }
 }

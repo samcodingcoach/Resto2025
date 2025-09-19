@@ -122,6 +122,11 @@
                                                 <Entry x:Name="EAlamat" Placeholder="Alamat Lengkap (Optional)"></Entry>
                                             </Border>
 
+                                            <HorizontalStackLayout VerticalOptions="Center" Spacing="10" x:Name="InfoKonsumenRegister" IsVisible="False">
+                                                <Image HeightRequest="15" x:Name="image_infokonsumenregister"></Image>
+                                                <Label Text="" FontSize="Caption" x:Name="text_infokonsumenregister"></Label>
+                                            </HorizontalStackLayout>
+
                                             <Button Text="DAFTARKAN MEMBER" x:Name="BDaftarMember" Clicked="BDaftarMember_Clicked" Margin="0,10" HorizontalOptions="End" FontFamily="FontBold"></Button>
                                         </StackLayout>
                                         
@@ -289,7 +294,7 @@
 
                         <Image Source="customer.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Konsumen" TextColor="#B3B3B3" FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="GUEST (NON MEMBER)" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="GUEST" x:Name="SummaryNamaKonsumen" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#333333" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
