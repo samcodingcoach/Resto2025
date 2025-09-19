@@ -94,6 +94,38 @@
                                         <Image Source="check_green.png" HeightRequest="15" x:Name="image_info"></Image>
                                         <Label Text="konsumen berhasil ditemukan." FontSize="Caption" x:Name="text_info"></Label>
                                     </HorizontalStackLayout>
+
+                                    <!--FORM REGISTER MEMBER-->
+                                    <Grid x:Name="FormRegisKonsumen" ColumnDefinitions="*" RowDefinitions="Auto,*" RowSpacing="10" Margin="0,30,0,0">
+
+
+
+                                        <Grid ColumnDefinitions="*,Auto,*" Grid.Row="0" ColumnSpacing="10">
+                                            <BoxView HeightRequest="0.1" Grid.Column="0" Opacity="0.1" BackgroundColor="Black"></BoxView>
+                                            <Label FontFamily="FontBold" Text="DAFTAR MEMBER BARU" Grid.Column="1"></Label>
+                                            <BoxView HeightRequest="0.1" Grid.Column="2" Opacity="0.1" BackgroundColor="Black"></BoxView>
+                                        </Grid>
+                                        
+                                        
+                                        <!--FORM-->
+                                        <StackLayout Spacing="10" Grid.Column="0" Grid.Row="1" Margin="0,15,0,0">
+                                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
+                                                <Entry x:Name="ENamaKonsumen" Placeholder="Nama Lengkap"></Entry>
+                                            </Border>
+                                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
+                                                <Entry x:Name="ENomorHp" TextChanged="ENomorHp_TextChanged" Keyboard="Telephone" Placeholder="Nomor Handphone"></Entry>
+                                            </Border>
+                                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
+                                                <Entry x:Name="EEmail" Placeholder="Email" Keyboard="Email"></Entry>
+                                            </Border>
+                                            <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
+                                                <Entry x:Name="EAlamat" Placeholder="Alamat Lengkap (Optional)"></Entry>
+                                            </Border>
+
+                                            <Button Text="DAFTARKAN MEMBER" x:Name="BDaftarMember" Clicked="BDaftarMember_Clicked" Margin="0,10" HorizontalOptions="End" FontFamily="FontBold"></Button>
+                                        </StackLayout>
+                                        
+                                    </Grid>
                                 </StackLayout>
                             </Border>
                         </Grid>

@@ -609,4 +609,32 @@ public partial class ProdukMenu : ContentPage
         NOMORHP = nomor;
         get_konsumen();
     }
+
+    private async void ENomorHp_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        var entry = (Entry)sender;
+        string input = entry.Text ?? "";
+
+        // Hilangkan karakter '-'
+        string nomor = input.Replace("-", "");
+
+        // Validasi: harus diawali '08' dan minimal 11 angka
+        if (!nomor.StartsWith("08") || nomor.Length < 11)
+        {
+            await DisplayAlert("Validasi Nomor HP", "Nomor HP harus diawali '08' dan minimal 11 angka.", "OK");
+            entry.Focus();
+            return;
+        }
+
+       
+    }
+
+    private async void BDaftarMember_Clicked(object sender, EventArgs e)
+    {
+
+
+        // lakukan validasi inputan kosong ENamaKonsumen.Text, ENomorHp.Text, EEmail.Text
+
+
+    }
 }
