@@ -113,7 +113,7 @@
                                                 <Entry x:Name="ENamaKonsumen" Placeholder="Nama Lengkap"></Entry>
                                             </Border>
                                             <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
-                                                <Entry x:Name="ENomorHp" TextChanged="ENomorHp_TextChanged" Keyboard="Telephone" Placeholder="Nomor Handphone"></Entry>
+                                                <Entry x:Name="ENomorHp" Completed="ENomorHp_Completed" TextChanged="ENomorHp_TextChanged" Keyboard="Telephone" Placeholder="Nomor Handphone"></Entry>
                                             </Border>
                                             <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10">
                                                 <Entry x:Name="EEmail" Placeholder="Email" Keyboard="Email"></Entry>

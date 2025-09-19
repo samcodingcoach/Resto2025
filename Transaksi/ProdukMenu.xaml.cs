@@ -266,7 +266,7 @@ public partial class ProdukMenu : ContentPage
 
             InfoKonsumenRegister.IsVisible = true;
             text_infokonsumenregister.Text = responseObject["message"];
-            image_infokonsumenregister.Source = ImageSource.FromFile("not_found.png");
+            image_infokonsumenregister.Source = ImageSource.FromFile("check_green.png");
             ID_KONSUMEN = responseObject["id_konsumen"];
 
             //kosongkan form
@@ -659,21 +659,36 @@ public partial class ProdukMenu : ContentPage
 
     private async void ENomorHp_TextChanged(object sender, TextChangedEventArgs e)
     {
+
         var entry = (Entry)sender;
-        string input = entry.Text ?? "";
+        var text = e.NewTextValue ?? "";
 
-        // Hilangkan karakter '-'
-        string nomor = input.Replace("-", "");
+        // 1. Mencegah infinite loop saat kita mengubah teks secara programatik
+        entry.TextChanged -= ENomorHp_TextChanged;
 
-        // Validasi: harus diawali '08' dan minimal 11 angka
-        if (!nomor.StartsWith("08") || nomor.Length < 11)
+        // 2. Hapus semua karakter non-digit (seperti tanda '-')
+        string digitsOnly = new string(text.Where(char.IsDigit).ToArray());
+
+        // 3. Terapkan format XXXX-XXXX-XXXX
+        string formattedText = digitsOnly;
+        if (digitsOnly.Length > 8)
         {
-            await DisplayAlert("Validasi Nomor HP", "Nomor HP harus diawali '08' dan minimal 11 angka.", "OK");
-            entry.Focus();
-            return;
+            // Format menjadi 0812-3456-7890
+            formattedText = $"{digitsOnly.Substring(0, 4)}-{digitsOnly.Substring(4, 4)}-{digitsOnly.Substring(8)}";
+        }
+        else if (digitsOnly.Length > 4)
+        {
+            // Format menjadi 0812-3456
+            formattedText = $"{digitsOnly.Substring(0, 4)}-{digitsOnly.Substring(4)}";
         }
 
-       
+        // 4. Update teks di Entry dan posisikan kursor di akhir
+        entry.Text = formattedText;
+        entry.CursorPosition = formattedText.Length;
+
+        // 5. Daftarkan kembali event handler
+        entry.TextChanged += ENomorHp_TextChanged;
+
     }
 
     private async void BDaftarMember_Clicked(object sender, EventArgs e)
@@ -705,5 +720,22 @@ public partial class ProdukMenu : ContentPage
         // Jika semua validasi lolos, lanjutkan proses pendaftaran di sini
         simpan_konsumen();
 
+    }
+
+    private async void ENomorHp_Completed(object sender, EventArgs e)
+    {
+        var entry = (Entry)sender;
+        string input = entry.Text ?? "";
+
+        // Hilangkan karakter '-'
+        string nomor = input.Replace("-", "");
+
+        // Validasi: harus diawali '08' dan minimal 11 angka
+        if (!nomor.StartsWith("08") || nomor.Length < 11)
+        {
+            await DisplayAlert("Validasi Nomor HP", "Nomor HP harus diawali '08' dan minimal 11 angka.", "OK");
+            entry.Focus();
+            return;
+        }
     }
 }
