@@ -375,6 +375,7 @@ public partial class ProdukMenu : ContentPage
         GridModePesanan.IsVisible = true;
         GridProduk.IsVisible = false;
         lv_metodepembayaran.IsVisible = false;
+        GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#FFFFFF");
         NavModePesanan.BackgroundColor = Color.FromArgb("#075E54");
@@ -390,9 +391,30 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-    private void Tap_Konsumen_Tapped(object sender, TappedEventArgs e)
+    private async void Tap_Konsumen_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
 
+        GridModePesanan.IsVisible = false;
+        GridProduk.IsVisible = false;
+        lv_metodepembayaran.IsVisible = false;
+        GridModeKonsumen.IsVisible = true;
+
+        LNavModePesanan.TextColor = Color.FromArgb("#333");
+        NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavProduk.TextColor = Color.FromArgb("#333");
+        NavProduk.BackgroundColor = Color.FromArgb("#F2F2F2");
+
+        LNavKonsumen.TextColor = Color.FromArgb("#FFF");
+        NavKonsumen.BackgroundColor = Color.FromArgb("#075E54");
+
+        LNavPembayaran.TextColor = Color.FromArgb("#333");
+        NavPembayaran.BackgroundColor = Color.FromRgba("#F2F2F2");
     }
 
     private async void Tap_Produk_Tapped(object sender, TappedEventArgs e)
@@ -406,6 +428,7 @@ public partial class ProdukMenu : ContentPage
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = true;
         lv_metodepembayaran.IsVisible = false;
+        GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
         NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
@@ -430,7 +453,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = false;
-        lv_metodepembayaran.IsVisible = true;
+        lv_metodepembayaran.IsVisible = true; GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
         NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
