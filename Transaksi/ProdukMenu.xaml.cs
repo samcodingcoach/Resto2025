@@ -42,9 +42,6 @@ public partial class ProdukMenu : ContentPage
     public class data_kategori()
     {
         public string id_kategori { get; set; } = string.Empty;
-
-        
-
     }
 
     public class list_produk
@@ -138,10 +135,6 @@ public partial class ProdukMenu : ContentPage
             await DisplayAlert("Error", ex.Message, "OK");
         }
     }
-
-
-
-
 
     private async void get_konsumen()
     {
@@ -651,12 +644,15 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioGuest_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-
+        if (!e.Value) return;
+        FormSearchKonsumen.IsVisible = false;
     }
 
     private void RadioMember_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-
+        if (!e.Value) return;
+        FormSearchKonsumen.IsVisible = true;
+        
     }
 
     private void T_SearchNomor_TextChanged(object sender, TextChangedEventArgs e)

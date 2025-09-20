@@ -53,6 +53,7 @@
                         <!--PRODUK MENU NAV TRIGGER-->
                         <!--KONSUMEN-->
                         <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModeKonsumen" RowDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10" Padding="0"  IsVisible="True">
+                            <!--PILIH GUEST-->
                             <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0" Padding="10" StrokeThickness="0.1">
                                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
 
@@ -61,11 +62,11 @@
                                     <Label Text="GUEST" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center"  Grid.Column="1"></Label>
 
                                     <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center">
-                                        <RadioButton IsChecked="False" GroupName="TipeKonsumen"  x:Name="RadioGuest" CheckedChanged="RadioGuest_CheckedChanged" />
+                                        <RadioButton IsChecked="True" GroupName="TipeKonsumen"  x:Name="RadioGuest" CheckedChanged="RadioGuest_CheckedChanged" />
                                     </StackLayout>
                                 </Grid>
                             </Border>
-
+                            <!--PILIH MEMBER-->
                             <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="1" Padding="10" StrokeThickness="0.1">
                                 <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
 
@@ -79,7 +80,7 @@
                                 </Grid>
                             </Border>
                             <!--SEARCH KONSUMEN-->
-                            <Border BackgroundColor="White" x:Name="FormSearchKonsumen"  StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="15" StrokeThickness="0.1">
+                            <Border BackgroundColor="White" x:Name="FormSearchKonsumen" IsVisible="False" StrokeShape="RoundRectangle 10" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Padding="15" StrokeThickness="0.1">
                                 <StackLayout Spacing="7">
                                     <Label Text="Nomor Handphone" TextColor="#333" FontFamily="FontBold"></Label>
                                     <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,5" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
@@ -97,8 +98,6 @@
 
                                     <!--FORM REGISTER MEMBER-->
                                     <Grid x:Name="FormRegisKonsumen" ColumnDefinitions="*" RowDefinitions="Auto,*" RowSpacing="10" Margin="0,30,0,0">
-
-
 
                                         <Grid ColumnDefinitions="*,Auto,*" Grid.Row="0" ColumnSpacing="10">
                                             <BoxView HeightRequest="0.1" Grid.Column="0" Opacity="0.1" BackgroundColor="Black"></BoxView>
