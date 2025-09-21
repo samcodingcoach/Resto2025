@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using static Microsoft.Maui.Controls.Compatibility.Grid;
 
 namespace Resto2025.Transaksi;
@@ -54,19 +56,43 @@ public partial class ProdukMenu : ContentPage
     }
 
     // Tambahkan kelas ini di dalam file ProdukMenu.xaml.cs
-    public class KeranjangItem
+    public class KeranjangItem : INotifyPropertyChanged
     {
+        // Properti asli
         public string IdProduk { get; set; }
         public string NamaProduk { get; set; }
         public double HargaJual { get; set; }
-        public int Jumlah { get; set; }
-        public string UrlGambar { get; set; } 
-        public double Subtotal => HargaJual * Jumlah;
+        public string UrlGambar { get; set; }
         public string IkonModePesanan { get; set; }
 
-        // Properti tambahan untuk format tampilan di UI
+        // Ubah 'Jumlah' menjadi properti dengan backing field
+        private int _jumlah;
+        public int Jumlah
+        {
+            get => _jumlah;
+            set
+            {
+                if (_jumlah != value)
+                {
+                    _jumlah = value;
+                    OnPropertyChanged(); // Memberitahu UI bahwa 'Jumlah' berubah
+                    OnPropertyChanged(nameof(Subtotal)); // Memberitahu UI bahwa 'Subtotal' juga berubah
+                    OnPropertyChanged(nameof(FormattedSubtotal)); // Dan formatnya juga
+                }
+            }
+        }
+
+        // Properti kalkulasi
+        public double Subtotal => HargaJual * Jumlah;
         public string FormattedHargaJual => $"Rp {HargaJual:N0}";
         public string FormattedSubtotal => $"Rp {Subtotal:N0}";
+
+        // Implementasi INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     private void Produk_Tapped(object sender, TappedEventArgs e)
@@ -114,6 +140,42 @@ public partial class ProdukMenu : ContentPage
         // Update Label Total Item
         Summary_TotalItem.Text = $"TOTAL ITEM ({totalItem})";
 
+    }
+
+    private async void EditJumlah_Tapped(object sender, TappedEventArgs e)
+    {
+        // 1. Dapatkan item yang di-tap dari BindingContext elemen yang ditekan
+        if ((sender as BindableObject)?.BindingContext is KeranjangItem item)
+        {
+            // 2. Tampilkan prompt untuk meminta input jumlah baru
+            string hasil = await DisplayPromptAsync(
+                title: "Ubah Jumlah",
+                message: $"Masukkan jumlah baru untuk {item.NamaProduk}:",
+                accept: "Simpan",
+                cancel: "Batal",
+                placeholder: item.Jumlah.ToString(), // Tampilkan jumlah saat ini
+                maxLength: 3,
+                keyboard: Keyboard.Numeric); // Hanya tampilkan keyboard angka
+
+            // 3. Jika pengguna tidak membatalkan
+            if (hasil != null)
+            {
+                // 4. Coba konversi input menjadi angka
+                if (int.TryParse(hasil, out int jumlahBaru) && jumlahBaru > 0)
+                {
+                    // 5. Update properti Jumlah. UI akan update otomatis karena INotifyPropertyChanged
+                    item.Jumlah = jumlahBaru;
+
+                    // 6. Panggil method update total keseluruhan di panel kanan
+                    UpdateTotalBelanja();
+                }
+                else
+                {
+                    // Tampilkan pesan jika input tidak valid (bukan angka atau <= 0)
+                    await DisplayAlert("Input Tidak Valid", "Harap masukkan jumlah yang valid (angka lebih dari 0).", "OK");
+                }
+            }
+        }
     }
 
     public class data_kategori()
