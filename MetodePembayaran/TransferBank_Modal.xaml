@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Resto2025.MetodePembayaran.TransferBank_Modal"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
+             Color="Transparent" Size="810, 550" CanBeDismissedByTappingOutsideOfPopup="False"
+             >
+
+    <Frame CornerRadius="10" Padding="15" BorderColor="Transparent">
+        <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*" RowSpacing="30">
+
+            <StackLayout Grid.Row="0" Spacing="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Bank" FontSize="Subtitle" Grid.Column="0" FontFamily="FontBold" TextColor="#333"></Label>
+                    <Image Source="close.png" Grid.Column="1">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="CloseModal" Tapped="CloseModal_Tapped"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Grid>
+                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
+                    <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
+                        <Picker x:Name="PickerBank" Title="Pilih Bank" WidthRequest="150">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>BCA</x:String>
+                                    <x:String>BNI</x:String>
+                                    <x:String>BRI</x:String>
+                                    <x:String>MANDIRI</x:String>
+                                    <x:String>LAINNYA</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Border>
+
+                    <Border BackgroundColor="White" Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="20,0" StrokeThickness="0.5">
+                        <HorizontalStackLayout Spacing="50" VerticalOptions="Center">
+
+                            <RadioButton x:Name="RadioTransfer" Content="TRANSFER" GroupName="MetodePembayaran" CheckedChanged="RadioTransfer_CheckedChanged" />
+
+                            <RadioButton x:Name="RadioEDC" Content="EDC" GroupName="MetodePembayaran" CheckedChanged="RadioEDC_CheckedChanged" />
+
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" Spacing="10">
+                <Label Text="Nama Pengirim / Atas Nama" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
+                    <Entry x:Name="EntryNamaPengirim" Placeholder="Masukkan Nama Pengirim / Atas Nama" ClearButtonVisibility="WhileEditing" />
+                </Border>
+            </StackLayout>
+
+            <StackLayout Grid.Row="2" Spacing="10">
+                <Label Text="Nomor Referensi" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
+                    <Entry x:Name="EntryReferensi" Placeholder="Masukan Nomor Referensi (Optional)" ClearButtonVisibility="WhileEditing" />
+                </Border>
+            </StackLayout>
+
+            <Grid Grid.Row="3" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10" VerticalOptions="EndAndExpand">
+
+                <Button Grid.Column="0" x:Name="BUploadBukti" Text="BUKTI TRANSFER" 
+                    HorizontalOptions="Start" BackgroundColor="WhiteSmoke" TextColor="#333" CornerRadius="8" WidthRequest="200" HeightRequest="50" FontFamily="FontBold"
+                    ImageSource="upload24.png" ContentLayout="Left, 10" />
+
+                <Button Grid.Column="1" x:Name="BTerapkanBank" Text="TERAPKAN BANK" 
+                    HorizontalOptions="End" BackgroundColor="#075E54" TextColor="White" 
+                    FontFamily="FontBold"  CornerRadius="8" WidthRequest="200" HeightRequest="50" />
+
+            </Grid>
+
+        </Grid>
+    </Frame>
+</toolkit:Popup>

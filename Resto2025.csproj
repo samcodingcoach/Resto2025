@@ -71,6 +71,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="MetodePembayaran\Qris_Modal.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="MetodePembayaran\TransferBank_Modal.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Transaksi\ProdukMenu.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

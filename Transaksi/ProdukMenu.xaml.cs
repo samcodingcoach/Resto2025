@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json;
 using System;
@@ -21,7 +22,10 @@ public partial class ProdukMenu : ContentPage
     public string ID_BAYAR = "1"; // Default Tunai
     public double BIAYA_ADMIN = 0;
     public double PERSENTASE_PPN = 0;
-
+    public string ID_PROMO= "0";
+    public double NILAI_PROMO = 0;
+    public string PILIHAN_PROMO = string.Empty;
+    public double MIN_PEMBELIAN = 0;
     public string NOMORHP = string.Empty;
 
     private List<list_produk> _listproduk;
@@ -32,17 +36,34 @@ public partial class ProdukMenu : ContentPage
 	{
 		InitializeComponent();
         get_data_kategori();
+        get_data_promo();
 
         _listproduk = new List<list_produk>();
         get_listproduk();
         get_metode_pembayaran();
         get_ppn();
     }
+    private async void OnPopupClosed()
+    {
+
+
+    }
 
     public class data_kategori()
     {
         public string id_kategori { get; set; } = string.Empty;
     }
+
+    public class data_promo()
+    {
+        public string id_promo { get; set; } = string.Empty;
+        public string nama_promo { get; set; } = string.Empty;   
+        public string pilihan_promo { get;set; } = string.Empty;    
+        public double nilai_promo { get; set; } = 0;
+        public double min_pembelian { get; set; } = 0;  
+        public string deskripsi { get; set; } = string.Empty;
+
+    }   
 
     public class list_produk
     {
@@ -85,8 +106,6 @@ public partial class ProdukMenu : ContentPage
         public string nama_konsumen { get; set; } = string.Empty;
     }
 
-
-
     public class list_ppn
     {
         public string id_ppn { get; set; } = string.Empty;
@@ -95,8 +114,6 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-
-   
     private async void get_ppn()
     {
         try
@@ -280,8 +297,27 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    //save new konsumen
+    private async void get_data_promo()
+    {
+        string url = App.API_HOST + "promo/promo_aktif.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
 
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            List<string> nama = JsonConvert.DeserializeObject<List<string>>(json);
+
+            Picker_Promo.ItemsSource = nama;
+            System.Diagnostics.Debug.WriteLine("Load Kategori Menu Berhasil");
+        }
+        else
+        {
+            await DisplayAlert("Error", "Gagal mendapatkan data kategori", "OK");
+        }
+    }
+
+    //save new konsumen
 
     private async void simpan_konsumen()
     {
@@ -350,6 +386,43 @@ public partial class ProdukMenu : ContentPage
 
                ID_KATEGORI = idKategori;
                get_listproduk();
+
+            }
+            else
+            {
+                await DisplayAlert("Info", "Data kategori tidak ditemukan.", "OK");
+            }
+        }
+        else
+        {
+            await DisplayAlert("Error", "Gagal mendapatkan data kategori", "OK");
+        }
+    }
+
+    private async void Picker_Promo_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var picker = (Picker)sender;
+        string nilaiTerpilih = picker.SelectedItem.ToString();
+
+        string url = App.API_HOST + "promo/id_promo.php?nama_promo=" + nilaiTerpilih;
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            var promoData = JsonConvert.DeserializeObject<List<data_promo>>(json);
+
+
+
+            if (promoData != null && promoData.Count > 0)
+            {
+                // 3. Ambil nilai "id_kategori" dari item pertama di list
+                string idPromo =promoData[0].id_promo;
+                NILAI_PROMO = promoData[0].nilai_promo;
+                ID_PROMO = idPromo;
+                PILIHAN_PROMO = promoData[0].pilihan_promo;
+                MIN_PEMBELIAN = promoData[0].min_pembelian;
 
             }
             else
@@ -659,6 +732,19 @@ public partial class ProdukMenu : ContentPage
        
         ID_BAYAR = selectedItem.id_bayar;
         string kategori = selectedItem.kategori;
+        //buka modal sesuai metode pembayaran
+        if(kategori == "Transfer")
+        {
+           
+                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
+                {
+                    // Event yang dijalankan setelah pop-up ditutup
+                    OnPopupClosed();
+
+                }));
+            
+        }
+
         BIAYA_ADMIN = selectedItem.biaya_admin;
 
         Summary_MetodeBayar.Text = kategori;
@@ -812,4 +898,6 @@ public partial class ProdukMenu : ContentPage
             return;
         }
     }
+
+    
 }

@@ -13,6 +13,7 @@
             IMAGE_HOST = "http://192.168.77.8/_resto007/public/images/";
 
             MainPage =  new NavigationPage(new Transaksi.ProdukMenu());
+            //MainPage = new NavigationPage(new MetodePembayaran.Qris_Modal());
         }
     }
 }

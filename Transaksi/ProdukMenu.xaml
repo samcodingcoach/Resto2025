@@ -322,11 +322,11 @@
                         <Image Source="diskon.png" HeightRequest="14" Grid.Column="0"></Image>
                         <!--SELECT PROMOSI-->
                         <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 8"  Grid.Column="1">
-                            <Picker Title="Pilih Promosi" FontSize="Caption">
+                            <Picker Title="Pilih Promosi" FontSize="Caption" x:Name="Picker_Promo" SelectedIndexChanged="Picker_Promo_SelectedIndexChanged">
                                 
                             </Picker>
                         </Border>
-                        <Label Text="Rp 50.000" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Rp 0" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
                         <!--<BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>-->
 
                     </Grid>
