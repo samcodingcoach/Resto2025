@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
+using System.Collections.ObjectModel;
 using static Microsoft.Maui.Controls.Compatibility.Grid;
 
 namespace Resto2025.Transaksi;
@@ -32,9 +33,12 @@ public partial class ProdukMenu : ContentPage
     private List<list_meja> listMeja = new List<list_meja>();
     private List<list_metodepembayaran> _listmetodepembayaran = new List<list_metodepembayaran>();
 
+    private ObservableCollection<KeranjangItem> keranjang = new ObservableCollection<KeranjangItem>();
+
     public ProdukMenu()
 	{
 		InitializeComponent();
+        LV_Keranjang.ItemsSource = keranjang;
         get_data_kategori();
         get_data_promo();
 
@@ -46,6 +50,69 @@ public partial class ProdukMenu : ContentPage
     private async void OnPopupClosed()
     {
 
+
+    }
+
+    // Tambahkan kelas ini di dalam file ProdukMenu.xaml.cs
+    public class KeranjangItem
+    {
+        public string IdProduk { get; set; }
+        public string NamaProduk { get; set; }
+        public double HargaJual { get; set; }
+        public int Jumlah { get; set; }
+        public string UrlGambar { get; set; } 
+        public double Subtotal => HargaJual * Jumlah;
+        public string IkonModePesanan { get; set; }
+
+        // Properti tambahan untuk format tampilan di UI
+        public string FormattedHargaJual => $"Rp {HargaJual:N0}";
+        public string FormattedSubtotal => $"Rp {Subtotal:N0}";
+    }
+
+    private void Produk_Tapped(object sender, TappedEventArgs e)
+    {
+        // Ambil data produk yang di-tap dari CommandParameter
+        if (e.Parameter is list_produk produkDipilih)
+        {
+            // Cek apakah produk sudah ada di keranjang
+            var itemDiKeranjang = keranjang.FirstOrDefault(item => item.IdProduk == produkDipilih.id_produk);
+
+            if (itemDiKeranjang != null)
+            {
+                // Jika sudah ada, tambah jumlahnya
+                itemDiKeranjang.Jumlah++;
+                // Refresh collection view untuk update subtotal (jika tidak pakai ObservableCollection)
+                LV_Keranjang.ItemsSource = null;
+                LV_Keranjang.ItemsSource = keranjang;
+            }
+            else
+            {
+                // Jika belum ada, tambahkan item baru ke keranjang
+                keranjang.Add(new KeranjangItem
+                {
+                    IdProduk = produkDipilih.id_produk,
+                    NamaProduk = produkDipilih.nama_produk,
+                    HargaJual = produkDipilih.harga_jual,
+                    Jumlah = 1,
+                    UrlGambar = produkDipilih.url_gambar,
+                    IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png"
+
+                });
+            }
+
+            // Panggil method untuk update total belanja di panel kanan
+            UpdateTotalBelanja();
+        }
+    }
+
+    // Method untuk update total belanja
+    private void UpdateTotalBelanja()
+    {
+        int totalItem = keranjang.Sum(item => item.Jumlah);
+        double totalProduk = keranjang.Sum(item => item.Subtotal);
+
+        // Update Label Total Item
+        Summary_TotalItem.Text = $"TOTAL ITEM ({totalItem})";
 
     }
 

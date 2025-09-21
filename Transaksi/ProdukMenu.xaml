@@ -11,7 +11,7 @@
             <Grid ColumnDefinitions="0.25*,0.25*,0.25*,0.25*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10">
                 
                 <!--MENU NAVBAR-->
-
+                
                 <Frame Padding="10" x:Name="NavKonsumen" BackgroundColor="#075E54" BorderColor="Transparent" Grid.Column="0" Grid.Row="0">
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer x:Name="Tap_Konsumen" Tapped="Tap_Konsumen_Tapped"/>
@@ -149,10 +149,7 @@
                                     <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
                                 </StackLayout>
                             </Border>
-
                             <!--PRODUK LIST-->
-
-
                             <CollectionView x:Name="CV_ListProduk" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
                                 <CollectionView.ItemsLayout>
                                     <GridItemsLayout Orientation="Vertical"
@@ -163,16 +160,14 @@
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid HorizontalOptions="Center" Padding="15">
+                                             <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="Produk_Tapped" CommandParameter="{Binding .}" />
+                                             </Grid.GestureRecognizers>
 
-                                            <Border WidthRequest="160" HeightRequest="200" 
-                                            StrokeShape="RoundRectangle 10" 
-                                            StrokeThickness="0" 
-                                            BackgroundColor="White">
-
+                                            <Border WidthRequest="200" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="White">
                                                 <Border.Shadow>
                                                     <Shadow Brush="Black" Offset="-2,1" Radius="5" Opacity="0.1" />
                                                 </Border.Shadow>
-
                                                 <Grid RowDefinitions="*, Auto">
                                                     <Grid Grid.Row="0">
                                                         <Image Aspect="AspectFill">
@@ -203,9 +198,6 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
-
-
-
                         </Grid>
                         <!--MODE PESANAN-->
                         <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModePesanan" RowDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10" Padding="0"  IsVisible="False">
@@ -251,7 +243,6 @@
                                 </ScrollView>
                             </Border>
                         </Grid>
-
                         <!--PEMBAYARAN-->
                        <ListView HasUnevenRows="True" x:Name="lv_metodepembayaran" SeparatorVisibility="None" SelectionMode="None" IsVisible="False">
                             <ListView.ItemTemplate>
@@ -339,33 +330,36 @@
                                 <Image Source="cart_green.png" HeightRequest="16"></Image>
                                 <Label Text="KERANJANG PESANAN" FontSize="Caption" TextColor="#075E54" FontFamily="FontBold"></Label>
                                 <!--TOTAL ITEM-->
-                                <Label Text="TOTAL ITEM (100)" FontSize="Caption"  HorizontalOptions="EndAndExpand" TextColor="#b3b3b3" FontFamily="FontRegular"></Label>
+                                <Label Text="TOTAL ITEM (0)" x:Name="Summary_TotalItem" FontSize="Caption"  HorizontalOptions="EndAndExpand" TextColor="#b3b3b3" FontFamily="FontRegular"></Label>
                                 
                             </StackLayout>
                             <!--LIST ITEM DETAIL-->
-                            <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15" Padding="0" RowSpacing="12" VerticalOptions="Start">
+                            <ListView Grid.Row="1" x:Name="LV_Keranjang" HasUnevenRows="True" SeparatorVisibility="None" BackgroundColor="Transparent" SelectionMode="None">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
+                                                <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                                    <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                                                </Border>
+                                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                                    <Label Text="{Binding NamaProduk}" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                                                    <Label Text="{Binding FormattedHargaJual}" TextColor="#075E54" FontFamily="FontRegular" FontSize="11"/>
+                                                </VerticalStackLayout>
 
-                                <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                                    <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
-                                </Border>
-                                
-                                <!--DETAIL-->
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                    <Label Text="Makanan" TextColor="LightGray" FontSize="10"/>
-                                    <Label Text="Nasi Goreng Enak Bener" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
-                                    <Label Text="Rp 100.000" TextColor="#075E54" FontFamily="FontBold" FontSize="11" TranslationY="-2"/>
-                                </VerticalStackLayout>
+                                                <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
 
-                                <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
-                                   
-                                </Image>
+                                                </Image>
 
-                                <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
-                                    <Label Text="20" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                </Border>
-
-                                <Label Grid.Column="4"  Text="Rp 200.000" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalOptions="End"/>
-                            </Grid>
+                                                <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
+                                                    <Label Text="{Binding Jumlah}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                </Border>
+                                                <Label Grid.Column="4" Text="{Binding FormattedSubtotal}" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
 
                         </Grid>
                     </Frame>
