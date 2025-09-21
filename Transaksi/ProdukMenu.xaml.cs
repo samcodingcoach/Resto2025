@@ -64,6 +64,7 @@ public partial class ProdukMenu : ContentPage
         public double HargaJual { get; set; }
         public string UrlGambar { get; set; }
         public string IkonModePesanan { get; set; }
+        public int StokTersedia { get; set; }
 
         // Ubah 'Jumlah' menjadi properti dengan backing field
         private int _jumlah;
@@ -163,10 +164,18 @@ public partial class ProdukMenu : ContentPage
                 // 4. Coba konversi input menjadi angka
                 if (int.TryParse(hasil, out int jumlahBaru) && jumlahBaru > 0)
                 {
-                    // 5. Update properti Jumlah. UI akan update otomatis karena INotifyPropertyChanged
+                    // ==== VALIDASI STOK DIMULAI DI SINI ====
+                    if (jumlahBaru > item.StokTersedia)
+                    {
+                        // Jika jumlah baru MELEBIHI stok, tolak dan tampilkan pesan
+                        await DisplayAlert("Stok Tidak Cukup", $"Jumlah yang Anda masukkan ({jumlahBaru}) melebihi stok yang tersedia ({item.StokTersedia}).", "OK");
+                        return; // Hentikan proses
+                    }
+                    // ==== VALIDASI STOK SELESAI ====
+
+                    // Jika validasi lolos, update jumlah
                     item.Jumlah = jumlahBaru;
 
-                    // 6. Panggil method update total keseluruhan di panel kanan
                     UpdateTotalBelanja();
                 }
                 else
