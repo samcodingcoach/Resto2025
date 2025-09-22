@@ -98,37 +98,50 @@ public partial class ProdukMenu : ContentPage
 
     private void Produk_Tapped(object sender, TappedEventArgs e)
     {
-        // Ambil data produk yang di-tap dari CommandParameter
         if (e.Parameter is list_produk produkDipilih)
         {
-            // Cek apakah produk sudah ada di keranjang
+            // Cari apakah produk ini sudah ada di keranjang
             var itemDiKeranjang = keranjang.FirstOrDefault(item => item.IdProduk == produkDipilih.id_produk);
 
+            // KASUS 1: PRODUK SUDAH ADA DI KERANJANG
             if (itemDiKeranjang != null)
             {
-                // Jika sudah ada, tambah jumlahnya
-                itemDiKeranjang.Jumlah++;
-                // Refresh collection view untuk update subtotal (jika tidak pakai ObservableCollection)
-                LV_Keranjang.ItemsSource = null;
-                LV_Keranjang.ItemsSource = keranjang;
+                // Validasi: Hanya tambah jumlah jika jumlah saat ini di keranjang BELUM MENCAPAI batas stok
+                if (itemDiKeranjang.Jumlah < itemDiKeranjang.StokTersedia)
+                {
+                    itemDiKeranjang.Jumlah++;
+                    UpdateTotalBelanja(); // Update total setelah berhasil
+                }
+                else
+                {
+                    // Jika sudah sama dengan stok, tampilkan pesan dan jangan lakukan apa-apa
+                    DisplayAlert("Stok Maksimal", "Jumlah pesanan untuk item ini sudah mencapai batas stok.", "OK");
+                }
             }
+            // KASUS 2: PRODUK BELUM ADA DI KERANJANG
             else
             {
-                // Jika belum ada, tambahkan item baru ke keranjang
-                keranjang.Add(new KeranjangItem
+                // Validasi: Hanya tambahkan produk baru jika stoknya lebih dari 0
+                if (produkDipilih.stok > 0)
                 {
-                    IdProduk = produkDipilih.id_produk,
-                    NamaProduk = produkDipilih.nama_produk,
-                    HargaJual = produkDipilih.harga_jual,
-                    Jumlah = 1,
-                    UrlGambar = produkDipilih.url_gambar,
-                    IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png",
-                    StokTersedia = produkDipilih.stok
-                });
+                    keranjang.Add(new KeranjangItem
+                    {
+                        IdProduk = produkDipilih.id_produk,
+                        NamaProduk = produkDipilih.nama_produk,
+                        HargaJual = produkDipilih.harga_jual,
+                        Jumlah = 1,
+                        UrlGambar = produkDipilih.url_gambar,
+                        IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png",
+                        StokTersedia = produkDipilih.stok
+                    });
+                    UpdateTotalBelanja(); // Update total setelah berhasil
+                }
+                else
+                {
+                    // Jika stok dari awal sudah 0, jangan tambahkan ke keranjang
+                    DisplayAlert("Stok Habis", "Produk ini sudah habis.", "OK");
+                }
             }
-
-            // Panggil method untuk update total belanja di panel kanan
-            UpdateTotalBelanja();
         }
     }
 
