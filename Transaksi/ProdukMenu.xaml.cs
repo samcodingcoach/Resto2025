@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using CommunityToolkit.Maui.Behaviors;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -156,47 +157,86 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-    private async void EditJumlah_Tapped(object sender, EventArgs e)
+    // Method utama yang dipanggil saat item keranjang di-tap
+    private async void ItemKeranjang_Tapped(object sender, EventArgs e)
     {
-        // 1. Dapatkan item yang di-tap dari BindingContext elemen yang ditekan
+        // Dapatkan item yang di-tap dari BindingContext ViewCell
         if ((sender as ViewCell)?.BindingContext is KeranjangItem item)
         {
-            // 2. Tampilkan prompt untuk meminta input jumlah baru
-            string hasil = await DisplayPromptAsync(
-                title: "Ubah Jumlah",
-                message: $"Masukkan jumlah baru untuk {item.NamaProduk}:",
-                accept: "Simpan",
-                cancel: "Batal",
-                placeholder: item.Jumlah.ToString(), // Tampilkan jumlah saat ini
-                maxLength: 3,
-                keyboard: Keyboard.Numeric); // Hanya tampilkan keyboard angka
+            // Tampilkan Action Sheet dengan pilihan untuk pengguna
+            string action = await DisplayActionSheet(
+                $"Pilih Aksi untuk {item.NamaProduk}", // Judul
+                "Batal",                               // Tombol Batal
+                null,                                  // Tombol Hapus (tidak ada di sini)
+                "Edit Jumlah",                         // Pilihan 1
+                "Hapus Item");                         // Pilihan 2
 
-            // 3. Jika pengguna tidak membatalkan
-            if (hasil != null)
+            // Gunakan switch untuk menentukan aksi berdasarkan pilihan pengguna
+            switch (action)
             {
-                // 4. Coba konversi input menjadi angka
-                if (int.TryParse(hasil, out int jumlahBaru) && jumlahBaru > 0)
-                {
-                    // ==== VALIDASI STOK DIMULAI DI SINI ====
-                    if (jumlahBaru > item.StokTersedia)
-                    {
-                        // Jika jumlah baru MELEBIHI stok, tolak dan tampilkan pesan
-                        await DisplayAlert("Stok Tidak Cukup", $"Jumlah yang Anda masukkan ({jumlahBaru}) melebihi stok yang tersedia ({item.StokTersedia}).", "OK");
-                        return; // Hentikan proses
-                    }
-                    // ==== VALIDASI STOK SELESAI ====
+                case "Edit Jumlah":
+                    await EditJumlahAsync(item);
+                    break;
 
-                    // Jika validasi lolos, update jumlah
-                    item.Jumlah = jumlahBaru;
-
-                    UpdateTotalBelanja();
-                }
-                else
-                {
-                    // Tampilkan pesan jika input tidak valid (bukan angka atau <= 0)
-                    await DisplayAlert("Input Tidak Valid", "Harap masukkan jumlah yang valid (angka lebih dari 0).", "OK");
-                }
+                case "Hapus Item":
+                    await HapusItemAsync(item);
+                    break;
             }
+        }
+    }
+
+    // Method bantuan untuk MENGEDIT jumlah
+    private async Task EditJumlahAsync(KeranjangItem item)
+    {
+        string hasil = await DisplayPromptAsync(
+            title: "Ubah Jumlah",
+            message: $"Stok tersedia: {item.StokTersedia}\n\nMasukkan jumlah baru:",
+            accept: "Simpan",
+            cancel: "Batal",
+            placeholder: item.Jumlah.ToString(),
+            maxLength: 3,
+            keyboard: Keyboard.Numeric);
+
+        if (hasil != null)
+        {
+            if (int.TryParse(hasil, out int jumlahBaru) && jumlahBaru >= 0) // Izinkan jumlah 0 untuk menghapus
+            {
+                if (jumlahBaru == 0)
+                {
+                    // Jika user memasukkan 0, anggap ingin menghapus
+                    await HapusItemAsync(item);
+                    return;
+                }
+
+                if (jumlahBaru > item.StokTersedia)
+                {
+                    await DisplayAlert("Stok Tidak Cukup", $"Jumlah melebihi stok yang tersedia ({item.StokTersedia}).", "OK");
+                    return;
+                }
+
+                item.Jumlah = jumlahBaru;
+                UpdateTotalBelanja();
+            }
+            else
+            {
+                await DisplayAlert("Input Tidak Valid", "Harap masukkan jumlah yang valid.", "OK");
+            }
+        }
+    }
+
+    // Method bantuan untuk MENGHAPUS item
+    private async Task HapusItemAsync(KeranjangItem itemDihapus)
+    {
+        bool jawaban = await DisplayAlert(
+            "Konfirmasi Hapus",
+            $"Anda yakin ingin menghapus '{itemDihapus.NamaProduk}' dari keranjang?",
+            "Ya, Hapus",
+            "Tidak");
+
+        if (jawaban)
+        {
+            keranjang.Remove(itemDihapus);
+            UpdateTotalBelanja();
         }
     }
 
@@ -1051,29 +1091,9 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private async void HapusItemCart_Tapped_1(object sender, EventArgs e)
-    {
-        // 1. Dapatkan ViewCell yang di-tap dan ambil datanya (KeranjangItem)
-        if ((sender as ViewCell)?.BindingContext is KeranjangItem itemDihapus)
-        {
-            // 2. Tampilkan dialog konfirmasi
-            bool jawaban = await DisplayAlert(
-                "Konfirmasi Hapus",
-                $"Anda yakin ingin menghapus '{itemDihapus.NamaProduk}' dari keranjang?",
-                "Ya, Hapus",
-                "Tidak");
-
-            // 3. Jika pengguna menekan "Ya, Hapus"
-            if (jawaban)
-            {
-                // 4. Hapus item dari ObservableCollection 'keranjang'
-                keranjang.Remove(itemDihapus);
-
-                // 5. Perbarui total belanja
-                UpdateTotalBelanja();
-            }
-        }
-    }
-
     
+
+   
+
+
 }

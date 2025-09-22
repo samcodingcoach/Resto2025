@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False"
+         
              Title="ProdukMenu">
 
     <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
@@ -343,8 +344,10 @@
                             <ListView Grid.Row="1" x:Name="LV_Keranjang" HasUnevenRows="True" SeparatorVisibility="None" BackgroundColor="Transparent" SelectionMode="None">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <ViewCell x:Name="EditJumlah" Tapped="EditJumlah_Tapped">
+                                        <ViewCell x:Name="EditJumlah" Tapped="ItemKeranjang_Tapped">
+                                            
                                             <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
+                                                
                                                 <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
                                                     <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
                                                 </Border>
@@ -360,7 +363,7 @@
                                                 <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
                                                     <StackLayout>
                                                         <StackLayout.GestureRecognizers>
-                                                            <TapGestureRecognizer Tapped="EditJumlah_Tapped" />
+                                                            <TapGestureRecognizer />
                                                         </StackLayout.GestureRecognizers>
                                                         <Label Text="{Binding Jumlah}" HorizontalOptions="Center" VerticalOptions="Center"/>
                                                     </StackLayout>
