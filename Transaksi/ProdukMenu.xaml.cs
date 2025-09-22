@@ -25,7 +25,7 @@ public partial class ProdukMenu : ContentPage
     public string ID_BAYAR = "1"; // Default Tunai
     public double BIAYA_ADMIN = 0;
     public double PERSENTASE_PPN = 0;
-    public string ID_PROMO= "0";
+    public string ID_PROMO = "0";
     public double NILAI_PROMO = 0;
     public string PILIHAN_PROMO = string.Empty;
     public double MIN_PEMBELIAN = 0;
@@ -38,8 +38,8 @@ public partial class ProdukMenu : ContentPage
     private ObservableCollection<KeranjangItem> keranjang = new ObservableCollection<KeranjangItem>();
 
     public ProdukMenu()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         LV_Keranjang.ItemsSource = keranjang;
         get_data_kategori();
         get_data_promo();
@@ -122,8 +122,8 @@ public partial class ProdukMenu : ContentPage
                     HargaJual = produkDipilih.harga_jual,
                     Jumlah = 1,
                     UrlGambar = produkDipilih.url_gambar,
-                    IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png"
-
+                    IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png",
+                    StokTersedia = produkDipilih.stok
                 });
             }
 
@@ -143,10 +143,10 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-    private async void EditJumlah_Tapped(object sender, TappedEventArgs e)
+    private async void EditJumlah_Tapped(object sender, EventArgs e)
     {
         // 1. Dapatkan item yang di-tap dari BindingContext elemen yang ditekan
-        if ((sender as BindableObject)?.BindingContext is KeranjangItem item)
+        if ((sender as ViewCell)?.BindingContext is KeranjangItem item)
         {
             // 2. Tampilkan prompt untuk meminta input jumlah baru
             string hasil = await DisplayPromptAsync(
@@ -187,6 +187,7 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
+
     public class data_kategori()
     {
         public string id_kategori { get; set; } = string.Empty;
@@ -195,13 +196,13 @@ public partial class ProdukMenu : ContentPage
     public class data_promo()
     {
         public string id_promo { get; set; } = string.Empty;
-        public string nama_promo { get; set; } = string.Empty;   
-        public string pilihan_promo { get;set; } = string.Empty;    
+        public string nama_promo { get; set; } = string.Empty;
+        public string pilihan_promo { get; set; } = string.Empty;
         public double nilai_promo { get; set; } = 0;
-        public double min_pembelian { get; set; } = 0;  
+        public double min_pembelian { get; set; } = 0;
         public string deskripsi { get; set; } = string.Empty;
 
-    }   
+    }
 
     public class list_produk
     {
@@ -210,7 +211,7 @@ public partial class ProdukMenu : ContentPage
         public string url_gambar => App.IMAGE_HOST + kode_produk + ".jpg";
         public string nama_produk { get; set; } = string.Empty;
         public int stok { get; set; } = 0;
-        public double harga_jual { get; set; } = 0; 
+        public double harga_jual { get; set; } = 0;
         public string new_harga_jual { get; set; } = string.Empty;
         public double opacity_produk { get; set; } = 1;
         public bool enabled_produk { get; set; } = true;
@@ -218,7 +219,7 @@ public partial class ProdukMenu : ContentPage
 
     public class list_meja
     {
-        public int id_meja { get; set; } = 0; 
+        public int id_meja { get; set; } = 0;
         public int in_used { get; set; } = 0;
         public string nomor_meja { get; set; } = string.Empty;
         public string pos_x { get; set; } = string.Empty;
@@ -275,7 +276,7 @@ public partial class ProdukMenu : ContentPage
                     }
                     else
                     {
-                        
+
                     }
                 }
                 else
@@ -311,9 +312,9 @@ public partial class ProdukMenu : ContentPage
                         list_konsumen row = rowData[0];
                         SummaryNamaKonsumen.Text = row.nama_konsumen;
                         ID_KONSUMEN = row.id_konsumen;
-                        
 
-                        
+
+
                         image_info.Source = ImageSource.FromFile("check_green.png");
                         text_info.Text = $"Konsumen Ditemukan: {row.nama_konsumen}";
 
@@ -331,13 +332,13 @@ public partial class ProdukMenu : ContentPage
                 {
                     await DisplayAlert("Gagal Terhubung", $"Tidak dapat mengambil data dari server. Status: {response.StatusCode}", "OK");
                 }
-            
+
             }
         }
 
         catch (Exception ex)
         {
-           await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayAlert("Error", ex.Message, "OK");
         }
     }
 
@@ -354,14 +355,14 @@ public partial class ProdukMenu : ContentPage
 
             _listmetodepembayaran.Clear(); // Hapus list sebelum diisi
 
-           
+
             for (int i = 0; i < rowData.Count; i++)
             {
 
-                _listmetodepembayaran.Add(rowData[i]); 
+                _listmetodepembayaran.Add(rowData[i]);
             }
 
-           
+
             lv_metodepembayaran.ItemsSource = _listmetodepembayaran;
 
         }
@@ -374,7 +375,7 @@ public partial class ProdukMenu : ContentPage
 
     private async Task get_listproduk()
     {
-       // contentview.IsVisible = true;
+        // contentview.IsVisible = true;
         await Task.Delay(1000);
         string url = App.API_HOST + "produk/list_produk.php?id_kategori=" + ID_KATEGORI;
         HttpClient client = new HttpClient();
@@ -402,13 +403,13 @@ public partial class ProdukMenu : ContentPage
 
             if (rowData.Count >= 1)
             {
-                
+
 
                 CV_ListProduk.ItemsSource = _listproduk;
             }
             else if (rowData.Count <= 0)
             {
-               
+
             }
 
             //T_TotalVariatif.Text = $"Total {kategori}: {rowData.Count.ToString()} Produk";
@@ -460,7 +461,7 @@ public partial class ProdukMenu : ContentPage
     private async void simpan_konsumen()
     {
         //staffID sementara nanti ganti sama temp login
-        
+
         var data = new Dictionary<string, string>
                 {
                     { "nama_konsumen", ENamaKonsumen.Text },
@@ -506,7 +507,7 @@ public partial class ProdukMenu : ContentPage
         var picker = (Picker)sender;
         string nilaiTerpilih = picker.SelectedItem.ToString();
 
-        string url = App.API_HOST + "kategori_menu/id_kategori.php?nama_kategori="+ nilaiTerpilih;
+        string url = App.API_HOST + "kategori_menu/id_kategori.php?nama_kategori=" + nilaiTerpilih;
         HttpClient client = new HttpClient();
         HttpResponseMessage response = await client.GetAsync(url);
 
@@ -516,14 +517,14 @@ public partial class ProdukMenu : ContentPage
             var kategoriData = JsonConvert.DeserializeObject<List<data_kategori>>(json);
 
 
-          
+
             if (kategoriData != null && kategoriData.Count > 0)
             {
                 // 3. Ambil nilai "id_kategori" dari item pertama di list
                 string idKategori = kategoriData[0].id_kategori;
 
-               ID_KATEGORI = idKategori;
-               get_listproduk();
+                ID_KATEGORI = idKategori;
+                get_listproduk();
 
             }
             else
@@ -556,7 +557,7 @@ public partial class ProdukMenu : ContentPage
             if (promoData != null && promoData.Count > 0)
             {
                 // 3. Ambil nilai "id_kategori" dari item pertama di list
-                string idPromo =promoData[0].id_promo;
+                string idPromo = promoData[0].id_promo;
                 NILAI_PROMO = promoData[0].nilai_promo;
                 ID_PROMO = idPromo;
                 PILIHAN_PROMO = promoData[0].pilihan_promo;
@@ -681,12 +682,12 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioTakeaway_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-      
+
         if (!e.Value) return;
         DenahMejaContainer.IsVisible = false;
         if (borderMejaTerpilih != null)
         {
-          
+
             borderMejaTerpilih.BackgroundColor = Color.FromArgb("#37474F");
             borderMejaTerpilih = null;
         }
@@ -696,9 +697,9 @@ public partial class ProdukMenu : ContentPage
 
     private void RadioDine_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        
+
         if (!e.Value) return;
-        DenahMejaContainer.IsVisible = true;      
+        DenahMejaContainer.IsVisible = true;
         get_meja();
         Summary_ModePesanan.Text = "Dine-In";
     }
@@ -861,32 +862,32 @@ public partial class ProdukMenu : ContentPage
             return;
         }
 
-        
+
         var selectedItem = radioButton.BindingContext as list_metodepembayaran;
         if (selectedItem == null)
         {
             return;
         }
-       
+
         ID_BAYAR = selectedItem.id_bayar;
         string kategori = selectedItem.kategori;
         //buka modal sesuai metode pembayaran
-        if(kategori == "Transfer")
+        if (kategori == "Transfer")
         {
-           
-                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
-                {
-                    // Event yang dijalankan setelah pop-up ditutup
-                    OnPopupClosed();
 
-                }));
-            
+            this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
+            {
+                // Event yang dijalankan setelah pop-up ditutup
+                OnPopupClosed();
+
+            }));
+
         }
 
         BIAYA_ADMIN = selectedItem.biaya_admin;
 
         Summary_MetodeBayar.Text = kategori;
-        Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN.ToString("N0")}"; 
+        Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN.ToString("N0")}";
     }
 
     private void RadioGuest_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -899,7 +900,7 @@ public partial class ProdukMenu : ContentPage
     {
         if (!e.Value) return;
         FormSearchKonsumen.IsVisible = true;
-        
+
     }
 
     private void T_SearchNomor_TextChanged(object sender, TextChangedEventArgs e)
@@ -1034,6 +1035,30 @@ public partial class ProdukMenu : ContentPage
             await DisplayAlert("Validasi Nomor HP", "Nomor HP harus diawali '08' dan minimal 11 angka.", "OK");
             entry.Focus();
             return;
+        }
+    }
+
+    private async void HapusItemCart_Tapped_1(object sender, EventArgs e)
+    {
+        // 1. Dapatkan ViewCell yang di-tap dan ambil datanya (KeranjangItem)
+        if ((sender as ViewCell)?.BindingContext is KeranjangItem itemDihapus)
+        {
+            // 2. Tampilkan dialog konfirmasi
+            bool jawaban = await DisplayAlert(
+                "Konfirmasi Hapus",
+                $"Anda yakin ingin menghapus '{itemDihapus.NamaProduk}' dari keranjang?",
+                "Ya, Hapus",
+                "Tidak");
+
+            // 3. Jika pengguna menekan "Ya, Hapus"
+            if (jawaban)
+            {
+                // 4. Hapus item dari ObservableCollection 'keranjang'
+                keranjang.Remove(itemDihapus);
+
+                // 5. Perbarui total belanja
+                UpdateTotalBelanja();
+            }
         }
     }
 

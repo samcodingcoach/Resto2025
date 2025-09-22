@@ -9,8 +9,12 @@
             InitializeComponent();
 
             //MainPage = new AppShell();
-            API_HOST = "http://192.168.77.8/_resto007/api/";
-            IMAGE_HOST = "http://192.168.77.8/_resto007/public/images/";
+            string lokal = "http://192.168.77.8/";
+            string publik = "https://resto.samdev.org/";
+            API_HOST = publik + "_resto007/api/";
+            IMAGE_HOST = publik + "_resto007/public/images/";
+
+
 
             MainPage =  new NavigationPage(new Transaksi.ProdukMenu());
             //MainPage = new NavigationPage(new MetodePembayaran.Qris_Modal());
