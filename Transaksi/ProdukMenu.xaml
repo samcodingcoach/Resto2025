@@ -417,7 +417,7 @@
 
                             </Picker>
                         </Border>
-                        <Label Text="Rp 0" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Rp 0" x:Name="Summary_NilaiPromosi" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
                         <!--<BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>-->
 
                     </Grid>

@@ -30,6 +30,11 @@ public partial class ProdukMenu : ContentPage
     public double NILAI_PROMO = 0;
     public double NILAI_PER_TAKEAWAY = 0;
     public string PILIHAN_PROMO = string.Empty;
+
+    
+    public double PERSEN_PROMO = 0;
+    public double NOMINAL_PROMO = 0;
+
     public double MIN_PEMBELIAN = 0;
     public string NOMORHP = string.Empty;
 
@@ -151,12 +156,12 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-   
+
 
     // Di dalam file ProdukMenu.xaml.cs
     private void UpdateTotalBelanja()
     {
-        
+
         int totalItem = keranjang.Sum(item => item.Jumlah);
         Summary_TotalItem.Text = $"TOTAL ITEM ({totalItem})";
 
@@ -167,10 +172,10 @@ public partial class ProdukMenu : ContentPage
             .Where(item => item.IkonModePesanan == "takeaway.png")
             .Sum(item => item.Jumlah);
 
-       
+
         double totalBiayaTakeaway = totalKuantitasTakeaway * NILAI_PER_TAKEAWAY;
 
-        
+
         Summary_BiayaTakeaway.Text = $"Rp {totalBiayaTakeaway:N0}";
 
         if (metodeBayarTerpilih != null)
@@ -195,7 +200,24 @@ public partial class ProdukMenu : ContentPage
             Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN:N0}";
         }
 
+        NILAI_PROMO = 0; // Reset nilai promo setiap kali perhitungan ulang
 
+        // Cek apakah total belanja memenuhi minimum pembelian promo
+        if (ID_PROMO != "0" && totalProduk >= MIN_PEMBELIAN)
+        {
+            // Cek tipe promo: persen atau nominal
+            if (PILIHAN_PROMO == "persen")
+            {
+                NILAI_PROMO = totalProduk * (PERSEN_PROMO / 100.0);
+            }
+            else if (PILIHAN_PROMO == "nominal")
+            {
+                NILAI_PROMO = NOMINAL_PROMO;
+            }
+        }
+
+        // Update Label nilai promosi di UI
+        Summary_NilaiPromosi.Text = $"Rp {NILAI_PROMO:N0}";
 
     }
 
@@ -298,6 +320,8 @@ public partial class ProdukMenu : ContentPage
         public string id_promo { get; set; } = string.Empty;
         public string nama_promo { get; set; } = string.Empty;
         public string pilihan_promo { get; set; } = string.Empty;
+        public double nominal { get; set; } = 0;
+        public double persen { get; set; } = 0;
         public double nilai_promo { get; set; } = 0;
         public double min_pembelian { get; set; } = 0;
         public string deskripsi { get; set; } = string.Empty;
@@ -696,37 +720,66 @@ public partial class ProdukMenu : ContentPage
     private async void Picker_Promo_SelectedIndexChanged(object sender, EventArgs e)
     {
         var picker = (Picker)sender;
-        string nilaiTerpilih = picker.SelectedItem.ToString();
 
-        string url = App.API_HOST + "promo/id_promo.php?nama_promo=" + nilaiTerpilih;
-        HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync(url);
-
-        if (response.IsSuccessStatusCode)
+        // Jika pengguna menghapus pilihan promo (kembali ke title "Pilih Promosi")
+        if (picker.SelectedIndex == -1)
         {
-            string json = await response.Content.ReadAsStringAsync();
-            var promoData = JsonConvert.DeserializeObject<List<data_promo>>(json);
+            // Reset semua data & nilai promo
+            ID_PROMO = "0";
+            NILAI_PROMO = 0;
+            PILIHAN_PROMO = string.Empty;
+            MIN_PEMBELIAN = 0;
+            PERSEN_PROMO = 0;
+            NOMINAL_PROMO = 0;
 
+            // Hitung ulang total tanpa promo
+            UpdateTotalBelanja();
+            return;
+        }
 
+        string nilaiTerpilih = picker.SelectedItem.ToString();
+        string url = App.API_HOST + "promo/id_promo.php?nama_promo="+ nilaiTerpilih;
 
-            if (promoData != null && promoData.Count > 0)
+        try
+        {
+            using (HttpClient client = new HttpClient())
             {
-                // 3. Ambil nilai "id_kategori" dari item pertama di list
-                string idPromo = promoData[0].id_promo;
-                NILAI_PROMO = promoData[0].nilai_promo;
-                ID_PROMO = idPromo;
-                PILIHAN_PROMO = promoData[0].pilihan_promo;
-                MIN_PEMBELIAN = promoData[0].min_pembelian;
+                HttpResponseMessage response = await client.GetAsync(url);
 
-            }
-            else
-            {
-                await DisplayAlert("Info", "Data kategori tidak ditemukan.", "OK");
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var promoData = JsonConvert.DeserializeObject<List<data_promo>>(json);
+
+                    if (promoData != null && promoData.Any())
+                    {
+                        var promo = promoData[0];
+
+                        // Simpan semua detail promo ke variabel kelas
+                        ID_PROMO = promo.id_promo;
+                        PILIHAN_PROMO = promo.pilihan_promo;
+                        MIN_PEMBELIAN = promo.min_pembelian;
+                        PERSEN_PROMO = promo.persen;
+                        NOMINAL_PROMO = promo.nominal;
+
+
+                        // Panggil method kalkulasi utama untuk menerapkan promo
+                        UpdateTotalBelanja();
+                    }
+                    else
+                    {
+                        await DisplayAlert("Info", "Detail untuk promo yang dipilih tidak ditemukan.", "OK");
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Gagal mendapatkan data promo dari server.", "OK");
+                }
             }
         }
-        else
+        catch (Exception ex)
         {
-            await DisplayAlert("Error", "Gagal mendapatkan data kategori", "OK");
+            await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
         }
     }
 
