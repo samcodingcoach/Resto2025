@@ -397,7 +397,7 @@
 
                         <Image Source="bag_takeaway.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Takeaway" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
-                        <Label Text="Rp 30.000" FontSize="Caption" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <Label Text="Rp 0" FontSize="Caption" x:Name="Summary_BiayaTakeaway" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>

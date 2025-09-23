@@ -28,9 +28,11 @@ public partial class ProdukMenu : ContentPage
     public double PERSENTASE_PPN = 0;
     public string ID_PROMO = "0";
     public double NILAI_PROMO = 0;
+    public double NILAI_PER_TAKEAWAY = 0;
     public string PILIHAN_PROMO = string.Empty;
     public double MIN_PEMBELIAN = 0;
     public string NOMORHP = string.Empty;
+   
 
     private List<list_produk> _listproduk;
     private List<list_meja> listMeja = new List<list_meja>();
@@ -44,6 +46,7 @@ public partial class ProdukMenu : ContentPage
         LV_Keranjang.ItemsSource = keranjang;
         get_data_kategori();
         get_data_promo();
+        get_biaya_takeaway();
 
         _listproduk = new List<list_produk>();
         get_listproduk();
@@ -146,15 +149,29 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    // Method untuk update total belanja
+   
+
+    // Di dalam file ProdukMenu.xaml.cs
     private void UpdateTotalBelanja()
     {
+        
         int totalItem = keranjang.Sum(item => item.Jumlah);
-        double totalProduk = keranjang.Sum(item => item.Subtotal);
-
-        // Update Label Total Item
         Summary_TotalItem.Text = $"TOTAL ITEM ({totalItem})";
 
+       
+        double totalProduk = keranjang.Sum(item => item.Subtotal);
+       
+        int totalKuantitasTakeaway = keranjang
+            .Where(item => item.IkonModePesanan == "takeaway.png")
+            .Sum(item => item.Jumlah);
+
+       
+        double totalBiayaTakeaway = totalKuantitasTakeaway * NILAI_PER_TAKEAWAY;
+
+        
+        Summary_BiayaTakeaway.Text = $"Rp {totalBiayaTakeaway:N0}";
+
+     
     }
 
     // Method utama yang dipanggil saat item keranjang di-tap
@@ -241,6 +258,11 @@ public partial class ProdukMenu : ContentPage
     }
 
 
+    public class data_biaya_takeaway
+    {
+        public double biaya_per_item { get; set; } = 0;
+    }
+
     public class data_kategori()
     {
         public string id_kategori { get; set; } = string.Empty;
@@ -305,6 +327,45 @@ public partial class ProdukMenu : ContentPage
         public string keterangan { get; set; } = string.Empty;
 
     }
+
+    private async void get_biaya_takeaway()
+    {
+        try
+        {
+            string url = App.API_HOST + "takeaway/biaya.php";
+            using (HttpClient client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(15);
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<data_biaya_takeaway> rowData = JsonConvert.DeserializeObject<List<data_biaya_takeaway>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        data_biaya_takeaway row = rowData[0];
+                        NILAI_PER_TAKEAWAY = row.biaya_per_item;
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("Gagal Terhubung", $"Tidak dapat mengambil data dari server. Status: {response.StatusCode}", "OK");
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+    }
+
 
     private async void get_ppn()
     {
