@@ -32,7 +32,9 @@ public partial class ProdukMenu : ContentPage
     public string PILIHAN_PROMO = string.Empty;
     public double MIN_PEMBELIAN = 0;
     public string NOMORHP = string.Empty;
-   
+
+    private list_metodepembayaran metodeBayarTerpilih;
+
 
     private List<list_produk> _listproduk;
     private List<list_meja> listMeja = new List<list_meja>();
@@ -171,7 +173,30 @@ public partial class ProdukMenu : ContentPage
         
         Summary_BiayaTakeaway.Text = $"Rp {totalBiayaTakeaway:N0}";
 
-     
+        if (metodeBayarTerpilih != null)
+        {
+            // Cek jika metode pembayaran adalah QRIS (atau ID 3)
+            if (metodeBayarTerpilih.id_bayar == "3") // Asumsi ID 3 adalah QRIS
+            {
+                // Hitung subtotal dasar untuk biaya admin
+                double subtotalUntukFee = totalProduk + totalBiayaTakeaway - NILAI_PROMO;
+
+                // Hitung biaya admin berdasarkan persentase
+                // Contoh: 0.7 -> 0.7 / 100.0 = 0.007
+                BIAYA_ADMIN = subtotalUntukFee * (metodeBayarTerpilih.biaya_admin / 100.0);
+            }
+            else
+            {
+                // Jika bukan QRIS, ambil nilainya langsung
+                BIAYA_ADMIN = metodeBayarTerpilih.biaya_admin;
+            }
+
+            // Update UI Biaya Admin
+            Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN:N0}";
+        }
+
+
+
     }
 
     // Method utama yang dipanggil saat item keranjang di-tap
@@ -366,7 +391,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-
     private async void get_ppn()
     {
         try
@@ -467,7 +491,7 @@ public partial class ProdukMenu : ContentPage
             string json = await response.Content.ReadAsStringAsync();
             List<list_metodepembayaran> rowData = JsonConvert.DeserializeObject<List<list_metodepembayaran>>(json);
 
-            _listmetodepembayaran.Clear(); // Hapus list sebelum diisi
+            _listmetodepembayaran.Clear(); 
 
 
             for (int i = 0; i < rowData.Count; i++)
@@ -980,45 +1004,31 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private void RadioTipePembayaran_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    private async void RadioTipePembayaran_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-        if (e.Value == false)
-        {
-            return;
-        }
-
+        if (e.Value == false) return;
         var radioButton = sender as RadioButton;
-        if (radioButton == null)
+        if (radioButton?.BindingContext is list_metodepembayaran selectedItem)
         {
-            return;
-        }
+            // 1. Simpan seluruh objek metode pembayaran yang dipilih
+            metodeBayarTerpilih = selectedItem;
 
+            // 2. Set state dasar
+            ID_BAYAR = selectedItem.id_bayar;
+            Summary_MetodeBayar.Text = selectedItem.kategori;
 
-        var selectedItem = radioButton.BindingContext as list_metodepembayaran;
-        if (selectedItem == null)
-        {
-            return;
-        }
+            // 3. Panggil UpdateTotalBelanja() untuk menghitung ulang semua biaya
+            UpdateTotalBelanja();
 
-        ID_BAYAR = selectedItem.id_bayar;
-        string kategori = selectedItem.kategori;
-        //buka modal sesuai metode pembayaran
-        if (kategori == "Transfer")
-        {
-
-            this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
+            // 4. Logika untuk menampilkan pop-up (tetap sama)
+            if (selectedItem.kategori == "Transfer")
             {
-                // Event yang dijalankan setelah pop-up ditutup
-                OnPopupClosed();
-
-            }));
-
+                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
+                {
+                    OnPopupClosed();
+                }));
+            }
         }
-
-        BIAYA_ADMIN = selectedItem.biaya_admin;
-
-        Summary_MetodeBayar.Text = kategori;
-        Summary_BiayaAdmin.Text = $"Rp {BIAYA_ADMIN.ToString("N0")}";
     }
 
     private void RadioGuest_CheckedChanged(object sender, CheckedChangedEventArgs e)
