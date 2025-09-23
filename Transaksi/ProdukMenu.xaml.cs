@@ -158,9 +158,9 @@ public partial class ProdukMenu : ContentPage
         int totalItem = keranjang.Sum(item => item.Jumlah);
         Summary_TotalItem.Text = $"TOTAL ITEM ({totalItem})";
 
-       
         double totalProduk = keranjang.Sum(item => item.Subtotal);
-       
+        Summary_TotalProduk.Text = $"Rp {totalProduk:N0}";
+
         int totalKuantitasTakeaway = keranjang
             .Where(item => item.IkonModePesanan == "takeaway.png")
             .Sum(item => item.Jumlah);
