@@ -428,46 +428,61 @@ public partial class ProdukMenu : ContentPage
 
     private async Task get_listproduk()
     {
-        // contentview.IsVisible = true;
-        await Task.Delay(1000);
-        string url = App.API_HOST + "produk/list_produk.php?id_kategori=" + ID_KATEGORI;
-        HttpClient client = new HttpClient();
-        HttpResponseMessage response = await client.GetAsync(url);
+        // 1. Tampilkan loading indicator SEBELUM proses dimulai
+        LoadingIndicator.IsVisible = true;
+        LoadingIndicator.IsRunning = true;
+        CV_ListProduk.IsVisible = false; // Sembunyikan daftar produk lama
 
-        if (response.IsSuccessStatusCode)
+        try
         {
-            string json = await response.Content.ReadAsStringAsync();
-            List<list_produk> rowData = JsonConvert.DeserializeObject<List<list_produk>>(json);
-            _listproduk.Clear();
-
-
-            for (int i = 0; i < rowData.Count; i++)
+            string url = App.API_HOST + "produk/list_produk.php?id_kategori=" + ID_KATEGORI;
+            using (HttpClient client = new HttpClient())
             {
+                // Set timeout agar tidak menunggu terlalu lama
+                client.Timeout = TimeSpan.FromSeconds(15);
+                HttpResponseMessage response = await client.GetAsync(url);
 
-                var formated = "Rp " + ((int)rowData[i].harga_jual).ToString("N0");
-                rowData[i].new_harga_jual = formated;
-                int cek_sisa = rowData[i].stok;
-                if (cek_sisa <= 0)
+                if (response.IsSuccessStatusCode)
                 {
-                    rowData[i].opacity_produk = 0.3; rowData[i].enabled_produk = false;
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<list_produk> rowData = JsonConvert.DeserializeObject<List<list_produk>>(json);
+                    _listproduk.Clear();
+
+                    foreach (var produk in rowData)
+                    {
+                        var formated = "Rp " + ((int)produk.harga_jual).ToString("N0");
+                        produk.new_harga_jual = formated;
+                        if (produk.stok <= 0)
+                        {
+                            produk.opacity_produk = 0.3;
+                            produk.enabled_produk = false;
+                        }
+                        _listproduk.Add(produk);
+                    }
+
+                    // Terapkan data baru ke CollectionView
+                    CV_ListProduk.ItemsSource = null;
+                    CV_ListProduk.ItemsSource = _listproduk;
                 }
-                _listproduk.Add(rowData[i]);
+                else
+                {
+                    // Handle jika server tidak merespon dengan baik
+                    await DisplayAlert("Gagal Terhubung", $"Server merespon dengan status: {response.StatusCode}", "OK");
+                    CV_ListProduk.ItemsSource = null; // Kosongkan list jika gagal
+                }
             }
-
-            if (rowData.Any()) // Cara yang lebih baik untuk memeriksa apakah list tidak kosong
-            {
-                // 1. Kosongkan ItemsSource untuk memicu refresh
-                CV_ListProduk.ItemsSource = null;
-                // 2. Isi kembali dengan daftar yang sudah diperbarui
-                CV_ListProduk.ItemsSource = _listproduk;
-            }
-            else
-            {
-                // Handle jika kategori yang dipilih tidak punya produk
-                CV_ListProduk.ItemsSource = null;
-            }
-
-            //T_TotalVariatif.Text = $"Total {kategori}: {rowData.Count.ToString()} Produk";
+        }
+        catch (Exception ex)
+        {
+            // Handle jika terjadi error (misal: tidak ada koneksi internet)
+            await DisplayAlert("Error", $"Terjadi kesalahan saat memuat produk: {ex.Message}", "OK");
+        }
+        finally
+        {
+            // 2. Sembunyikan loading indicator SETELAH semua proses selesai
+            LoadingIndicator.IsRunning = false;
+            LoadingIndicator.IsVisible = false;
+            CV_ListProduk.IsVisible = true; // Tampilkan kembali daftar produk (baik ada isinya maupun kosong)
         }
     }
 

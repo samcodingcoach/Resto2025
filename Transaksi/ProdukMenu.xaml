@@ -205,6 +205,9 @@
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
+                            <ActivityIndicator x:Name="LoadingIndicator" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsRunning="False" IsVisible="False" Color="#075E54" 
+                                               HorizontalOptions="Center"
+                                VerticalOptions="Center" />
                         </Grid>
                         <!--MODE PESANAN-->
                         <Grid ColumnDefinitions="0.5*,0.5*" x:Name="GridModePesanan" RowDefinitions="Auto,*" RowSpacing="10" ColumnSpacing="10" Padding="0"  IsVisible="False">
