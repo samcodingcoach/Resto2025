@@ -287,7 +287,7 @@
         <!--KOLOM KANAN--> 
         <Frame Grid.Column="1" Padding="0" BorderColor="Transparent">
             <Frame BackgroundColor="#F9F9F9" Padding="20" Margin="10" BorderColor="Transparent" >
-                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
+                <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
                 
                     <!--KONSUMEN-->
                     <Grid Grid.Column="0"  Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
@@ -317,23 +317,9 @@
 
                     </Grid>
                     
-                    <!--PROMOSI-->
-                    <Grid Grid.Column="0" Margin="0,5,0,0"  Grid.Row="3" ColumnDefinitions="Auto,Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
-
-                        <Image Source="diskon.png" HeightRequest="14" Grid.Column="0"></Image>
-                        <!--SELECT PROMOSI-->
-                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 8"  Grid.Column="1">
-                            <Picker Title="Pilih Promosi" FontSize="Caption" x:Name="Picker_Promo" SelectedIndexChanged="Picker_Promo_SelectedIndexChanged">
-                                
-                            </Picker>
-                        </Border>
-                        <Label Text="Rp 0" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
-                        <!--<BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>-->
-
-                    </Grid>
-
+                    
                     <!--LIST KERANJANG-->
-                    <Frame Padding="15" Grid.Column="0" Grid.Row="4" BorderColor="Transparent">
+                    <Frame Padding="15" Grid.Column="0" Grid.Row="3" BorderColor="Transparent">
                         <Grid ColumnDefinitions="*" RowDefinitions="Auto,*" RowSpacing="12">
                             
                             <StackLayout Orientation="Horizontal" Spacing="15" Grid.Row="0">
@@ -383,7 +369,7 @@
 
                     <!--SUBTOTAL-->
                     <!--PRODUK-->
-                    <Grid Grid.Column="0"  Grid.Row="5" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Grid Grid.Column="0"  Grid.Row="4" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
                         <Image Source="food.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Produk" TextColor="#B3B3B3"  FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
@@ -393,7 +379,7 @@
                     </Grid>
 
                     <!--TAKEAWAY-->
-                    <Grid Grid.Column="0"  Grid.Row="6" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Grid Grid.Column="0"  Grid.Row="5" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
                         <Image Source="bag_takeaway.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Takeaway" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
@@ -403,7 +389,7 @@
                     </Grid>
                     <!--ADMIN-->
                     
-                    <Grid Grid.Column="0"  Grid.Row="7" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Grid Grid.Column="0"  Grid.Row="6" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
                         <Image Source="admin.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Admin" TextColor="#B3B3B3" FontSize="Caption" FontFamily="FontBold" Grid.Column="1"></Label>
@@ -412,7 +398,7 @@
 
                     </Grid>
                     <!--POTONGAN-->
-                    <Grid Grid.Column="0"  Grid.Row="8" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+                    <Grid Grid.Column="0"  Grid.Row="7" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
                         <Image Source="diskon2.png" HeightRequest="14" Grid.Column="0"></Image>
                         <Label Text="Potongan" FontSize="Caption" TextColor="#B3B3B3" FontFamily="FontBold" Grid.Column="1"></Label>
@@ -420,6 +406,23 @@
                         <BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>
 
                     </Grid>
+
+                    <!--PROMOSI-->
+                    <Grid Grid.Column="0" Margin="0,5,0,0"  Grid.Row="8" ColumnDefinitions="Auto,Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
+
+                        <Image Source="diskon.png" HeightRequest="14" Grid.Column="0"></Image>
+                        <!--SELECT PROMOSI-->
+                        <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 8"  Grid.Column="1">
+                            <Picker Title="Pilih Promosi" FontSize="Caption" x:Name="Picker_Promo" SelectedIndexChanged="Picker_Promo_SelectedIndexChanged">
+
+                            </Picker>
+                        </Border>
+                        <Label Text="Rp 0" HorizontalTextAlignment="End" FontSize="Caption" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" TextColor="#FF2D2D" FontFamily="FontBold" Grid.Column="2"></Label>
+                        <!--<BoxView HeightRequest="0.1" BackgroundColor="#b3b3b3" Opacity="0.3" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"></BoxView>-->
+
+                    </Grid>
+
+
                     <!--TOTALSUB-->
                     <Grid Grid.Column="0"  Grid.Row="9" ColumnDefinitions="*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
 
