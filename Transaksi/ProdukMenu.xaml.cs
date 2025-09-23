@@ -36,6 +36,9 @@ public partial class ProdukMenu : ContentPage
     public double NOMINAL_PROMO = 0;
 
     public double MIN_PEMBELIAN = 0;
+
+    public double NILAI_POTONGAN = 0;
+
     public string NOMORHP = string.Empty;
 
     private list_metodepembayaran metodeBayarTerpilih;
@@ -156,8 +159,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-
-
     // Di dalam file ProdukMenu.xaml.cs
     private void UpdateTotalBelanja()
     {
@@ -218,6 +219,23 @@ public partial class ProdukMenu : ContentPage
 
         // Update Label nilai promosi di UI
         Summary_NilaiPromosi.Text = $"Rp {NILAI_PROMO:N0}";
+
+        Summary_Potongan.Text = $"Rp {NILAI_POTONGAN:N0}";
+
+       
+        double subtotal = totalProduk + totalBiayaTakeaway + BIAYA_ADMIN - NILAI_PROMO - NILAI_POTONGAN;
+        Summary_Subtotal.Text = $"Rp {subtotal:N0}";
+
+      
+        double nilaiPPN = subtotal * (PERSENTASE_PPN / 100.0);
+        Summary_PPN.Text = $"Rp {nilaiPPN:N0}";
+
+
+        double grandTotal = subtotal + nilaiPPN;
+        double grandTotalBulat = Math.Floor(grandTotal / 100.0) * 100;
+
+        // 4. Tampilkan Grand Total yang SUDAH DIBULATKAN di Tombol Checkout
+        Summary_TotalCheckout.Text = $"Rp {grandTotalBulat:N0}";
 
     }
 
@@ -1248,5 +1266,36 @@ public partial class ProdukMenu : ContentPage
             .ToList();
 
         CV_ListProduk.ItemsSource = produkYangDifilter;
+    }
+
+    private async void TapPotongan_Tapped(object sender, TappedEventArgs e)
+    {
+        // 1.Tampilkan prompt untuk meminta input potongan
+    string hasil = await DisplayPromptAsync(
+        title: "Masukkan Potongan",
+        message: "Masukkan jumlah potongan dalam nominal (Rp):",
+        accept: "Terapkan",
+        cancel: "Batal",
+        placeholder: "0",
+        keyboard: Keyboard.Numeric);
+
+        // 2. Jika pengguna tidak membatalkan
+        if (hasil != null)
+        {
+            // 3. Coba konversi input menjadi angka (double)
+            if (double.TryParse(hasil, out double potonganBaru) && potonganBaru >= 0)
+            {
+                // 4. Simpan nilai potongan ke variabel kelas
+                NILAI_POTONGAN = potonganBaru;
+
+                // 5. Panggil method update utama untuk menghitung ulang semua total
+                UpdateTotalBelanja();
+            }
+            else
+            {
+                // Tampilkan pesan jika input tidak valid
+                await DisplayAlert("Input Tidak Valid", "Harap masukkan angka yang valid.", "OK");
+            }
+        }
     }
 }
