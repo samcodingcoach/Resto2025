@@ -145,7 +145,7 @@
                             <!--SEARCH-->
                             <Border BackgroundColor="White"  StrokeThickness="0.4" Padding="10,0" StrokeShape="RoundRectangle 10" Grid.Row="0" Grid.Column="1">
                                 <StackLayout Orientation="Horizontal">
-                                    <Entry Placeholder="Cari Menu. Ex: Nasi Goreng" x:Name="T_Search"></Entry>
+                                    <Entry Placeholder="Cari Menu. Ex: Nasi Goreng" x:Name="T_Search" Completed="T_Search_Completed"></Entry>
                                     <!--simbol search-->
                                     <Image Source="search_gray.png" HeightRequest="24" HorizontalOptions="EndAndExpand" TranslationX="-3"></Image>
                                 </StackLayout>
@@ -173,7 +173,7 @@
                                                 <VerticalStackLayout>
 
                                                     <Grid>
-                                                        <Image Aspect="AspectFill">
+                                                        <Image Aspect="AspectFit">
                                                             <Image.Source>
                                                                 <UriImageSource Uri="{Binding url_gambar}" CacheValidity="30.00:00:00" />
                                                             </Image.Source>

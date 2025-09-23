@@ -5,7 +5,7 @@
     <ActiveDebugFramework>net8.0-android</ActiveDebugFramework>
     <ActiveDebugProfile>ITEL P10003L (Android 14.0 - API 34)</ActiveDebugProfile>
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
-    <DefaultDevice>tablet_m-dpi_10_1in_-_api_35_1</DefaultDevice>
+    <DefaultDevice>nexus_9_-_api_35</DefaultDevice>
   </PropertyGroup>
   <ItemGroup>
     <None Update="App.xaml">

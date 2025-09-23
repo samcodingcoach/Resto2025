@@ -454,15 +454,17 @@ public partial class ProdukMenu : ContentPage
                 _listproduk.Add(rowData[i]);
             }
 
-            if (rowData.Count >= 1)
+            if (rowData.Any()) // Cara yang lebih baik untuk memeriksa apakah list tidak kosong
             {
-
-
+                // 1. Kosongkan ItemsSource untuk memicu refresh
+                CV_ListProduk.ItemsSource = null;
+                // 2. Isi kembali dengan daftar yang sudah diperbarui
                 CV_ListProduk.ItemsSource = _listproduk;
             }
-            else if (rowData.Count <= 0)
+            else
             {
-
+                // Handle jika kategori yang dipilih tidak punya produk
+                CV_ListProduk.ItemsSource = null;
             }
 
             //T_TotalVariatif.Text = $"Total {kategori}: {rowData.Count.ToString()} Produk";
@@ -1091,9 +1093,21 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    
+    private void T_Search_Completed(object sender, EventArgs e)
+    {
+       
+        string searchText = T_Search.Text;
 
-   
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            CV_ListProduk.ItemsSource = _listproduk;
+            return;
+        }
 
+        var produkYangDifilter = _listproduk
+            .Where(produk => produk.nama_produk.ToLower().Contains(searchText.ToLower()))
+            .ToList();
 
+        CV_ListProduk.ItemsSource = produkYangDifilter;
+    }
 }
