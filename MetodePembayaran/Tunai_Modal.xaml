@@ -82,5 +82,31 @@
             <Button Grid.Row="3" Grid.Column="4" Text="5.000" Style="{StaticResource KeypadButtonStyle}" />
 
         </Grid>
+        
+        
+        <!--konfirmasi dan bayar-->
+        <Grid Padding="10" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+
+                <CheckBox x:Name="CheckPrint" IsChecked="True" CheckedChanged="CheckPrint_CheckedChanged" VerticalOptions="Center" />
+
+                <Label VerticalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Setujui, untuk melakukan printout," />
+                            <Span Text="&#10;action tidak bisa di batalkan" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </HorizontalStackLayout>
+
+            <Button Grid.Column="2" x:Name="BBayar" Text="BAYAR" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
+        </Grid>
     </Grid>
 </ContentPage>

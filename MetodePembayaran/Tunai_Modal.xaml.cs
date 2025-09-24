@@ -11,4 +11,9 @@ public partial class Tunai_Modal : ContentPage
     {
 
     }
+
+    private void CheckPrint_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+
+    }
 }
