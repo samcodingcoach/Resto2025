@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Resto2025.MetodePembayaran.Tunai_Modal"
+             >
+    <Grid RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*" Padding="10" RowSpacing="15">
+        <!--header-->
+        <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+            <StackLayout Grid.Column="0">
+                <Label Text="PEMBAYARAN DENGAN TUNAI" TextColor="#333" FontFamily="FontBold" FontSize="Title"></Label>
+                <HorizontalStackLayout Spacing="10">
+                    <Image Source="grandtotal.png" HeightRequest="24"></Image>
+                    <Label FontSize="Subtitle" Text="RP 200.000" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
+                </HorizontalStackLayout>
+            </StackLayout>
+
+            <Image Grid.Column="1" Source="close.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="TapClose" Tapped="TapClose_Tapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+        
+        <!--uang konsumen dan kembalian-->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Border Grid.Column="0"  Stroke="#b3b3b3" StrokeThickness="0.1" StrokeShape="RoundRectangle 10,10,10,10" Padding="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0">
+                        <Label Text="UANG KONSUMEN" FontFamily="FontBold" TextColor="#b3b3b3"></Label>
+                        <Label Text="RP 0" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"></Label>
+                    </StackLayout>
+                    <Image Grid.Column="1" Source="uangkonsumen.png" HeightRequest="32" TranslationX="-10"></Image>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1"  Stroke="#b3b3b3" StrokeThickness="0.1" StrokeShape="RoundRectangle 10,10,10,10" Background="#075E54" Padding="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0">
+                        <Label Text="UANG KEMBALIAN" FontFamily="FontBold" TextColor="#FFF"></Label>
+                        <Label Text="RP 0" FontFamily="FontBold" FontSize="Subtitle" TextColor="#FFF"></Label>
+                    </StackLayout>
+                    <Image Grid.Column="1" Source="kembalian.png" HeightRequest="32" TranslationX="-10"></Image>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        
+    </Grid>
+</ContentPage>

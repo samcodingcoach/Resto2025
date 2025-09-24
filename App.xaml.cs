@@ -16,8 +16,8 @@
 
 
 
-            MainPage =  new NavigationPage(new Transaksi.ProdukMenu());
-            //MainPage = new NavigationPage(new MetodePembayaran.Qris_Modal());
+           // MainPage =  new NavigationPage(new Transaksi.ProdukMenu());
+           MainPage = new NavigationPage(new MetodePembayaran.Tunai_Modal());
         }
     }
 }
