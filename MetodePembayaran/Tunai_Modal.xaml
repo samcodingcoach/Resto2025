@@ -44,7 +44,7 @@
                     <Grid ColumnDefinitions="*,Auto">
                         <StackLayout Grid.Column="0">
                             <Label Text="UANG KONSUMEN" FontFamily="FontBold" TextColor="#b3b3b3"></Label>
-                            <Label Text="RP 0" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"></Label>
+                            <Label Text="RP 0" x:Name="L_UangKonsumen" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"></Label>
                         </StackLayout>
                         <Image Grid.Column="1" Source="uangkonsumen.png" HeightRequest="32" TranslationX="-10"></Image>
                     </Grid>
@@ -54,7 +54,7 @@
                     <Grid ColumnDefinitions="*,Auto">
                         <StackLayout Grid.Column="0">
                             <Label Text="UANG KEMBALIAN" FontFamily="FontBold" TextColor="#FFF"></Label>
-                            <Label Text="RP 0" FontFamily="FontBold" FontSize="Subtitle" TextColor="#FFF"></Label>
+                            <Label Text="RP 0" x:Name="L_Kembalian" FontFamily="FontBold" FontSize="Subtitle" TextColor="#FFF"></Label>
                         </StackLayout>
                         <Image Grid.Column="1" Source="kembalian.png" HeightRequest="32" TranslationX="-10"></Image>
                     </Grid>
@@ -64,25 +64,25 @@
             <!--NUMERIC KEYBOARD-->
             <Grid Grid.Row="2" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*,*,*" RowSpacing="10" ColumnSpacing="10" Padding="10">
 
-                <Button Grid.Row="0" Grid.Column="0" Text="7" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="0" Grid.Column="1" Text="8" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="0" Grid.Column="2" Text="9" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Text="100.000" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="0" Grid.Column="0" Text="7" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="0" Grid.Column="1" Text="8" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="0" Grid.Column="2" Text="9" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Nominal_Clicked" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Text="100.000" Style="{StaticResource KeypadButtonStyle}" />
 
-                <Button Grid.Row="1" Grid.Column="0" Text="4" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="1" Grid.Column="1" Text="5" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="1" Grid.Column="2" Text="6" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Text="50.000" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="1" Grid.Column="0" Text="4" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="1" Grid.Column="1" Text="5" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="1" Grid.Column="2" Text="6" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Nominal_Clicked" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Text="50.000" Style="{StaticResource KeypadButtonStyle}" />
 
-                <Button Grid.Row="2" Grid.Column="0" Text="1" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="2" Grid.Column="1" Text="2" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="2" Grid.Column="2" Text="3" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Text="20.000" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="2" Grid.Column="0" Text="1" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="2" Grid.Column="1" Text="2" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="2" Grid.Column="2" Text="3" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Nominal_Clicked" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="2" Text="20.000" Style="{StaticResource KeypadButtonStyle}" />
 
-                <Button Grid.Row="3" Grid.Column="0" Text="0" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="C" Style="{StaticResource KeypadButtonStyle}"  BackgroundColor="#00695C" TextColor="White" />
-                <Button Grid.Row="3" Grid.Column="3" Text="10.000" Style="{StaticResource KeypadButtonStyle}" />
-                <Button Grid.Row="3" Grid.Column="4" Text="5.000" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Keypad_Clicked" Grid.Row="3" Grid.Column="0" Text="0" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Clear_Clicked" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="C" Style="{StaticResource KeypadButtonStyle}"  BackgroundColor="#00695C" TextColor="White" />
+                <Button Clicked="Nominal_Clicked" Grid.Row="3" Grid.Column="3" Text="10.000" Style="{StaticResource KeypadButtonStyle}" />
+                <Button Clicked="Nominal_Clicked" Grid.Row="3" Grid.Column="4" Text="5.000" Style="{StaticResource KeypadButtonStyle}" />
 
             </Grid>
 
