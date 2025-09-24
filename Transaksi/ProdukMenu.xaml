@@ -452,7 +452,7 @@
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                             <Switch IsToggled="True" HorizontalOptions="Start" OnColor="OrangeRed" VerticalOptions="Center" Grid.Column="0"/>
                             <Label Text="Pembayaran Langsung" TextColor="#333333" FontSize="Caption" Grid.Column="1" VerticalOptions="Center"></Label>
-                            <Button ImageSource="checkout19.png" Text="Rp 0" x:Name="Summary_TotalCheckout" TextColor="White" FontFamily="FontBold"  Grid.Column="2"></Button>
+                            <Button ImageSource="checkout19.png" Clicked="Summary_TotalCheckout_Clicked" Text="Rp 0" x:Name="Summary_TotalCheckout" TextColor="White" FontFamily="FontBold"  Grid.Column="2"></Button>
                         </Grid>
                     </Frame>
                     

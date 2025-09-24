@@ -1298,4 +1298,15 @@ public partial class ProdukMenu : ContentPage
             }
         }
     }
+
+    private async void Summary_TotalCheckout_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+        // Menampilkan popup Tunai_Modal
+        await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal());
+    }
 }
