@@ -19,11 +19,6 @@ public partial class Tunai_Modal : Popup
         Close();
     }
 
-    private void CheckPrint_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-
-    }
-
     // Method untuk tombol angka (0-9) - Logika diubah menjadi numerik
     private void Keypad_Clicked(object sender, EventArgs e)
     {
@@ -72,5 +67,22 @@ public partial class Tunai_Modal : Popup
         {
             L_Kembalian.Text = "Rp 0";
         }
+
+        // Cek apakah uang konsumen sudah cukup untuk membayar total belanja
+        if (uangKonsumenValue >= this.totalBelanja)
+        {
+            BBayar.IsEnabled = true;
+            BBayar.Opacity = 1;
+        }
+        else
+        {
+            BBayar.IsEnabled = false;
+            BBayar.Opacity = 0.2;
+        }
+    }
+
+    private void CheckPrint_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+
     }
 }

@@ -97,7 +97,7 @@
 
                 <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
 
-                    <CheckBox x:Name="CheckPrint" IsChecked="True" CheckedChanged="CheckPrint_CheckedChanged" VerticalOptions="Center" />
+                    <CheckBox x:Name="CheckPrint" IsChecked="False" CheckedChanged="CheckPrint_CheckedChanged" VerticalOptions="Center" />
 
                     <Label VerticalOptions="Center">
                         <Label.FormattedText>
@@ -109,7 +109,10 @@
                     </Label>
                 </HorizontalStackLayout>
 
-                <Button Grid.Column="2" x:Name="BBayar" Text="BAYAR" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
+                <Button Grid.Column="2" x:Name="BBayar" Text="BAYAR" 
+                        IsEnabled="False" Opacity="0.2"
+                        BackgroundColor="Red" TextColor="White" 
+                        FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
             </Grid>
         </Grid>
     </Frame>
