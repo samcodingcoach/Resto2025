@@ -5,7 +5,9 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
              Color="Transparent" Size="550,550" CanBeDismissedByTappingOutsideOfPopup="False"
              >
-    <Grid Padding="10" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*" RowSpacing="10">
+
+    <Frame BackgroundColor="White" CornerRadius="15" Padding="0">
+        <Grid Padding="10" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*" RowSpacing="10">
         <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
 
             <StackLayout Grid.Column="0" Spacing="5">
@@ -36,7 +38,7 @@
 
                 <CheckBox x:Name="CheckSetuju" IsChecked="True" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
 
-                <Label VerticalOptions="Center">
+                <Label VerticalOptions="Center" FontSize="Caption">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Setujui, untuk melakukan pembayaran dengan QRIS," />
@@ -49,4 +51,5 @@
             <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
         </Grid>
     </Grid>
+    </Frame>
 </toolkit:Popup>

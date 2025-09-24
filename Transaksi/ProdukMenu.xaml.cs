@@ -63,13 +63,13 @@ public partial class ProdukMenu : ContentPage
         get_metode_pembayaran();
         get_ppn();
     }
+
     private async void OnPopupClosed()
     {
 
 
     }
 
-    // Tambahkan kelas ini di dalam file ProdukMenu.xaml.cs
     public class KeranjangItem : INotifyPropertyChanged
     {
         // Properti asli
@@ -159,7 +159,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    // Di dalam file ProdukMenu.xaml.cs
     private void UpdateTotalBelanja()
     {
 
@@ -239,7 +238,6 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-    // Method utama yang dipanggil saat item keranjang di-tap
     private async void ItemKeranjang_Tapped(object sender, EventArgs e)
     {
         // Dapatkan item yang di-tap dari BindingContext ViewCell
@@ -267,7 +265,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    // Method bantuan untuk MENGEDIT jumlah
     private async Task EditJumlahAsync(KeranjangItem item)
     {
         string hasil = await DisplayPromptAsync(
@@ -306,7 +303,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    // Method bantuan untuk MENGHAPUS item
     private async Task HapusItemAsync(KeranjangItem itemDihapus)
     {
         bool jawaban = await DisplayAlert(
@@ -653,8 +649,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    //save new konsumen
-
     private async void simpan_konsumen()
     {
         //staffID sementara nanti ganti sama temp login
@@ -697,7 +691,6 @@ public partial class ProdukMenu : ContentPage
 
         }
     }
-
 
     private async void Picker_Kategori_SelectedIndexChanged(object sender, EventArgs e)
     {
@@ -1270,30 +1263,18 @@ public partial class ProdukMenu : ContentPage
 
     private async void TapPotongan_Tapped(object sender, TappedEventArgs e)
     {
-        // 1.Tampilkan prompt untuk meminta input potongan
-    string hasil = await DisplayPromptAsync(
-        title: "Masukkan Potongan",
-        message: "Masukkan jumlah potongan dalam nominal (Rp):",
-        accept: "Terapkan",
-        cancel: "Batal",
-        placeholder: "0",
-        keyboard: Keyboard.Numeric);
+      
+        string hasil = await DisplayPromptAsync(title: "Masukkan Potongan",message: "Masukkan jumlah potongan dalam nominal (Rp):", accept: "Terapkan", cancel: "Batal", placeholder: "0", keyboard: Keyboard.Numeric);
 
-        // 2. Jika pengguna tidak membatalkan
         if (hasil != null)
         {
-            // 3. Coba konversi input menjadi angka (double)
             if (double.TryParse(hasil, out double potonganBaru) && potonganBaru >= 0)
             {
-                // 4. Simpan nilai potongan ke variabel kelas
                 NILAI_POTONGAN = potonganBaru;
-
-                // 5. Panggil method update utama untuk menghitung ulang semua total
                 UpdateTotalBelanja();
             }
             else
             {
-                // Tampilkan pesan jika input tidak valid
                 await DisplayAlert("Input Tidak Valid", "Harap masukkan angka yang valid.", "OK");
             }
         }
@@ -1306,7 +1287,31 @@ public partial class ProdukMenu : ContentPage
             await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
-        // Menampilkan popup Tunai_Modal
-        await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal());
+
+
+        switch (ID_BAYAR)
+        {
+            case "1":
+                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal());
+                break;
+
+            case "2":
+                await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(() =>
+                {
+                    OnPopupClosed();
+                }));
+                break;
+
+            case "3":
+                await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(() =>
+                {
+                    OnPopupClosed();
+                }));
+                break;
+
+            default:
+                await DisplayAlert("Perhatian", "Silakan pilih metode pembayaran terlebih dahulu.", "OK");
+                break;
+        }
     }
 }
