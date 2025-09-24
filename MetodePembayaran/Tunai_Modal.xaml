@@ -110,7 +110,7 @@
                 </HorizontalStackLayout>
 
                 <Button Grid.Column="2" x:Name="BBayar" Text="BAYAR" 
-                        IsEnabled="False" Opacity="0.2"
+                        IsEnabled="False" Opacity="0.2" Clicked="BBayar_Clicked"
                         BackgroundColor="Red" TextColor="White" 
                         FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
             </Grid>

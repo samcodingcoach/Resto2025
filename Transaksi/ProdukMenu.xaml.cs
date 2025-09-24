@@ -16,6 +16,7 @@ namespace Resto2025.Transaksi;
 
 public partial class ProdukMenu : ContentPage
 {
+    public string ID_USER= "4"; // sementara nanti ganti sama temp login
     private Border borderMejaTerpilih;
     private double currentScale = 1;
     private double startScale = 1;
@@ -41,7 +42,13 @@ public partial class ProdukMenu : ContentPage
 
     public string NOMORHP = string.Empty;
 
+    public int STATUS_BAYAR = 0; //0 = belum bayar, 1 = sudah bayar, 2 batal
+
+    public double subtotal = 0;
+    public double totalBiayaTakeaway = 0;
+    public double nilaiPPN = 0;
     private double grandTotalFinal = 0;
+    
 
     private list_metodepembayaran metodeBayarTerpilih;
 
@@ -64,6 +71,115 @@ public partial class ProdukMenu : ContentPage
         get_listproduk();
         get_metode_pembayaran();
         get_ppn();
+
+        Task.Run(async () => await MuatPesananSementaraAsync());
+    }
+
+    // Model untuk setiap item di dalam 'pesanan_detail'
+    public class PesananDetailPayload
+    {
+        [JsonProperty("id_produk_sell")]
+        public string IdProdukSell { get; set; }
+
+        [JsonProperty("qty")]
+        public int Qty { get; set; }
+
+        [JsonProperty("ta_dinein")]
+        public string TaDinein { get; set; }
+    }
+
+    // Model utama untuk JSON yang akan dikirim ke API
+    
+
+    public class ProsesPembayaranDetailPayload
+    {
+        [JsonProperty("subtotal")]
+        public double Subtotal { get; set; }
+
+        [JsonProperty("biaya_pengemasan")]
+        public double BiayaPengemasan { get; set; }
+
+        [JsonProperty("service_charge")]
+        public double ServiceCharge { get; set; }
+
+        [JsonProperty("promo_diskon")]
+        public double PromoDiskon { get; set; }
+
+        [JsonProperty("ppn_resto")]
+        public double PpnResto { get; set; }
+    }
+
+    public class ProsesPembayaranPayload
+    {
+        [JsonProperty("id_bayar")]
+        public string IdBayar { get; set; }
+
+        [JsonProperty("id_user")]
+        public string IdUser { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("jumlah_uang")]
+        public double JumlahUang { get; set; }
+
+        [JsonProperty("jumlah_dibayarkan")]
+        public double JumlahDibayarkan { get; set; }
+
+        [JsonProperty("kembalian")]
+        public double Kembalian { get; set; }
+
+        [JsonProperty("model_diskon")]
+        public string ModelDiskon { get; set; }
+
+        [JsonProperty("nilai_nominal")]
+        public double NilaiNominal { get; set; }
+
+        [JsonProperty("total_diskon")]
+        public double TotalDiskon { get; set; }
+
+        [JsonProperty("pembayaran_detail")]
+        public ProsesPembayaranDetailPayload PembayaranDetail { get; set; }
+    }
+
+    // Ubah kelas PesananPayload yang sudah ada menjadi seperti ini
+    public class PesananPayload
+    {
+        [JsonProperty("id_user")]
+        public string IdUser { get; set; }
+
+        [JsonProperty("id_konsumen")]
+        public string IdKonsumen { get; set; }
+
+        [JsonProperty("total_cart")]
+        public double TotalCart { get; set; }
+
+        [JsonProperty("status_checkout")]
+        public string StatusCheckout { get; set; }
+
+        [JsonProperty("id_meja")]
+        public string IdMeja { get; set; }
+
+        [JsonProperty("deviceid")]
+        public string DeviceId { get; set; }
+
+        [JsonProperty("pesanan_detail")]
+        public List<PesananDetailPayload> PesananDetail { get; set; }
+
+        // TAMBAHKAN OBJEK PEMBAYARAN DI SINI
+        [JsonProperty("proses_pembayaran")]
+        public ProsesPembayaranPayload ProsesPembayaran { get; set; }
+    }
+
+
+    public class TransaksiSementara
+    {
+        public string IdKonsumen { get; set; }
+        public string IdMeja { get; set; }
+        public string IdBayar { get; set; }
+        public string IdPromo { get; set; }
+        public double NilaiPotongan { get; set; }
+        public List<KeranjangItem> ItemDiKeranjang { get; set; }
     }
 
     private async void OnPopupClosed()
@@ -76,6 +192,7 @@ public partial class ProdukMenu : ContentPage
     {
         // Properti asli
         public string IdProduk { get; set; }
+        public string IdProdukSell { get; set; }
         public string NamaProduk { get; set; }
         public double HargaJual { get; set; }
         public string UrlGambar { get; set; }
@@ -143,6 +260,7 @@ public partial class ProdukMenu : ContentPage
                     keranjang.Add(new KeranjangItem
                     {
                         IdProduk = produkDipilih.id_produk,
+                        IdProdukSell = produkDipilih.id_produk_sell,
                         NamaProduk = produkDipilih.nama_produk,
                         HargaJual = produkDipilih.harga_jual,
                         Jumlah = 1,
@@ -151,6 +269,7 @@ public partial class ProdukMenu : ContentPage
                         StokTersedia = produkDipilih.stok
                     });
                     UpdateTotalBelanja(); // Update total setelah berhasil
+                   
                 }
                 else
                 {
@@ -160,7 +279,7 @@ public partial class ProdukMenu : ContentPage
             }
         }
     }
-
+    //kalkulasi
     private void UpdateTotalBelanja()
     {
 
@@ -175,7 +294,7 @@ public partial class ProdukMenu : ContentPage
             .Sum(item => item.Jumlah);
 
 
-        double totalBiayaTakeaway = totalKuantitasTakeaway * NILAI_PER_TAKEAWAY;
+       totalBiayaTakeaway = totalKuantitasTakeaway * NILAI_PER_TAKEAWAY;
 
 
         Summary_BiayaTakeaway.Text = $"Rp {totalBiayaTakeaway:N0}";
@@ -223,23 +342,25 @@ public partial class ProdukMenu : ContentPage
 
         Summary_Potongan.Text = $"Rp {NILAI_POTONGAN:N0}";
 
-       
-        double subtotal = totalProduk + totalBiayaTakeaway + BIAYA_ADMIN - NILAI_PROMO - NILAI_POTONGAN;
+
+        subtotal = totalProduk + totalBiayaTakeaway + BIAYA_ADMIN - NILAI_PROMO - NILAI_POTONGAN;
         Summary_Subtotal.Text = $"Rp {subtotal:N0}";
 
-      
-        double nilaiPPN = subtotal * (PERSENTASE_PPN / 100.0);
+
+        nilaiPPN = subtotal * (PERSENTASE_PPN / 100.0);
         Summary_PPN.Text = $"Rp {nilaiPPN:N0}";
 
 
         double grandTotal = subtotal + nilaiPPN;
         double grandTotalBulat = Math.Floor(grandTotal / 100.0) * 100;
 
-     
+
         Summary_TotalCheckout.Text = $"Rp {grandTotalBulat:N0}";
 
         // nilai modal
         this.grandTotalFinal = grandTotalBulat;
+
+        Task.Run(async () => await SimpanPesananSementaraAsync());
     }
 
     private async void ItemKeranjang_Tapped(object sender, EventArgs e)
@@ -348,7 +469,8 @@ public partial class ProdukMenu : ContentPage
 
     public class list_produk
     {
-        public string id_produk { get; set; } = string.Empty; public string id_produk_sell { get; set; } = string.Empty;
+        public string id_produk { get; set; } = string.Empty; 
+        public string id_produk_sell { get; set; } = string.Empty;
         public string kode_produk { get; set; } = string.Empty;
         public string url_gambar => App.IMAGE_HOST + kode_produk + ".jpg";
         public string nama_produk { get; set; } = string.Empty;
@@ -1296,7 +1418,7 @@ public partial class ProdukMenu : ContentPage
         switch (ID_BAYAR)
         {
             case "1":
-                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal));
+                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
                 break;
 
             case "2":
@@ -1317,5 +1439,199 @@ public partial class ProdukMenu : ContentPage
                 await DisplayAlert("Perhatian", "Silakan pilih metode pembayaran terlebih dahulu.", "OK");
                 break;
         }
+    }
+
+    private async Task SimpanPesananSementaraAsync()
+    {
+        try
+        {
+            // Kumpulkan data pesanan saat ini
+            var transaksi = new TransaksiSementara
+            {
+                IdKonsumen = this.ID_KONSUMEN,
+                IdMeja = this.ID_MEJA,
+                IdBayar = this.ID_BAYAR,
+                IdPromo = this.ID_PROMO,
+                NilaiPotongan = this.NILAI_POTONGAN,
+                ItemDiKeranjang = new List<KeranjangItem>(this.keranjang)
+            };
+
+            // Ubah menjadi format JSON
+            string jsonTransaksi = JsonConvert.SerializeObject(transaksi, Formatting.Indented);
+
+            // Tentukan lokasi dan nama file, lalu tulis isinya
+            string targetFile = System.IO.Path.Combine(FileSystem.AppDataDirectory, "pesanan_sementara.json");
+            await File.WriteAllTextAsync(targetFile, jsonTransaksi);
+
+            System.Diagnostics.Debug.WriteLine("--> Pesanan sementara DISIMPAN/DIPERBARUI.");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Gagal menyimpan pesanan sementara: {ex.Message}");
+        }
+    }
+
+    private async Task MuatPesananSementaraAsync()
+    {
+        string targetFile = System.IO.Path.Combine(FileSystem.AppDataDirectory, "pesanan_sementara.json");
+
+        if (File.Exists(targetFile))
+        {
+            try
+            {
+                string jsonTransaksi = await File.ReadAllTextAsync(targetFile);
+                var transaksi = JsonConvert.DeserializeObject<TransaksiSementara>(jsonTransaksi);
+
+                if (transaksi != null && transaksi.ItemDiKeranjang.Any())
+                {
+                    // Kembalikan semua state dari file ke halaman Anda
+                    this.ID_KONSUMEN = transaksi.IdKonsumen;
+                    this.ID_MEJA = transaksi.IdMeja;
+                    this.ID_BAYAR = transaksi.IdBayar;
+                    this.ID_PROMO = transaksi.IdPromo;
+                    this.NILAI_POTONGAN = transaksi.NilaiPotongan;
+
+                    this.keranjang.Clear();
+                    foreach (var item in transaksi.ItemDiKeranjang)
+                    {
+                        this.keranjang.Add(item);
+                    }
+
+                    UpdateTotalBelanja(); // Refresh seluruh UI
+                    System.Diagnostics.Debug.WriteLine("--> Pesanan sementara berhasil DIMUAT.");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Gagal memuat pesanan sementara: {ex.Message}");
+            }
+        }
+    }
+
+    private async Task ProsesDanSimpanTransaksiAsync(double uangDiterima)
+    {
+        // 1. Kumpulkan data untuk detail pembayaran
+        var pembayaranDetail = new ProsesPembayaranDetailPayload
+        {
+            Subtotal = this.subtotal,
+            BiayaPengemasan = this.totalBiayaTakeaway,
+            ServiceCharge = this.BIAYA_ADMIN,
+            PromoDiskon = this.NILAI_PROMO,
+            PpnResto = this.nilaiPPN
+        };
+
+        // 2. Kumpulkan data untuk pembayaran utama
+        var pembayaran = new ProsesPembayaranPayload
+        {
+            IdBayar = this.ID_BAYAR,
+            IdUser = this.ID_USER,
+            Status = this.STATUS_BAYAR.ToString(),
+            JumlahDibayarkan = this.grandTotalFinal,       // Total tagihan
+            JumlahUang = uangDiterima,                   // Uang dari konsumen
+            Kembalian = uangDiterima - this.grandTotalFinal,
+            ModelDiskon = "nominal",                     // Sesuai permintaan Anda
+            NilaiNominal = this.NILAI_POTONGAN,            // Potongan manual
+            TotalDiskon = this.NILAI_PROMO,                // Potongan dari promo
+            PembayaranDetail = pembayaranDetail
+        };
+
+        // 3. Kumpulkan payload utama untuk dikirim
+        var payload = new PesananPayload
+        {
+            IdUser = ID_USER,
+            IdKonsumen = this.ID_KONSUMEN,
+            TotalCart = this.grandTotalFinal,
+            StatusCheckout = this.STATUS_BAYAR.ToString(), // status 0 atau 1 dari Switch
+            IdMeja = this.ID_MEJA,
+            DeviceId = "-",
+            PesananDetail = new List<PesananDetailPayload>(),
+            ProsesPembayaran = pembayaran // Masukkan objek pembayaran ke payload utama
+        };
+
+        // Isi detail pesanan (item keranjang)
+        foreach (var item in keranjang)
+        {
+            payload.PesananDetail.Add(new PesananDetailPayload
+            {
+                IdProdukSell = item.IdProdukSell,
+                Qty = item.Jumlah,
+                TaDinein = (item.IkonModePesanan == "takeaway.png") ? "1" : "0"
+            });
+        }
+
+        // 4. Serialisasi dan kirim ke API
+        string jsonPayload = JsonConvert.SerializeObject(payload);
+        System.Diagnostics.Debug.WriteLine("================ JSON DIKIRIM KE SERVER ================");
+        System.Diagnostics.Debug.WriteLine(jsonPayload);
+        System.Diagnostics.Debug.WriteLine("==========================================================");
+
+        try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string url = App.API_HOST + "pesanan/simpan_pesanan.php";
+                var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await DisplayAlert("Sukses", "Transaksi berhasil disimpan!", "OK");
+                    HapusPesananSementara();
+                    ResetHalaman();
+                }
+                else
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Gagal", $"Gagal menyimpan transaksi ke server. Pesan: {errorContent}", "OK");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
+        }
+    }
+
+    // Method bantuan untuk mereset halaman
+    private void ResetHalaman()
+    {
+        keranjang.Clear();
+        ID_KONSUMEN = "1";
+        ID_MEJA = "0";
+        ID_BAYAR = "1";
+        ID_PROMO = "0";
+        NILAI_POTONGAN = 0;
+       
+        // Tap_Konsumen_Tapped(NavKonsumen, null);
+
+        // Update tampilan
+        UpdateTotalBelanja();
+    }
+
+    public void HapusPesananSementara()
+    {
+        try
+        {
+            // 1. Tentukan lokasi file
+            string targetFile = System.IO.Path.Combine(FileSystem.AppDataDirectory, "pesanan_sementara.json");
+
+            // 2. Cek apakah file tersebut ada
+            if (File.Exists(targetFile))
+            {
+                // 3. Jika ada, hapus file tersebut
+                File.Delete(targetFile);
+                System.Diagnostics.Debug.WriteLine("--> File pesanan sementara berhasil dihapus.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Catat error jika gagal menghapus, tidak perlu mengganggu user
+            System.Diagnostics.Debug.WriteLine($"Gagal menghapus file pesanan sementara: {ex.Message}");
+        }
+    }
+
+    private void SwitchInvoice_Toggled(object sender, ToggledEventArgs e)
+    {
+        STATUS_BAYAR = e.Value ? 1 : 0;
     }
 }

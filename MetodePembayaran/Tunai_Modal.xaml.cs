@@ -4,14 +4,16 @@ namespace Resto2025.MetodePembayaran;
 
 public partial class Tunai_Modal : Popup
 {
+    private readonly Func<double, Task> _onPaymentSuccessCallback;
     private double totalBelanja = 0;
-  
+    private double kembalian = 0;
     private double uangKonsumenValue = 0;
-    public Tunai_Modal(double totalBelanja)
+    public Tunai_Modal(double totalBelanja, Func<double, Task> onPaymentSuccessCallback)
     {
         InitializeComponent();
         this.totalBelanja = totalBelanja;
         L_NilaiGrandTotal.Text = $"Rp {totalBelanja:N0}";
+        _onPaymentSuccessCallback = onPaymentSuccessCallback;
     }
 
     private void TapClose_Tapped(object sender, TappedEventArgs e)
@@ -52,7 +54,7 @@ public partial class Tunai_Modal : Popup
        
         L_UangKonsumen.Text = $"Rp {uangKonsumenValue:N0}";
 
-        double kembalian = uangKonsumenValue - this.totalBelanja;
+       kembalian = uangKonsumenValue - this.totalBelanja;
 
         if (kembalian >= 0)
         {
@@ -79,5 +81,15 @@ public partial class Tunai_Modal : Popup
     private void CheckPrint_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
 
+    }
+
+    private async void BBayar_Clicked(object sender, EventArgs e)
+    {
+        if (_onPaymentSuccessCallback != null)
+        {
+            // Panggil callback sambil mengirimkan nilai uang yang diinput
+            await _onPaymentSuccessCallback(this.uangKonsumenValue);
+        }
+        await CloseAsync();
     }
 }
