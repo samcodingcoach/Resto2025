@@ -27,7 +27,7 @@
                     <Label Text="PEMBAYARAN DENGAN TUNAI" TextColor="#333" FontFamily="FontBold" FontSize="Title"></Label>
                     <HorizontalStackLayout Spacing="10">
                         <Image Source="grandtotal.png" HeightRequest="24"></Image>
-                        <Label FontSize="Subtitle" Text="RP 200.000" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
+                        <Label x:Name="L_NilaiGrandTotal" FontSize="Subtitle" Text="RP 0" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
                     </HorizontalStackLayout>
                 </StackLayout>
 

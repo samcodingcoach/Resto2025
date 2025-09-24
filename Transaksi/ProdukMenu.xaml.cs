@@ -41,6 +41,8 @@ public partial class ProdukMenu : ContentPage
 
     public string NOMORHP = string.Empty;
 
+    private double grandTotalFinal = 0;
+
     private list_metodepembayaran metodeBayarTerpilih;
 
 
@@ -233,9 +235,11 @@ public partial class ProdukMenu : ContentPage
         double grandTotal = subtotal + nilaiPPN;
         double grandTotalBulat = Math.Floor(grandTotal / 100.0) * 100;
 
-        // 4. Tampilkan Grand Total yang SUDAH DIBULATKAN di Tombol Checkout
+     
         Summary_TotalCheckout.Text = $"Rp {grandTotalBulat:N0}";
 
+        // nilai modal
+        this.grandTotalFinal = grandTotalBulat;
     }
 
     private async void ItemKeranjang_Tapped(object sender, EventArgs e)
@@ -1292,7 +1296,7 @@ public partial class ProdukMenu : ContentPage
         switch (ID_BAYAR)
         {
             case "1":
-                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal());
+                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal));
                 break;
 
             case "2":
