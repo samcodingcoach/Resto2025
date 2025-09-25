@@ -362,21 +362,14 @@ public partial class ProdukMenu : ContentPage
 
         Task.Run(async () => await SimpanPesananSementaraAsync());
     }
-
+    //keranjang tapped
     private async void ItemKeranjang_Tapped(object sender, EventArgs e)
     {
-        // Dapatkan item yang di-tap dari BindingContext ViewCell
+        
         if ((sender as ViewCell)?.BindingContext is KeranjangItem item)
         {
-            // Tampilkan Action Sheet dengan pilihan untuk pengguna
-            string action = await DisplayActionSheet(
-                $"Pilih Aksi untuk {item.NamaProduk}", // Judul
-                "Batal",                               // Tombol Batal
-                null,                                  // Tombol Hapus (tidak ada di sini)
-                "Edit Jumlah",                         // Pilihan 1
-                "Hapus Item");                         // Pilihan 2
+            string action = await DisplayActionSheet($"Pilih Aksi untuk {item.NamaProduk}","Batal", null, "Edit Jumlah", "Hapus Item");
 
-            // Gunakan switch untuk menentukan aksi berdasarkan pilihan pengguna
             switch (action)
             {
                 case "Edit Jumlah":
