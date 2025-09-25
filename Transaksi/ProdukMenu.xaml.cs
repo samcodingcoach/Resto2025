@@ -196,7 +196,22 @@ public partial class ProdukMenu : ContentPage
         public string NamaProduk { get; set; }
         public double HargaJual { get; set; }
         public string UrlGambar { get; set; }
-        public string IkonModePesanan { get; set; }
+        
+        // Ubah 'IkonModePesanan' menjadi properti dengan backing field
+        private string _ikonModePesanan;
+        public string IkonModePesanan
+        {
+            get => _ikonModePesanan;
+            set
+            {
+                if (_ikonModePesanan != value)
+                {
+                    _ikonModePesanan = value;
+                    OnPropertyChanged(); // Memberitahu UI bahwa 'IkonModePesanan' berubah
+                }
+            }
+        }
+        
         public int StokTersedia { get; set; }
 
         // Ubah 'Jumlah' menjadi properti dengan backing field
@@ -257,7 +272,7 @@ public partial class ProdukMenu : ContentPage
                 // Validasi: Hanya tambahkan produk baru jika stoknya lebih dari 0
                 if (produkDipilih.stok > 0)
                 {
-                    keranjang.Add(new KeranjangItem
+                    var newItem = new KeranjangItem
                     {
                         IdProduk = produkDipilih.id_produk,
                         IdProdukSell = produkDipilih.id_produk_sell,
@@ -265,9 +280,11 @@ public partial class ProdukMenu : ContentPage
                         HargaJual = produkDipilih.harga_jual,
                         Jumlah = 1,
                         UrlGambar = produkDipilih.url_gambar,
-                        IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png",
                         StokTersedia = produkDipilih.stok
-                    });
+                    };
+                    // Atur IkonModePesanan menggunakan setter agar OnPropertyChanged dipicu
+                    newItem.IkonModePesanan = (this.ID_MEJA == "0") ? "takeaway.png" : "dine.png";
+                    keranjang.Add(newItem);
                     UpdateTotalBelanja(); // Update total setelah berhasil
                    
                 }
@@ -475,6 +492,9 @@ public partial class ProdukMenu : ContentPage
             {
                 item.IkonModePesanan = "dine.png";
             }
+            
+            // Karena kita memperbarui IkonModePesanan, OnPropertyChanged akan memicu pembaruan UI
+            // untuk binding terkait termasuk ikon pada item keranjang
             
             // Debug output sesuai permintaan
             System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: IkonModePesanan lama = {oldMode}, baru = {item.IkonModePesanan}");
