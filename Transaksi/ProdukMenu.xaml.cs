@@ -1099,6 +1099,15 @@ public partial class ProdukMenu : ContentPage
         }
         ID_MEJA = "0";
         Summary_ModePesanan.Text = "Takeaway";
+        
+        // Ubah mode pesanan semua item di keranjang ke takeaway
+        foreach (var item in keranjang)
+        {
+            item.IkonModePesanan = "takeaway.png";
+        }
+        
+        // Update total belanja untuk menghitung ulang biaya takeaway
+        UpdateTotalBelanja();
     }
 
     private void RadioDine_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -1108,6 +1117,15 @@ public partial class ProdukMenu : ContentPage
         DenahMejaContainer.IsVisible = true;
         get_meja();
         Summary_ModePesanan.Text = "Dine-In";
+        
+        // Ubah mode pesanan semua item di keranjang ke dine-in
+        foreach (var item in keranjang)
+        {
+            item.IkonModePesanan = "dine.png";
+        }
+        
+        // Update total belanja untuk menghitung ulang biaya takeaway
+        UpdateTotalBelanja();
     }
 
     private void OnMejaTapped(object sender, TappedEventArgs e)
