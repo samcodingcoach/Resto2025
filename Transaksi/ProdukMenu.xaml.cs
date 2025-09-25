@@ -94,19 +94,19 @@ public partial class ProdukMenu : ContentPage
     public class ProsesPembayaranDetailPayload
     {
         [JsonProperty("subtotal")]
-        public double Subtotal { get; set; }
+        public double? Subtotal { get; set; }
 
         [JsonProperty("biaya_pengemasan")]
-        public double BiayaPengemasan { get; set; }
+        public double? BiayaPengemasan { get; set; }
 
         [JsonProperty("service_charge")]
-        public double ServiceCharge { get; set; }
+        public double? ServiceCharge { get; set; }
 
         [JsonProperty("promo_diskon")]
-        public double PromoDiskon { get; set; }
+        public double? PromoDiskon { get; set; }
 
         [JsonProperty("ppn_resto")]
-        public double PpnResto { get; set; }
+        public double? PpnResto { get; set; }
     }
 
     public class ProsesPembayaranPayload
@@ -121,22 +121,22 @@ public partial class ProdukMenu : ContentPage
         public string Status { get; set; }
 
         [JsonProperty("jumlah_uang")]
-        public double JumlahUang { get; set; }
+        public double? JumlahUang { get; set; }
 
         [JsonProperty("jumlah_dibayarkan")]
-        public double JumlahDibayarkan { get; set; }
+        public double? JumlahDibayarkan { get; set; }
 
         [JsonProperty("kembalian")]
-        public double Kembalian { get; set; }
+        public double? Kembalian { get; set; }
 
         [JsonProperty("model_diskon")]
         public string ModelDiskon { get; set; }
 
         [JsonProperty("nilai_nominal")]
-        public double NilaiNominal { get; set; }
+        public double? NilaiNominal { get; set; }
 
         [JsonProperty("total_diskon")]
-        public double TotalDiskon { get; set; }
+        public double? TotalDiskon { get; set; }
 
         [JsonProperty("pembayaran_detail")]
         public ProsesPembayaranDetailPayload PembayaranDetail { get; set; }
@@ -1414,29 +1414,42 @@ public partial class ProdukMenu : ContentPage
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
 
-        switch (ID_BAYAR)
+        if (!keranjang.Any())
         {
-            case "1":
-                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
-                break;
+            await DisplayAlert("Perhatian", "Keranjang belanja masih kosong.", "OK");
+            return;
+        }
 
-            case "2":
-                await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(() =>
-                {
-                    OnPopupClosed();
-                }));
-                break;
+        if (SwitchInvoice.IsToggled)
+        {
+            switch (ID_BAYAR)
+            {
+                case "1":
+                    await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
+                    break;
 
-            case "3":
-                await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(() =>
-                {
-                    OnPopupClosed();
-                }));
-                break;
+                case "2":
+                    await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(() =>
+                    {
+                        OnPopupClosed();
+                    }));
+                    break;
 
-            default:
-                await DisplayAlert("Perhatian", "Silakan pilih metode pembayaran terlebih dahulu.", "OK");
-                break;
+                case "3":
+                    await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(() =>
+                    {
+                        OnPopupClosed();
+                    }));
+                    break;
+
+                default:
+                    await DisplayAlert("Perhatian", "Silakan pilih metode pembayaran terlebih dahulu.", "OK");
+                    break;
+            }
+        }
+        else
+        {
+            await SimpanSebagaiInvoiceAsync();
         }
     }
 
@@ -1558,6 +1571,18 @@ public partial class ProdukMenu : ContentPage
             });
         }
 
+
+        string endpoint;
+        if (this.STATUS_BAYAR == 1) // Bayar Langsung
+        {
+            endpoint = "pesanan/simpan_pesanan.php";
+        }
+        else // Simpan sebagai Invoice (Belum Bayar)
+        {
+            endpoint = "pesanan/simpan_invoice.php";
+        }
+        string url = App.API_HOST + endpoint;
+
         // 4. Serialisasi dan kirim ke API
         string jsonPayload = JsonConvert.SerializeObject(payload);
         System.Diagnostics.Debug.WriteLine("================ JSON DIKIRIM KE SERVER ================");
@@ -1568,7 +1593,7 @@ public partial class ProdukMenu : ContentPage
         {
             using (HttpClient client = new HttpClient())
             {
-                string url = App.API_HOST + "pesanan/simpan_pesanan.php";
+               
                 var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
@@ -1582,6 +1607,79 @@ public partial class ProdukMenu : ContentPage
                 {
                     string errorContent = await response.Content.ReadAsStringAsync();
                     await DisplayAlert("Gagal", $"Gagal menyimpan transaksi ke server. Pesan: {errorContent}", "OK");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
+        }
+    }
+
+    private async Task SimpanSebagaiInvoiceAsync()
+    {
+        // 1. Buat payload pembayaran MINIMAL yang dibutuhkan oleh simpan_invoice.php
+        var pembayaran = new ProsesPembayaranPayload
+        {
+            IdUser = this.ID_USER
+            // Properti lain sengaja dibiarkan kosong/default (akan menjadi null)
+        };
+
+        // 2. Buat payload utama
+        var payload = new PesananPayload
+        {
+            IdUser = ID_USER,
+            IdKonsumen = this.ID_KONSUMEN,
+            TotalCart = this.grandTotalFinal,
+            StatusCheckout = this.STATUS_BAYAR.ToString(), // Akan bernilai "0"
+            IdMeja = this.ID_MEJA,
+            DeviceId = "-",
+            PesananDetail = new List<PesananDetailPayload>(),
+            ProsesPembayaran = pembayaran
+        };
+
+        // Isi detail pesanan (item keranjang)
+        foreach (var item in keranjang)
+        {
+            payload.PesananDetail.Add(new PesananDetailPayload
+            {
+                IdProdukSell = item.IdProdukSell,
+                Qty = item.Jumlah,
+                TaDinein = (item.IkonModePesanan == "takeaway.png") ? "1" : "0"
+            });
+        }
+
+        // 3. Serialisasi JSON dan PERINTAHKAN UNTUK MENGABAIKAN NILAI NULL
+        string jsonPayload = JsonConvert.SerializeObject(payload, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.Indented
+        });
+
+        // 4. Kirim ke endpoint KHUSUS untuk invoice
+        string url = App.API_HOST + "pesanan/simpan_invoice.php";
+
+        System.Diagnostics.Debug.WriteLine("================ JSON INVOICE (BERSIH) DIKIRIM KE SERVER ================");
+        System.Diagnostics.Debug.WriteLine(jsonPayload);
+        System.Diagnostics.Debug.WriteLine("========================================================================");
+
+        try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await DisplayAlert("Sukses", "Invoice berhasil disimpan!", "OK");
+                    HapusPesananSementara();
+                    ResetHalaman();
+                }
+                else
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    await DisplayAlert("Gagal", $"Gagal menyimpan invoice. Pesan: {errorContent}", "OK");
                 }
             }
         }
