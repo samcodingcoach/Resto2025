@@ -365,15 +365,27 @@ public partial class ProdukMenu : ContentPage
     //keranjang tapped
     private async void ItemKeranjang_Tapped(object sender, EventArgs e)
     {
-        
+        // Dapatkan item yang di-tap dari BindingContext ViewCell
         if ((sender as ViewCell)?.BindingContext is KeranjangItem item)
         {
-            string action = await DisplayActionSheet($"Pilih Aksi untuk {item.NamaProduk}","Batal", null, "Edit Jumlah", "Hapus Item");
+            // Tampilkan Action Sheet dengan pilihan untuk pengguna
+            string action = await DisplayActionSheet(
+                $"Pilih Aksi untuk {item.NamaProduk}", // Judul
+                "Batal",                               // Tombol Batal
+                null,                                  // Tombol Hapus (tidak ada di sini)
+                "Edit Jumlah",                         // Pilihan 1
+                "Ubah Mode Pesanan",                   // Pilihan 2
+                "Hapus Item");                         // Pilihan 3
 
+            // Gunakan switch untuk menentukan aksi berdasarkan pilihan pengguna
             switch (action)
             {
                 case "Edit Jumlah":
                     await EditJumlahAsync(item);
+                    break;
+
+                case "Ubah Mode Pesanan":
+                    await UbahModePesananAsync(item);
                     break;
 
                 case "Hapus Item":
@@ -432,6 +444,42 @@ public partial class ProdukMenu : ContentPage
         if (jawaban)
         {
             keranjang.Remove(itemDihapus);
+            UpdateTotalBelanja();
+        }
+    }
+
+    private async Task UbahModePesananAsync(KeranjangItem item)
+    {
+        // Dapatkan mode pesanan saat ini dari item
+        string currentMode = item.IkonModePesanan == "takeaway.png" ? "Takeaway" : "Dine-in";
+        
+        // Tampilkan Action Sheet untuk memilih mode pesanan baru
+        string newMode = await DisplayActionSheet(
+            $"Ubah Mode Pesanan - Saat ini: {currentMode}",
+            "Batal",
+            null,
+            "Takeaway",
+            "Dine-in");
+
+        if (newMode != null && newMode != currentMode)
+        {
+            // Simpan mode pesanan lama untuk debugging
+            string oldMode = item.IkonModePesanan;
+            
+            // Ubah mode pesanan berdasarkan pilihan
+            if (newMode == "Takeaway")
+            {
+                item.IkonModePesanan = "takeaway.png";
+            }
+            else if (newMode == "Dine-in")
+            {
+                item.IkonModePesanan = "dine.png";
+            }
+            
+            // Debug output sesuai permintaan
+            System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: IkonModePesanan lama = {oldMode}, baru = {item.IkonModePesanan}");
+            
+            // Perbarui total belanja karena biaya takeaway mungkin berubah
             UpdateTotalBelanja();
         }
     }
