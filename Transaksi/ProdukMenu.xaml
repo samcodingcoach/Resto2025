@@ -450,7 +450,7 @@
                     <!--SUBMIT CEKOUT-->
                     <Frame Grid.Column="0" Grid.Row="11" Padding="0" BorderColor="Transparent">
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
-                            <Switch IsToggled="True" x:Name="SwitchInvoice" Toggled="SwitchInvoice_Toggled"  HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="0"/>
+                            <Switch IsToggled="False" x:Name="SwitchInvoice" Toggled="SwitchInvoice_Toggled"  HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="0"/>
                             <Label Text="Pembayaran Langsung" TextColor="#333333" FontSize="Caption" Grid.Column="1" VerticalOptions="Center"></Label>
                             <Button ImageSource="checkout19.png" Clicked="Summary_TotalCheckout_Clicked" Text="Rp 0" x:Name="Summary_TotalCheckout" TextColor="White" FontFamily="FontBold"  Grid.Column="2"></Button>
                         </Grid>

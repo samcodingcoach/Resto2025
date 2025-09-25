@@ -11,8 +11,8 @@
             //MainPage = new AppShell();
             string lokal = "http://192.168.77.8/";
             string publik = "https://resto.samdev.org/";
-            API_HOST = lokal + "_resto007/api/";
-            IMAGE_HOST = lokal + "_resto007/public/images/";
+            API_HOST = publik + "_resto007/api/";
+            IMAGE_HOST = publik + "_resto007/public/images/";
 
 
 

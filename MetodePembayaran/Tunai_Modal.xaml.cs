@@ -8,6 +8,7 @@ public partial class Tunai_Modal : Popup
     private double totalBelanja = 0;
     private double kembalian = 0;
     private double uangKonsumenValue = 0;
+    private string statusBayar = "0";
     public Tunai_Modal(double totalBelanja, Func<double, Task> onPaymentSuccessCallback)
     {
         InitializeComponent();
