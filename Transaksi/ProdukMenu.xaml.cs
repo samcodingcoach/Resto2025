@@ -471,30 +471,102 @@ public partial class ProdukMenu : ContentPage
         string currentMode = item.IkonModePesanan == "takeaway.png" ? "Takeaway" : "Dine-in";
         string oppositeMode = item.IkonModePesanan == "takeaway.png" ? "Dine-in" : "Takeaway";
         
-        string action;
-        
         // Jika jumlah item lebih dari 1, tawarkan opsi untuk memecah item
         if (item.Jumlah > 1)
         {
-            action = await DisplayActionSheet(
+            string action = await DisplayActionSheet(
                 $"Pilih Aksi untuk {item.NamaProduk}",
                 "Batal",
                 null,
                 "Ubah Semua",
                 "Pecah Item");
+
+            if (action == "Ubah Semua")
+            {
+                string newMode = await DisplayActionSheet(
+                    $"Ubah Mode Pesanan - Saat ini: {currentMode}",
+                    "Batal",
+                    null,
+                    "Takeaway",
+                    "Dine-in");
+
+                if (newMode != null && newMode != currentMode)
+                {
+                    // Simpan mode pesanan lama untuk debugging
+                    string oldMode = item.IkonModePesanan;
+                    
+                    // Ubah mode pesanan berdasarkan pilihan
+                    if (newMode == "Takeaway")
+                    {
+                        item.IkonModePesanan = "takeaway.png";
+                    }
+                    else if (newMode == "Dine-in")
+                    {
+                        item.IkonModePesanan = "dine.png";
+                    }
+                    
+                    // Debug output sesuai permintaan
+                    System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: IkonModePesanan lama = {oldMode}, baru = {item.IkonModePesanan}");
+                }
+            }
+            else if (action == "Pecah Item")
+            {
+                // Tawarkan jumlah baru untuk item yang akan diubah mode pesannya
+                string jumlahInput = await DisplayPromptAsync(
+                    title: "Pecah Item - Jumlah",
+                    message: $"Item saat ini: {item.NamaProduk} - Jumlah: {item.Jumlah} - Mode: {currentMode}\n\nMasukkan jumlah {oppositeMode} (maks: {item.Jumlah}):",
+                    accept: "Lanjutkan",
+                    cancel: "Batal",
+                    placeholder: "1",  // Defaultnya 1
+                    maxLength: 3,
+                    keyboard: Keyboard.Numeric);
+
+                if (jumlahInput != null)
+                {
+                    if (int.TryParse(jumlahInput, out int jumlahBaru) && jumlahBaru > 0 && jumlahBaru <= item.Jumlah)
+                    {
+                        // Buat item baru dengan jumlah yang dipilih dan mode pesanan yang berlawanan
+                        var newItem = new KeranjangItem
+                        {
+                            IdProduk = item.IdProduk,
+                            IdProdukSell = item.IdProdukSell,
+                            NamaProduk = item.NamaProduk,
+                            HargaJual = item.HargaJual,
+                            UrlGambar = item.UrlGambar,
+                            StokTersedia = item.StokTersedia
+                        };
+
+                        // Tetapkan mode pesanan berlawanan ke item baru
+                        if (item.IkonModePesanan == "takeaway.png")
+                        {
+                            newItem.IkonModePesanan = "dine.png";  // Jika sekarang takeaway, yang baru jadi dine-in
+                        }
+                        else
+                        {
+                            newItem.IkonModePesanan = "takeaway.png";  // Jika sekarang dine-in, yang baru jadi takeaway
+                        }
+
+                        newItem.Jumlah = jumlahBaru;
+
+                        // Kurangi jumlah item lama
+                        item.Jumlah -= jumlahBaru;
+
+                        // Tambahkan item baru ke keranjang
+                        keranjang.Add(newItem);
+
+                        // Debug output
+                        System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: {jumlahBaru} item dipecah dari {currentMode} ke {oppositeMode}");
+                    }
+                    else
+                    {
+                        await DisplayAlert("Input Tidak Valid", $"Jumlah harus antara 1 dan {item.Jumlah}.", "OK");
+                    }
+                }
+            }
         }
         else
         {
-            action = await DisplayActionSheet(
-                $"Ubah Mode Pesanan - Saat ini: {currentMode}",
-                "Batal",
-                null,
-                "Takeaway",
-                "Dine-in");
-        }
-
-        if (action == "Ubah Semua")
-        {
+            // Untuk item dengan jumlah 1, langsung tawarkan pengubahan mode
             string newMode = await DisplayActionSheet(
                 $"Ubah Mode Pesanan - Saat ini: {currentMode}",
                 "Batal",
@@ -520,79 +592,6 @@ public partial class ProdukMenu : ContentPage
                 // Debug output sesuai permintaan
                 System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: IkonModePesanan lama = {oldMode}, baru = {item.IkonModePesanan}");
             }
-        }
-        else if (action == "Pecah Item")
-        {
-            // Tawarkan jumlah baru untuk item yang akan diubah mode pesannya
-            string jumlahInput = await DisplayPromptAsync(
-                title: "Pecah Item",
-                message: $"Item saat ini: {item.NamaProduk} - Jumlah: {item.Jumlah} - Mode: {currentMode}\n\nMasukkan jumlah item yang ingin diubah ke mode {oppositeMode}:",
-                accept: "Lanjutkan",
-                cancel: "Batal",
-                placeholder: "1",  // Defaultnya 1
-                maxLength: 3,
-                keyboard: Keyboard.Numeric);
-
-            if (jumlahInput != null)
-            {
-                if (int.TryParse(jumlahInput, out int jumlahBaru) && jumlahBaru > 0 && jumlahBaru <= item.Jumlah)
-                {
-                    // Buat item baru dengan jumlah yang dipilih dan mode pesanan yang berlawanan
-                    var newItem = new KeranjangItem
-                    {
-                        IdProduk = item.IdProduk,
-                        IdProdukSell = item.IdProdukSell,
-                        NamaProduk = item.NamaProduk,
-                        HargaJual = item.HargaJual,
-                        UrlGambar = item.UrlGambar,
-                        StokTersedia = item.StokTersedia
-                    };
-
-                    // Tetapkan mode pesanan berlawanan ke item baru
-                    if (item.IkonModePesanan == "takeaway.png")
-                    {
-                        newItem.IkonModePesanan = "dine.png";  // Jika sekarang takeaway, yang baru jadi dine-in
-                    }
-                    else
-                    {
-                        newItem.IkonModePesanan = "takeaway.png";  // Jika sekarang dine-in, yang baru jadi takeaway
-                    }
-
-                    newItem.Jumlah = jumlahBaru;
-
-                    // Kurangi jumlah item lama
-                    item.Jumlah -= jumlahBaru;
-
-                    // Tambahkan item baru ke keranjang
-                    keranjang.Add(newItem);
-
-                    // Debug output
-                    System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: {jumlahBaru} item dipecah dari {currentMode} ke {oppositeMode}");
-                }
-                else
-                {
-                    await DisplayAlert("Input Tidak Valid", $"Jumlah harus antara 1 dan {item.Jumlah}.", "OK");
-                }
-            }
-        }
-        else if (action == "Takeaway" || action == "Dine-in")
-        {
-            // Untuk item dengan jumlah 1, langsung ubah mode pesanan
-            // Simpan mode pesanan lama untuk debugging
-            string oldMode = item.IkonModePesanan;
-            
-            // Ubah mode pesanan berdasarkan pilihan
-            if (action == "Takeaway")
-            {
-                item.IkonModePesanan = "takeaway.png";
-            }
-            else if (action == "Dine-in")
-            {
-                item.IkonModePesanan = "dine.png";
-            }
-            
-            // Debug output sesuai permintaan
-            System.Diagnostics.Debug.WriteLine($"Item {item.NamaProduk}: IkonModePesanan lama = {oldMode}, baru = {item.IkonModePesanan}");
         }
 
         // Perbarui total belanja karena biaya takeaway mungkin berubah
@@ -880,7 +879,7 @@ public partial class ProdukMenu : ContentPage
         catch (Exception ex)
         {
             // Handle jika terjadi error (misal: tidak ada koneksi internet)
-            await DisplayAlert("Error", $"Terjadi kesalahan saat memuat produk: {ex.Message}", "OK");
+            await DisplayAlert("Error Produk", $"Terjadi kesalahan saat memuat produk: {ex.Message}", "OK");
         }
         finally
         {
@@ -1072,7 +1071,7 @@ public partial class ProdukMenu : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
+            await DisplayAlert("Error Promo", $"Terjadi kesalahan: {ex.Message}", "OK");
         }
     }
 
@@ -1782,6 +1781,13 @@ public partial class ProdukMenu : ContentPage
                     await DisplayAlert("Sukses", "Transaksi berhasil disimpan!", "OK");
                     HapusPesananSementara();
                     ResetHalaman();
+                    
+                    // Perbarui data meja dan produk setelah transaksi selesai - harus di main thread
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await get_listproduk();
+                        get_meja();
+                    });
                 }
                 else
                 {
@@ -1792,7 +1798,7 @@ public partial class ProdukMenu : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
+            await DisplayAlert("Error Proses Dan Simpan", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
         }
     }
 
@@ -1855,6 +1861,13 @@ public partial class ProdukMenu : ContentPage
                     await DisplayAlert("Sukses", "Invoice berhasil disimpan!", "OK");
                     HapusPesananSementara();
                     ResetHalaman();
+                    
+                    // Perbarui data meja dan produk setelah transaksi selesai - harus di main thread
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await get_listproduk();
+                        get_meja();
+                    });
                 }
                 else
                 {
@@ -1865,7 +1878,7 @@ public partial class ProdukMenu : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
+            await DisplayAlert("Error Invoice", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
         }
     }
 
