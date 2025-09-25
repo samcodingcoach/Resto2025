@@ -1449,6 +1449,12 @@ public partial class ProdukMenu : ContentPage
         }
         else
         {
+            if(ID_MEJA == "0")
+            {
+                await DisplayAlert("Perhatian", "Bayar nanti hanya berlaku untuk Dine-in", "OK");
+                return;
+            }
+
             await SimpanSebagaiInvoiceAsync();
         }
     }
@@ -1730,5 +1736,14 @@ public partial class ProdukMenu : ContentPage
     private void SwitchInvoice_Toggled(object sender, ToggledEventArgs e)
     {
         STATUS_BAYAR = e.Value ? 1 : 0;
+        if(e.Value)
+        {
+            LabelSwitch.Text = "Bayar Langsung";
+        }
+        else
+        {
+            LabelSwitch.Text = "Pembayaran Nanti (Invoice)";
+        }
+
     }
 }
