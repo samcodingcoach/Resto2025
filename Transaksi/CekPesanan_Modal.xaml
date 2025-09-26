@@ -4,6 +4,7 @@
              x:Class="Resto2025.Transaksi.CekPesanan_Modal"
              Title="CekPesanan_Modal">
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" Padding="15">
+        <!--header-->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="15">
             <Border Grid.Column="0" BackgroundColor="#FF2D2D" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" HeightRequest="50" WidthRequest="50">
                 <Label Text="13" TextColor="White" FontFamily="FontBold" FontSize="Title" HorizontalOptions="Center" VerticalOptions="Center" />
@@ -23,6 +24,24 @@
 
             <Image Source="close.png" HeightRequest="32" Grid.Column="3"></Image>
            
+        </Grid>
+
+
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" Padding="10" VerticalOptions="Center">
+
+            <Button Grid.Column="0" x:Name="BHapusInvoice" ImageSource="delete.png" BackgroundColor="Red" CornerRadius="8"  />
+
+            <HorizontalStackLayout Grid.Column="2"  Spacing="15" VerticalOptions="Center">
+
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="End">
+                    <Label Text="TOTAL INVOICE" TextColor="#b3b3b3" FontSize="Caption" HorizontalTextAlignment="End" />
+                    <Label Text="RP 35.000.000" TextColor="#075E54" FontFamily="FontBold" FontSize="Title" HorizontalTextAlignment="End" />
+                </VerticalStackLayout>
+
+                <Button Text="BAYAR" TextColor="White" FontAttributes="Bold" FontSize="Title" BackgroundColor="#FF2D2D" CornerRadius="8" Padding="30,15" />
+
+            </HorizontalStackLayout>
+
         </Grid>
     </Grid>
 </ContentPage>
