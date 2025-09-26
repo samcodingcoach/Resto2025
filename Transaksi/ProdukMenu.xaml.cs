@@ -31,8 +31,10 @@ public partial class ProdukMenu : ContentPage
     public double NILAI_PROMO = 0;
     public double NILAI_PER_TAKEAWAY = 0;
     public string PILIHAN_PROMO = string.Empty;
+    public bool MODE_PESANAN_DINE = false;
+    public bool MODE_PESANAN_TA = true;
 
-    
+
     public double PERSEN_PROMO = 0;
     public double NOMINAL_PROMO = 0;
 
@@ -1193,7 +1195,8 @@ public partial class ProdukMenu : ContentPage
         }
         ID_MEJA = "0";
         Summary_ModePesanan.Text = "Takeaway";
-        
+        MODE_PESANAN_DINE = false;
+        MODE_PESANAN_TA = true;
         // Ubah mode pesanan semua item di keranjang ke takeaway
         foreach (var item in keranjang)
         {
@@ -1211,7 +1214,9 @@ public partial class ProdukMenu : ContentPage
         DenahMejaContainer.IsVisible = true;
         get_meja();
         Summary_ModePesanan.Text = "Dine-In";
-        
+        MODE_PESANAN_DINE = true;
+        MODE_PESANAN_TA = false;
+
         // Ubah mode pesanan semua item di keranjang ke dine-in
         foreach (var item in keranjang)
         {
@@ -1590,6 +1595,12 @@ public partial class ProdukMenu : ContentPage
         if (!keranjang.Any())
         {
             await DisplayAlert("Perhatian", "Keranjang belanja masih kosong.", "OK");
+            return;
+        }
+
+        if(MODE_PESANAN_DINE && ID_MEJA == "0")
+        {
+            await DisplayAlert("Perhatian", "Silakan pilih nomor meja terlebih dahulu.", "OK");
             return;
         }
 
