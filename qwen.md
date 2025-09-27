@@ -1,17 +1,8 @@
-CekPesanan_Modal.xaml.cs
-pada bagian ini
-private async void CloseModal_Tapped(object sender, TappedEventArgs e)
-    {
-
-
-		if (sender is Image image)
-		{
-			await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
-			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
-		}
-
-		// tutup modal
-	}
-
-	pada <Label Text="Total Item: " x:Name="L_TotalItem" FontSize="Caption" HorizontalOptions="End"></Label> beri informasi berapa item yang dipesan
-	berdasarkan sum dari binding Qty
+CekPesanan_Modal.xaml.cs, pada bagian_
+public class PesananInfo
+public string TglCart { get; set; } kenapa menjadi string?
+contoh output dari json adalah "tgl_cart": "2025-09-27 09:35:18"
+dari ouput itu saya ingin di transform kedalam bentuk informasi durasi yang sudah di lewati
+misalnya 1:30 Menit 
+artinya yang lalu (1 jam 30 menit yang lalu)
+taruh dalam ui <Label Text="" x:Name="L_DURASI"  TextColor="#B3b3b3" FontFamily="FontBold" FontSize="Caption" />
