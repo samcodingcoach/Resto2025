@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Transaksi.CekPesanan_Modal"
              >
-    <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" Padding="15">
+    <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" Padding="15" RowSpacing="10">
         <!--header-->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="15">
             <Border Grid.Column="0" BackgroundColor="#FF2D2D" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" HeightRequest="50" WidthRequest="50">
@@ -33,7 +33,7 @@
                         <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
 
                             <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                                <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                                <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
                             </Border>
                             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
                                 <Label Text="{Binding NamaKategori}" TextColor="#b3b3b3" FontSize="Caption"></Label>

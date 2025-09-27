@@ -240,6 +240,7 @@ public partial class CekPesanan_Modal : ContentPage
 		public string Ket { get; set; }
 		public string NamaKategori { get; set; }
 
+		public string UrlGambar => App.IMAGE_HOST + KodeProduk + ".jpg";
 		public string FormattedHargaJual => $"Rp {HargaJual:N0}";
 		
 		public string ModePesananSource => (TaDinein == "1") ? "takeaway.png" : "dine.png";
