@@ -1,8 +1,9 @@
-CekPesanan_Modal.xaml.cs, pada bagian_
-public class PesananInfo
-public string TglCart { get; set; } kenapa menjadi string?
-contoh output dari json adalah "tgl_cart": "2025-09-27 09:35:18"
-dari ouput itu saya ingin di transform kedalam bentuk informasi durasi yang sudah di lewati
-misalnya 1:30 Menit 
-artinya yang lalu (1 jam 30 menit yang lalu)
-taruh dalam ui <Label Text="" x:Name="L_DURASI"  TextColor="#B3b3b3" FontFamily="FontBold" FontSize="Caption" />
+pada CekPesanan_Modal.xaml.cs_
+		
+		[JsonProperty("status")]
+		public string Status { get; set; }
+	Jika status == 1 itu artinya sudah dibayar diawal
+	maka tombol bayar 
+	<Button Text="BAYAR" TextColor="White" FontAttributes="Bold" x:Name="Submit_Bayar" Clicked="Submit_Bayar_Clicked"
+                        FontSize="Title" BackgroundColor="#FF2D2D" CornerRadius="8" Padding="30,15" />
+diganti dengan text RILIS MEJA back ground 075E54 text white

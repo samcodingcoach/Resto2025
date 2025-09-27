@@ -32,9 +32,12 @@ public partial class CekPesanan_Modal : Popup
 			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
 		}
 
-		// tutup modal
+		
 		Close();
-    }
+		
+	}
+
+	
 
 	private async Task LoadCekPesananDataAsync()
 	{
@@ -99,6 +102,31 @@ public partial class CekPesanan_Modal : Popup
 			// Tampilkan durasi sejak pesanan dibuat
 			if (L_DURASI != null)
 				L_DURASI.Text = cekPesananData.Pesanan.DurasiSejakDipesan;
+
+			// Cek status pembayaran dan update tombol
+			if (Submit_Bayar != null)
+			{
+				// Cek apakah ada pembayaran dan statusnya
+				bool sudahDibayar = false;
+				if (cekPesananData.Pesanan.Pembayaran != null && cekPesananData.Pesanan.Pembayaran.Count > 0)
+				{
+					// Cek apakah salah satu pembayaran memiliki status 1
+					sudahDibayar = cekPesananData.Pesanan.Pembayaran.Any(p => p.Status == "1");
+				}
+				
+				if (sudahDibayar)
+				{
+					// Jika sudah dibayar, ubah tombol menjadi "RILIS MEJA"
+					Submit_Bayar.Text = "RILIS MEJA";
+					Submit_Bayar.BackgroundColor = Color.FromArgb("#075E54");
+				}
+				else
+				{
+					// Jika belum dibayar, biarkan sebagai "BAYAR"
+					Submit_Bayar.Text = "BAYAR";
+					Submit_Bayar.BackgroundColor = Color.FromArgb("#FF2D2D");
+				}
+			}
 
 			// Isi ListView LV_Keranjang dengan data dari pesanan_detail
 			if (LV_Keranjang != null && cekPesananData.Pesanan.PesananDetail != null)
@@ -300,5 +328,8 @@ public partial class CekPesanan_Modal : Popup
 		}
 	}
 
-    
+    private void Submit_Bayar_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }
