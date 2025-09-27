@@ -16,7 +16,7 @@
                 <VerticalStackLayout Grid.Column="1"  VerticalOptions="Center"  Spacing="2">
                     <Label Text="DETAIL PESANAN DINE IN" FontFamily="FontBold" TextColor="#333" FontSize="Subtitle" />
                    
-                    <StackLayout Orientation="Horizontal" Spacing="15">
+                    <StackLayout Orientation="Horizontal" Spacing="10">
                         <Label Text="INV" x:Name="L_IDTAGIHAN"  TextColor="#FF2d2d" FontFamily="FontBold" FontSize="Caption" />
                         <Label Text="" x:Name="L_DURASI"  TextColor="#B3b3b3" FontFamily="FontBold" FontSize="Caption" />
                     </StackLayout>

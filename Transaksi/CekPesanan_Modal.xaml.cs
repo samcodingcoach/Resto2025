@@ -49,7 +49,10 @@ public partial class CekPesanan_Modal : Popup
 				if (response.IsSuccessStatusCode)
 				{
 					string json = await response.Content.ReadAsStringAsync();
-					cekPesananData = JsonConvert.DeserializeObject<CekPesananResponse>(json);
+					// Gunakan JsonSerializerSettings untuk mengkonversi tanggal dari string ke DateTime
+					JsonSerializerSettings settings = new JsonSerializerSettings();
+					settings.DateParseHandling = DateParseHandling.DateTime;
+					cekPesananData = JsonConvert.DeserializeObject<CekPesananResponse>(json, settings);
 
 					if (cekPesananData?.Pesanan != null)
 					{
@@ -92,6 +95,10 @@ public partial class CekPesanan_Modal : Popup
 				
 			if (L_IDMEJA != null && cekPesananData.Meja != null)
 				L_IDMEJA.Text = cekPesananData.Meja.NomorMeja;
+
+			// Tampilkan durasi sejak pesanan dibuat
+			if (L_DURASI != null)
+				L_DURASI.Text = cekPesananData.Pesanan.DurasiSejakDipesan;
 
 			// Isi ListView LV_Keranjang dengan data dari pesanan_detail
 			if (LV_Keranjang != null && cekPesananData.Pesanan.PesananDetail != null)
@@ -219,7 +226,7 @@ public partial class CekPesanan_Modal : Popup
 		public string NamaKonsumen { get; set; }
 
 		[JsonProperty("tgl_cart")]
-		public string TglCart { get; set; }
+		public DateTime TglCart { get; set; }
 
 		[JsonProperty("total_cart")]
 		public double TotalCart { get; set; }
@@ -240,6 +247,20 @@ public partial class CekPesanan_Modal : Popup
 		public List<PembayaranInfo> Pembayaran { get; set; }
 
 		public string FormattedTotalCart => $"Rp {TotalCart:N0}";
+		
+		public string DurasiSejakDipesan
+		{
+			get
+			{
+				var sekarang = DateTime.Now;
+				var selisih = sekarang - TglCart;
+				
+				int jam = (int)selisih.TotalHours;
+				int menit = (int)selisih.Minutes;
+				
+				return $"{jam}:{menit} Menit";
+			}
+		}
 	}
 
 	public class CekPesananResponse
