@@ -9,7 +9,7 @@ using CommunityToolkit.Maui.Views;
 
 namespace Resto2025.Transaksi;
 
-public partial class CekPesanan_Modal : ContentPage
+public partial class CekPesanan_Modal : Popup
 {
 	public int ID_MEJA = 4;
 	private CekPesananResponse cekPesananData;
