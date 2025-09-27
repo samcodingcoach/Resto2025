@@ -82,43 +82,9 @@ public partial class ProdukMenu : ContentPage
     {
         InitializeComponent();
         LV_Keranjang.ItemsSource = keranjang;
-        get_data_kategori();
-        get_data_promo();
-        get_biaya_takeaway();
-
+        // --- TAMBAHKAN BARIS INI UNTUK MEMPERBAIKI ERROR ---
         _listproduk = new List<list_produk>();
-        get_listproduk();
-        get_metode_pembayaran();
-        get_ppn(); // Ini akan mengisi nilai PERSENTASE_PPN
-
-        // Isi keranjang dari data pesanan
-        foreach (var item in pesananDetail)
-        {
-            var newItem = new KeranjangItem
-            {
-                IdProduk = item.IdProdukSell,
-                IdProdukSell = item.IdProdukSell,
-                NamaProduk = item.NamaProduk,
-                HargaJual = item.HargaJual,
-                Jumlah = item.Qty,
-                UrlGambar = App.IMAGE_HOST + item.KodeProduk + ".jpg",
-                // Set mode pesanan berdasarkan TaDinein
-                IkonModePesanan = (item.TaDinein == "1") ? "takeaway.png" : "dine.png"
-            };
-            
-            keranjang.Add(newItem);
-        }
-
-        // Update ID_MEJA jika diperlukan
-        if (idMeja != "0")
-        {
-            this.ID_MEJA = idMeja;
-        }
-
-        // Update tampilan setelah mengisi keranjang
-        // Kita panggil UpdateTotalBelanja() untuk menghitung ulang semua nilai
-        // termasuk PPN berdasarkan PERSENTASE_PPN yang aktif saat ini
-        UpdateTotalBelanja();
+        _ = InisialisasiDariPesananAsync(pesananDetail, idMeja);
     }
 
     // Model untuk setiap item di dalam 'pesanan_detail'
@@ -370,8 +336,7 @@ public partial class ProdukMenu : ContentPage
                 // Hitung subtotal dasar untuk biaya admin
                 double subtotalUntukFee = totalProduk + totalBiayaTakeaway - NILAI_PROMO;
 
-                // Hitung biaya admin berdasarkan persentase
-                // Contoh: 0.7 -> 0.7 / 100.0 = 0.007
+               
                 BIAYA_ADMIN = subtotalUntukFee * (metodeBayarTerpilih.biaya_admin / 100.0);
             }
             else
@@ -756,7 +721,7 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private async void get_ppn()
+    private async Task get_ppn()
     {
         try
         {
@@ -1996,5 +1961,44 @@ public partial class ProdukMenu : ContentPage
             LabelSwitch.Text = "Pembayaran Nanti (Invoice)";
         }
 
+    }
+
+
+    private async Task InisialisasiDariPesananAsync(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja)
+    {
+        // Panggil dan TUNGGU semua data yang dibutuhkan, terutama PPN
+        await get_ppn();
+
+        // Method lain bisa jalan paralel jika tidak ada ketergantungan
+        get_data_kategori();
+        get_data_promo();
+        get_biaya_takeaway();
+        get_listproduk();
+        get_metode_pembayaran();
+
+        // Isi keranjang dari data pesanan
+        foreach (var item in pesananDetail)
+        {
+            var newItem = new KeranjangItem
+            {
+                IdProduk = item.IdProdukSell,
+                IdProdukSell = item.IdProdukSell,
+                NamaProduk = item.NamaProduk,
+                HargaJual = item.HargaJual,
+                Jumlah = item.Qty,
+                UrlGambar = App.IMAGE_HOST + item.KodeProduk + ".jpg",
+                IkonModePesanan = (item.TaDinein == "1") ? "takeaway.png" : "dine.png"
+            };
+            keranjang.Add(newItem);
+        }
+
+        // Update ID_MEJA jika diperlukan
+        if (idMeja != "0")
+        {
+            this.ID_MEJA = idMeja;
+        }
+
+        // Panggil UpdateTotalBelanja SETELAH get_ppn() dijamin selesai
+        UpdateTotalBelanja();
     }
 }
