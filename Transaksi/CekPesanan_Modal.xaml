@@ -2,58 +2,64 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Transaksi.CekPesanan_Modal"
-             Title="CekPesanan_Modal">
+             >
     <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" Padding="15">
         <!--header-->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="15">
             <Border Grid.Column="0" BackgroundColor="#FF2D2D" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" HeightRequest="50" WidthRequest="50">
-                <Label Text="13" TextColor="White" FontFamily="FontBold" FontSize="Title" HorizontalOptions="Center" VerticalOptions="Center" />
+                <Label Text="0" x:Name="L_IDMEJA" TextColor="White" FontFamily="FontBold" FontSize="Title" HorizontalOptions="Center" VerticalOptions="Center" />
             </Border>
 
             <VerticalStackLayout Grid.Column="1"  VerticalOptions="Center"  Spacing="2">
                 <Label Text="DETAIL PESANAN DINE IN" FontFamily="FontBold" TextColor="#333" FontSize="Subtitle" />
-                <Label Text="INV-13-2509260002" TextColor="#FF2d2d" FontFamily="FontBold" FontSize="Caption" />
+                <Label Text="INV" x:Name="L_IDTAGIHAN"  TextColor="#FF2d2d" FontFamily="FontBold" FontSize="Caption" />
             </VerticalStackLayout>
 
             <Border Grid.Column="2" BackgroundColor="#D9D9D9" StrokeShape="RoundRectangle 8" HeightRequest="35" Stroke="Transparent" Padding="10,5">
                 <StackLayout Orientation="Horizontal" Spacing="8" VerticalOptions="Start">
                     <Image Source="guest.png" HeightRequest="24" />
-                    <Label Text="GUEST" TextColor="#757575" FontFamily="FontBold"  FontSize="Caption" VerticalOptions="Center" />
+                    <Label Text="GUEST" x:Name="L_NamaMember" TextColor="#757575" FontFamily="FontBold"  FontSize="Caption" VerticalOptions="Center" />
                 </StackLayout>
             </Border>
 
             <Image Source="close.png" HeightRequest="32" Grid.Column="3"></Image>
-           
+
         </Grid>
+        <!--listview-->
+        <ListView Grid.Row="1" x:Name="LV_Keranjang" HasUnevenRows="True" SeparatorVisibility="None" BackgroundColor="Transparent" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
 
+                            <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                <Label Text="Makanan" TextColor="#b3b3b3" FontSize="Caption"></Label>
+                                <Label Text="Nasi Pecel Family Samarinda 2" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                                <Label Text="RP 300.000.000" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
+                            </VerticalStackLayout>
 
-        <Grid Grid.Row="1" Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
+                            <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
 
-            <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
-            </Border>
-            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                <Label Text="Makanan" TextColor="#b3b3b3" FontSize="Caption"></Label>
-                <Label Text="Nasi Pecel Family Samarinda 2" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
-                <Label Text="RP 300.000.000" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
-            </VerticalStackLayout>
+                            </Image>
 
-            <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
-
-            </Image>
-
-            <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
-                <StackLayout>
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer />
-                    </StackLayout.GestureRecognizers>
-                    <Label Text="122" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </StackLayout>
-            </Border>
-            <Label Grid.Column="4" Text="RP 300.000.000" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
-        </Grid>
-
-
+                            <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
+                                <StackLayout>
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer />
+                                    </StackLayout.GestureRecognizers>
+                                    <Label Text="122" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </StackLayout>
+                            </Border>
+                            <Label Grid.Column="4" Text="RP 300.000.000" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--footer submit-->
         <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" Padding="10" VerticalOptions="Center">
 
             <Button Grid.Column="0" x:Name="BHapusInvoice" ImageSource="delete.png" BackgroundColor="Red" CornerRadius="8"  />
@@ -62,10 +68,11 @@
 
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="End">
                     <Label Text="TOTAL INVOICE" TextColor="#b3b3b3" FontSize="Caption" HorizontalTextAlignment="End" />
-                    <Label Text="RP 35.000.000" TextColor="#075E54" FontFamily="FontBold" FontSize="Title" HorizontalTextAlignment="End" />
+                    <Label Text="RP 35.000.000" x:Name="L_TotalInvoice" TextColor="#075E54" FontFamily="FontBold" FontSize="Title" HorizontalTextAlignment="End" />
                 </VerticalStackLayout>
 
-                <Button Text="BAYAR" TextColor="White" FontAttributes="Bold" FontSize="Title" BackgroundColor="#FF2D2D" CornerRadius="8" Padding="30,15" />
+                <Button Text="BAYAR" TextColor="White" FontAttributes="Bold" 
+                        FontSize="Title" BackgroundColor="#FF2D2D" CornerRadius="8" Padding="30,15" />
 
             </HorizontalStackLayout>
 
