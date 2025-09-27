@@ -11,17 +11,30 @@ namespace Resto2025.Transaksi;
 
 public partial class CekPesanan_Modal : Popup
 {
-	public int ID_MEJA = 4;
+	public int ID_MEJA;
 	private CekPesananResponse cekPesananData;
 	private List<KeranjangItem> keranjangItems;
 
-	public CekPesanan_Modal()
+	public CekPesanan_Modal(int idMeja)
 	{
+		ID_MEJA = idMeja;
 		InitializeComponent();
 		
 		// Panggil fungsi untuk mengambil data dari API
 		Task.Run(async () => await LoadCekPesananDataAsync());
 	}
+
+	private async void CloseModal_Tapped(object sender, TappedEventArgs e)
+	{
+		if (sender is Image image)
+		{
+			await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+		}
+
+		// tutup modal
+		Close();
+    }
 
 	private async Task LoadCekPesananDataAsync()
 	{
@@ -49,13 +62,17 @@ public partial class CekPesanan_Modal : Popup
 				}
 				else
 				{
-					await DisplayAlert("Gagal Terhubung", $"Tidak dapat mengambil data dari server. Status: {response.StatusCode}", "OK");
+					// Dalam konteks popup, kita bisa menangani error dengan cara lain
+					// Misalnya menampilkan pesan error di komponen UI di popup atau hanya mencatatnya
+					System.Diagnostics.Debug.WriteLine($"Gagal Terhubung: Tidak dapat mengambil data dari server. Status: {response.StatusCode}");
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlert("Error", $"Terjadi kesalahan saat mengambil data: {ex.Message}", "OK");
+			// Dalam konteks popup, kita bisa menangani error dengan cara lain
+			// Misalnya menampilkan pesan error di komponen UI di popup atau hanya mencatatnya
+			System.Diagnostics.Debug.WriteLine($"Error: Terjadi kesalahan saat mengambil data: {ex.Message}");
 		}
 	}
 
@@ -98,6 +115,13 @@ public partial class CekPesanan_Modal : Popup
 				}
 				
 				LV_Keranjang.ItemsSource = keranjangItems;
+				
+				// Update total item berdasarkan sum dari Qty
+				if (L_TotalItem != null)
+				{
+					int totalItem = keranjangItems.Sum(item => item.Qty);
+					L_TotalItem.Text = $"Total Item: {totalItem}";
+				}
 			}
 		}
 	}
@@ -254,4 +278,6 @@ public partial class CekPesanan_Modal : Popup
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
+
+    
 }

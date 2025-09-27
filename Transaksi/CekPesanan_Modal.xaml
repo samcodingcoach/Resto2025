@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Transaksi.CekPesanan_Modal"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-             Color="Transparent" Size="810, 550" CanBeDismissedByTappingOutsideOfPopup="False"
+             Color="Transparent" Size="600, 600" CanBeDismissedByTappingOutsideOfPopup="False"
              >
     <Frame CornerRadius="10" Padding="15" BorderColor="Transparent">
         <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" RowSpacing="10">
@@ -25,43 +25,59 @@
                     </StackLayout>
                 </Border>
 
-                <Image Source="close.png" HeightRequest="32" Grid.Column="3"></Image>
+                <Image Source="close.png" HeightRequest="32" Grid.Column="3">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="CloseModal" Tapped="CloseModal_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
 
             </Grid>
             <!--listview-->
-            <ListView Grid.Row="1" x:Name="LV_Keranjang" HasUnevenRows="True" SeparatorVisibility="None" BackgroundColor="Transparent" SelectionMode="None">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
+            <Frame Grid.Row="1" BackgroundColor="White" BorderColor="WhiteSmoke" Padding="15">
+                <Frame.Shadow>
+                    <Shadow Brush="Black" Offset="10,10" Radius="20" Opacity="0.2" />
+                </Frame.Shadow>
 
-                                <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                                    <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                    <Label Text="{Binding NamaKategori}" TextColor="#b3b3b3" FontSize="Caption"></Label>
-                                    <Label Text="{Binding NamaProduk}" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
-                                    <Label Text="{Binding FormattedHargaJual}" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
-                                </VerticalStackLayout>
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="*" RowSpacing="10">
+                    <StackLayout Orientation="Horizontal" Grid.Row="0">
+                        <Label Text="LIST PESANAN" FontFamily="FontBold"  TextColor="#075E54" FontSize="Caption"></Label>
+                        <Label Text="Total Item: " x:Name="L_TotalItem" FontSize="Caption" VerticalTextAlignment="Center" HorizontalOptions="EndAndExpand" HorizontalTextAlignment="End"></Label>
+                    </StackLayout>
+                    <ListView x:Name="LV_Keranjang" Grid.Row="1" HasUnevenRows="True" SeparatorVisibility="None" BackgroundColor="Transparent" SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
 
-                                <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="{Binding ModePesananSource}">
+                                        <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                            <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                            <Label Text="{Binding NamaKategori}" TextColor="#b3b3b3" FontSize="Caption"></Label>
+                                            <Label Text="{Binding NamaProduk}" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                                            <Label Text="{Binding FormattedHargaJual}" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
+                                        </VerticalStackLayout>
 
-                                </Image>
+                                        <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="{Binding ModePesananSource}">
 
-                                <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
-                                    <StackLayout>
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer />
-                                        </StackLayout.GestureRecognizers>
-                                        <Label Text="{Binding Qty}" HorizontalOptions="Center" VerticalOptions="Center"/>
-                                    </StackLayout>
-                                </Border>
-                                <Label Grid.Column="4" Text="{Binding FormattedSubtotal}" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                        </Image>
+
+                                        <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
+                                            <StackLayout>
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer />
+                                                </StackLayout.GestureRecognizers>
+                                                <Label Text="{Binding Qty}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                            </StackLayout>
+                                        </Border>
+                                        <Label Grid.Column="4" Text="{Binding FormattedSubtotal}" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Frame>
             <!--footer submit-->
             <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" Padding="10" VerticalOptions="Center">
 

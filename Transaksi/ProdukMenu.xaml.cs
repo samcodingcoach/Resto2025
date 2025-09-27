@@ -1232,10 +1232,12 @@ public partial class ProdukMenu : ContentPage
         // Pastikan parameter dan elemen yang di-tap valid
         if (e.Parameter is list_meja mejaYangDiTap && sender is Border borderBaru)
         {
-            // 1. Jika meja sudah terpakai, tampilkan pesan dan hentikan proses
+            // 1. Jika meja sudah terpakai, buka popup cekpesanan_modal
             if (mejaYangDiTap.in_used == 1)
             {
-                DisplayAlert("Informasi", "Meja ini sudah terpakai.", "OK");
+                // Buka popup CekPesanan_Modal dengan membawa nilai id_meja
+                var cekPesananModal = new CekPesanan_Modal(mejaYangDiTap.id_meja);
+                this.ShowPopup(cekPesananModal);
                 return;
             }
 
