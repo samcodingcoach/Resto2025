@@ -27,6 +27,33 @@
         </Grid>
 
 
+        <Grid Grid.Row="1" Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
+
+            <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+            </Border>
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                <Label Text="Makanan" TextColor="#b3b3b3" FontSize="Caption"></Label>
+                <Label Text="Nasi Pecel Family Samarinda 2" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                <Label Text="RP 300.000.000" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
+            </VerticalStackLayout>
+
+            <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
+
+            </Image>
+
+            <Border Grid.Column="3" Stroke="LightGray" StrokeThickness="1" Padding="16,8" StrokeShape="RoundRectangle 5" VerticalOptions="Center">
+                <StackLayout>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer />
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="122" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </StackLayout>
+            </Border>
+            <Label Grid.Column="4" Text="RP 300.000.000" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+        </Grid>
+
+
         <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" Padding="10" VerticalOptions="Center">
 
             <Button Grid.Column="0" x:Name="BHapusInvoice" ImageSource="delete.png" BackgroundColor="Red" CornerRadius="8"  />
