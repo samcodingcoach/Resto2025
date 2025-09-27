@@ -9,7 +9,7 @@
         <Grid ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" RowSpacing="10">
             <!--header-->
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="15">
-                <Border Grid.Column="0" BackgroundColor="#FF2D2D" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" HeightRequest="50" WidthRequest="50">
+                <Border Grid.Column="0" BackgroundColor="#FF2D2D" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" HeightRequest="50" WidthRequest="70">
                     <Label Text="0" x:Name="L_IDMEJA" TextColor="White" FontFamily="FontBold" FontSize="Title" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
 

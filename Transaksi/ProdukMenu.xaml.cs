@@ -21,6 +21,7 @@ public partial class ProdukMenu : ContentPage
     private double currentScale = 1;
     private double startScale = 1;
 
+    public string KODE_PAYMENT = string.Empty;
     public string ID_KATEGORI = string.Empty;
     public string ID_KONSUMEN = "1"; // Default ID_KONSUMEN GUEST
     public string ID_MEJA = "0";
@@ -78,12 +79,14 @@ public partial class ProdukMenu : ContentPage
     }
 
     // Konstruktor tambahan untuk mengisi keranjang dari data pesanan
-    public ProdukMenu(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja = "0")
+    public ProdukMenu(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja = "0", string kodePayment = "")
     {
         InitializeComponent();
         LV_Keranjang.ItemsSource = keranjang;
-        // --- TAMBAHKAN BARIS INI UNTUK MEMPERBAIKI ERROR ---
+	
         _listproduk = new List<list_produk>();
+        this.KODE_PAYMENT = kodePayment;
+        System.Diagnostics.Debug.WriteLine($"ProdukMenu initialized with KODE_PAYMENT: {this.KODE_PAYMENT}");
         _ = InisialisasiDariPesananAsync(pesananDetail, idMeja);
     }
 
@@ -2000,5 +2003,7 @@ public partial class ProdukMenu : ContentPage
 
         // Panggil UpdateTotalBelanja SETELAH get_ppn() dijamin selesai
         UpdateTotalBelanja();
+        
+        System.Diagnostics.Debug.WriteLine($"ProdukMenu initialized from order data with KODE_PAYMENT: {this.KODE_PAYMENT}");
     }
 }

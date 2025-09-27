@@ -1,11 +1,20 @@
 CekPesanan_Modal.xaml.cs
-pada kode dibawah ini
-Submit_Bayar_Clicked, bagian bayar
+saat klik Submit_Bayar_Clicked
 if(Submit_Bayar.Text == "BAYAR")
 		{
-			???
+			if (cekPesananData?.Pesanan != null && cekPesananData.Pesanan.PesananDetail != null)
+			{
+				// Navigasi kembali ke ProdukMenu dan isi keranjang dengan data dari pesanan
+				var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja);
+				
+				// Pindah ke halaman ProdukMenu
+				Application.Current.MainPage = new NavigationPage(produkMenu);
+				
+				// Tutup popup ini
+				Close();
+			}
 		}
 
-		mau saya menutup form dan kembali ke ProdukMenu dan langsung mengisi keranjang
-		termasuk mengisi total bayar, total item dan yang lainnya layaknya pesanan baru
-		//jadi user tidak perlu mengisi ulang dari awal
+
+		var produk menu buatkan debug consolenya.WriteLine
+	    bawa juga kode_payment, dan simpan juga di public string KODE_PAYMENT (ProdukMenu.xaml.cs)

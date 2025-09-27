@@ -40,8 +40,6 @@ public partial class CekPesanan_Modal : Popup
 		
 	}
 
-	
-
 	private async Task LoadCekPesananDataAsync()
 	{
 		try
@@ -346,8 +344,16 @@ public partial class CekPesanan_Modal : Popup
 		{
 			if (cekPesananData?.Pesanan != null && cekPesananData.Pesanan.PesananDetail != null)
 			{
+				// Ambil kode payment dari pembayaran yang sudah dilakukan
+				string kodePayment = string.Empty;
+				if (cekPesananData.Pesanan.Pembayaran != null && cekPesananData.Pesanan.Pembayaran.Count > 0)
+				{
+					// Ambil kode payment dari pembayaran pertama
+					kodePayment = cekPesananData.Pesanan.Pembayaran[0].KodePayment;
+				}
+				
 				// Navigasi kembali ke ProdukMenu dan isi keranjang dengan data dari pesanan
-				var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja);
+				var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja, kodePayment);
 				
 				// Pindah ke halaman ProdukMenu
 				Application.Current.MainPage = new NavigationPage(produkMenu);
