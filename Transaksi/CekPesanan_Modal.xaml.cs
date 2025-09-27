@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Views;
+using System.Text;
 
 namespace Resto2025.Transaksi;
 
@@ -328,8 +329,55 @@ public partial class CekPesanan_Modal : Popup
 		}
 	}
 
-    private void Submit_Bayar_Clicked(object sender, EventArgs e)
-    {
+    private async void Submit_Bayar_Clicked(object sender, EventArgs e)
+	{
 
+
+		if (sender is Button image)
+		{
+			await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+		}
+
+
+		if(Submit_Bayar.Text == "BAYAR")
+		{
+
+		}
+		else if(Submit_Bayar.Text == "RILIS MEJA")
+		{
+			aktifkan_meja();
+        }
     }
+
+	private async void aktifkan_meja()
+	{
+		
+		var data = new Dictionary<string, string>
+				{
+					{ "id_meja", ID_MEJA.ToString() }
+				};
+
+		var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+		var client = new HttpClient();
+		string ip = App.API_HOST + "meja/aktifkan.php";
+
+		var response = await client.PostAsync(ip, jsonData);
+		var responseContent = await response.Content.ReadAsStringAsync();
+		var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+		if (responseObject["status"] == "success")
+		{
+
+			//await DisplayAlert("Berhasil", responseObject["message"], "OK");
+
+			// Tutup modal
+			Close();
+			
+			// Perbarui/refresh meja - bisa memicu event atau panggil fungsi di parent page
+			// Misalnya dengan memanggil fungsi di ProdukMenu
+			// Atau dengan event yang bisa dihandle oleh parent page
+		}
+	}
+
 }

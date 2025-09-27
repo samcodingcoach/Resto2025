@@ -1,9 +1,33 @@
 pada CekPesanan_Modal.xaml.cs_
 		
-		[JsonProperty("status")]
-		public string Status { get; set; }
-	Jika status == 1 itu artinya sudah dibayar diawal
-	maka tombol bayar 
-	<Button Text="BAYAR" TextColor="White" FontAttributes="Bold" x:Name="Submit_Bayar" Clicked="Submit_Bayar_Clicked"
-                        FontSize="Title" BackgroundColor="#FF2D2D" CornerRadius="8" Padding="30,15" />
-diganti dengan text RILIS MEJA back ground 075E54 text white
+ private async void Submit_Bayar_Clicked(object sender, EventArgs e)
+    {
+
+
+		if (sender is Button image)
+		{
+			await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+		}
+
+
+		if(Submit_Bayar.Text == "BAYAR")
+		{
+
+		}
+		else if(Submit_Bayar.Text == "RILIS MEJA")
+		{
+			aktifkan_meja();
+        }
+    }
+
+	fokus terhadap rilis meja, anda cek di aktif_meja pada bagian ini
+	if (responseObject["status"] == "success")
+		{
+			
+			//await DisplayAlert("Berhasil", responseObject["message"], "OK");
+			
+
+		}_
+
+		tambahkan tutup modal dan perbarui/ refresh meja
