@@ -36,12 +36,12 @@
                                 <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
                             </Border>
                             <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="Makanan" TextColor="#b3b3b3" FontSize="Caption"></Label>
-                                <Label Text="Nasi Pecel Family Samarinda 2" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
-                                <Label Text="RP 300.000.000" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
+                                <Label Text="{Binding NamaKategori}" TextColor="#b3b3b3" FontSize="Caption"></Label>
+                                <Label Text="{Binding NamaProduk}" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>
+                                <Label Text="{Binding FormattedHargaJual}" TextColor="#075E54" FontFamily="FontRegular" FontSize="Caption"/>
                             </VerticalStackLayout>
 
-                            <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="takeaway.png">
+                            <Image Grid.Column="2" VerticalOptions="Center" HeightRequest="14" Source="{Binding ModePesananSource}">
 
                             </Image>
 
@@ -50,10 +50,10 @@
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer />
                                     </StackLayout.GestureRecognizers>
-                                    <Label Text="122" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Qty}" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </StackLayout>
                             </Border>
-                            <Label Grid.Column="4" Text="RP 300.000.000" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
+                            <Label Grid.Column="4" Text="{Binding FormattedSubtotal}" TextColor="#075E54" FontAttributes="Bold" FontSize="Caption" VerticalOptions="Center" HorizontalTextAlignment="End"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
