@@ -15,10 +15,12 @@ public partial class CekPesanan_Modal : Popup
 	public int ID_MEJA;
 	private CekPesananResponse cekPesananData;
 	private List<KeranjangItem> keranjangItems;
+	private readonly Action _onMejaReleasedCallback;
 
-	public CekPesanan_Modal(int idMeja)
+	public CekPesanan_Modal(int idMeja, Action onMejaReleasedCallback = null)
 	{
 		ID_MEJA = idMeja;
+		_onMejaReleasedCallback = onMejaReleasedCallback;
 		InitializeComponent();
 		
 		// Panggil fungsi untuk mengambil data dari API
@@ -368,15 +370,16 @@ public partial class CekPesanan_Modal : Popup
 
 		if (responseObject["status"] == "success")
 		{
-
+			
 			//await DisplayAlert("Berhasil", responseObject["message"], "OK");
-
-			// Tutup modal
+			
 			Close();
 			
-			// Perbarui/refresh meja - bisa memicu event atau panggil fungsi di parent page
-			// Misalnya dengan memanggil fungsi di ProdukMenu
-			// Atau dengan event yang bisa dihandle oleh parent page
+			// Panggil callback untuk merefresh meja di parent page jika tersedia
+			if (_onMejaReleasedCallback != null)
+			{
+				_onMejaReleasedCallback();
+			}
 		}
 	}
 

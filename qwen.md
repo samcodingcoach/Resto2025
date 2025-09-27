@@ -1,33 +1,27 @@
-pada CekPesanan_Modal.xaml.cs_
+private async void aktifkan_meja()
+	{
 		
- private async void Submit_Bayar_Clicked(object sender, EventArgs e)
-    {
+		var data = new Dictionary<string, string>
+				{
+					{ "id_meja", ID_MEJA.ToString() }
+				};
 
+		var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+		var client = new HttpClient();
+		string ip = App.API_HOST + "meja/aktifkan.php";
 
-		if (sender is Button image)
+		var response = await client.PostAsync(ip, jsonData);
+		var responseContent = await response.Content.ReadAsStringAsync();
+		var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+		if (responseObject["status"] == "success")
 		{
-			await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
-			await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
-		}
 
-
-		if(Submit_Bayar.Text == "BAYAR")
-		{
-
-		}
-		else if(Submit_Bayar.Text == "RILIS MEJA")
-		{
-			aktifkan_meja();
-        }
-    }
-
-	fokus terhadap rilis meja, anda cek di aktif_meja pada bagian ini
-	if (responseObject["status"] == "success")
-		{
 			
-			//await DisplayAlert("Berhasil", responseObject["message"], "OK");
-			
+			Close();
+		
+		}
+	}
 
-		}_
-
-		tambahkan tutup modal dan perbarui/ refresh meja
+	harusnya pada success anda cari tau kodenya ketika ditutup langsung merefresh meja. karna sepertinya di ProdukMenu.xaml.cs ada methodnya
+	coba anda cari methodnya di ProdukMenu.xaml.cs dan contoh di Tunai_Modal.xaml.cs_

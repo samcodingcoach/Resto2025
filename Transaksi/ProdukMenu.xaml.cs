@@ -1235,8 +1235,15 @@ public partial class ProdukMenu : ContentPage
             // 1. Jika meja sudah terpakai, buka popup cekpesanan_modal
             if (mejaYangDiTap.in_used == 1)
             {
-                // Buka popup CekPesanan_Modal dengan membawa nilai id_meja
-                var cekPesananModal = new CekPesanan_Modal(mejaYangDiTap.id_meja);
+                // Buka popup CekPesanan_Modal dengan membawa nilai id_meja dan callback untuk refresh meja
+                var cekPesananModal = new CekPesanan_Modal(mejaYangDiTap.id_meja, () => 
+                {
+                    // Panggil get_meja dari thread utama
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        get_meja(); // Panggil tanpa await karena ini async void
+                    });
+                });
                 this.ShowPopup(cekPesananModal);
                 return;
             }
