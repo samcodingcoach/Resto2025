@@ -89,7 +89,7 @@ public partial class ProdukMenu : ContentPage
         _listproduk = new List<list_produk>();
         get_listproduk();
         get_metode_pembayaran();
-        get_ppn();
+        get_ppn(); // Ini akan mengisi nilai PERSENTASE_PPN
 
         // Isi keranjang dari data pesanan
         foreach (var item in pesananDetail)
@@ -116,6 +116,8 @@ public partial class ProdukMenu : ContentPage
         }
 
         // Update tampilan setelah mengisi keranjang
+        // Kita panggil UpdateTotalBelanja() untuk menghitung ulang semua nilai
+        // termasuk PPN berdasarkan PERSENTASE_PPN yang aktif saat ini
         UpdateTotalBelanja();
     }
 
