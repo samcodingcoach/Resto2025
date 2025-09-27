@@ -1,27 +1,11 @@
-private async void aktifkan_meja()
-	{
-		
-		var data = new Dictionary<string, string>
-				{
-					{ "id_meja", ID_MEJA.ToString() }
-				};
-
-		var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-		var client = new HttpClient();
-		string ip = App.API_HOST + "meja/aktifkan.php";
-
-		var response = await client.PostAsync(ip, jsonData);
-		var responseContent = await response.Content.ReadAsStringAsync();
-		var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
-
-		if (responseObject["status"] == "success")
+CekPesanan_Modal.xaml.cs
+pada kode dibawah ini
+Submit_Bayar_Clicked, bagian bayar
+if(Submit_Bayar.Text == "BAYAR")
 		{
-
-			
-			Close();
-		
+			???
 		}
-	}
 
-	harusnya pada success anda cari tau kodenya ketika ditutup langsung merefresh meja. karna sepertinya di ProdukMenu.xaml.cs ada methodnya
-	coba anda cari methodnya di ProdukMenu.xaml.cs dan contoh di Tunai_Modal.xaml.cs_
+		mau saya menutup form dan kembali ke ProdukMenu dan langsung mengisi keranjang
+		termasuk mengisi total bayar, total item dan yang lainnya layaknya pesanan baru
+		//jadi user tidak perlu mengisi ulang dari awal

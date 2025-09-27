@@ -59,7 +59,7 @@ public partial class ProdukMenu : ContentPage
     private List<list_meja> listMeja = new List<list_meja>();
     private List<list_metodepembayaran> _listmetodepembayaran = new List<list_metodepembayaran>();
 
-    private ObservableCollection<KeranjangItem> keranjang = new ObservableCollection<KeranjangItem>();
+    public ObservableCollection<KeranjangItem> keranjang = new ObservableCollection<KeranjangItem>();
 
     public ProdukMenu()
     {
@@ -75,6 +75,48 @@ public partial class ProdukMenu : ContentPage
         get_ppn();
 
         Task.Run(async () => await MuatPesananSementaraAsync());
+    }
+
+    // Konstruktor tambahan untuk mengisi keranjang dari data pesanan
+    public ProdukMenu(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja = "0")
+    {
+        InitializeComponent();
+        LV_Keranjang.ItemsSource = keranjang;
+        get_data_kategori();
+        get_data_promo();
+        get_biaya_takeaway();
+
+        _listproduk = new List<list_produk>();
+        get_listproduk();
+        get_metode_pembayaran();
+        get_ppn();
+
+        // Isi keranjang dari data pesanan
+        foreach (var item in pesananDetail)
+        {
+            var newItem = new KeranjangItem
+            {
+                IdProduk = item.IdProdukSell,
+                IdProdukSell = item.IdProdukSell,
+                NamaProduk = item.NamaProduk,
+                HargaJual = item.HargaJual,
+                Jumlah = item.Qty,
+                UrlGambar = App.IMAGE_HOST + item.KodeProduk + ".jpg",
+                // Set mode pesanan berdasarkan TaDinein
+                IkonModePesanan = (item.TaDinein == "1") ? "takeaway.png" : "dine.png"
+            };
+            
+            keranjang.Add(newItem);
+        }
+
+        // Update ID_MEJA jika diperlukan
+        if (idMeja != "0")
+        {
+            this.ID_MEJA = idMeja;
+        }
+
+        // Update tampilan setelah mengisi keranjang
+        UpdateTotalBelanja();
     }
 
     // Model untuk setiap item di dalam 'pesanan_detail'
@@ -299,7 +341,7 @@ public partial class ProdukMenu : ContentPage
         }
     }
     //kalkulasi
-    private void UpdateTotalBelanja()
+    public void UpdateTotalBelanja()
     {
 
         int totalItem = keranjang.Sum(item => item.Jumlah);
