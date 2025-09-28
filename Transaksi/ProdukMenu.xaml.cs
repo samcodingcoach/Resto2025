@@ -78,15 +78,16 @@ public partial class ProdukMenu : ContentPage
         Task.Run(async () => await MuatPesananSementaraAsync());
     }
 
-    // Konstruktor tambahan untuk mengisi keranjang dari data pesanan
+
     public ProdukMenu(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja = "0", string kodePayment = "")
     {
         InitializeComponent();
         LV_Keranjang.ItemsSource = keranjang;
-	
+
         _listproduk = new List<list_produk>();
         this.KODE_PAYMENT = kodePayment;
-        System.Diagnostics.Debug.WriteLine($"ProdukMenu initialized with KODE_PAYMENT: {this.KODE_PAYMENT}");
+
+        // HANYA panggil method inisialisasi. JANGAN isi keranjang di sini.
         _ = InisialisasiDariPesananAsync(pesananDetail, idMeja);
     }
 
@@ -206,6 +207,7 @@ public partial class ProdukMenu : ContentPage
     public class KeranjangItem : INotifyPropertyChanged
     {
         // Properti asli
+        public bool IsFrozen { get; set; } = false;
         public string IdProduk { get; set; }
         public string IdProdukSell { get; set; }
         public string NamaProduk { get; set; }
@@ -399,6 +401,11 @@ public partial class ProdukMenu : ContentPage
         // Dapatkan item yang di-tap dari BindingContext ViewCell
         if ((sender as ViewCell)?.BindingContext is KeranjangItem item)
         {
+            if (item.IsFrozen)
+            {
+                await DisplayAlert("Informasi", "Item ini tidak dapat diubah karena merupakan bagian dari pesanan sebelumnya. Anda hanya dapat menambah item baru.", "OK");
+                return;
+            }
             // Tampilkan Action Sheet dengan pilihan untuk pengguna
             string action = await DisplayActionSheet(
                 $"Pilih Aksi untuk {item.NamaProduk}", // Judul
@@ -1989,6 +1996,7 @@ public partial class ProdukMenu : ContentPage
                 NamaProduk = item.NamaProduk,
                 HargaJual = item.HargaJual,
                 Jumlah = item.Qty,
+                IsFrozen = true,
                 UrlGambar = App.IMAGE_HOST + item.KodeProduk + ".jpg",
                 IkonModePesanan = (item.TaDinein == "1") ? "takeaway.png" : "dine.png"
             };

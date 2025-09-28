@@ -327,7 +327,9 @@ public partial class CekPesanan_Modal : Popup
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
-	}
+
+       
+    }
 
     private async void Submit_Bayar_Clicked(object sender, EventArgs e)
 	{
