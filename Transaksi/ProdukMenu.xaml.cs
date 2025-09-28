@@ -1861,11 +1861,6 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-
-
-  
-
-
     private async Task SimpanSebagaiInvoiceAsync()
     {
         // 1. Buat payload pembayaran MINIMAL yang dibutuhkan oleh simpan_invoice.php
@@ -2032,6 +2027,7 @@ public partial class ProdukMenu : ContentPage
         if (idMeja != "0")
         {
             this.ID_MEJA = idMeja;
+            Summary_ModePesanan.Text = $"Dine In - Meja #{idMeja.PadLeft(2, '0')}";
         }
 
         // Panggil UpdateTotalBelanja SETELAH get_ppn() dijamin selesai
