@@ -1834,7 +1834,10 @@ public partial class ProdukMenu : ContentPage
 
                 if (response.IsSuccessStatusCode)
                 {
-                    await DisplayAlert("Sukses", "Transaksi berhasil disimpan!", "OK");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+                    string successMessage = responseObject != null && responseObject.ContainsKey("message") ? responseObject["message"] : "Transaksi berhasil diproses.";
+                    await DisplayAlert("Sukses", successMessage, "OK");
                     HapusPesananSementara();
                     ResetHalaman();
                     
@@ -1857,6 +1860,11 @@ public partial class ProdukMenu : ContentPage
             await DisplayAlert("Error Proses Dan Simpan", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
         }
     }
+
+
+
+  
+
 
     private async Task SimpanSebagaiInvoiceAsync()
     {

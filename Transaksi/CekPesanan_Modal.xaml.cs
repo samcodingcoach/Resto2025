@@ -355,7 +355,8 @@ public partial class CekPesanan_Modal : Popup
 				}
 				
 				// Navigasi kembali ke ProdukMenu dan isi keranjang dengan data dari pesanan
-				var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja, kodePayment);
+					var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja, kodePayment);
+					Console.WriteLine($"Debug: ProdukMenu created with kode_payment: {kodePayment}");
 				
 				// Pindah ke halaman ProdukMenu
 				Application.Current.MainPage = new NavigationPage(produkMenu);

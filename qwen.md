@@ -1,20 +1,15 @@
-CekPesanan_Modal.xaml.cs
-saat klik Submit_Bayar_Clicked
-if(Submit_Bayar.Text == "BAYAR")
-		{
-			if (cekPesananData?.Pesanan != null && cekPesananData.Pesanan.PesananDetail != null)
-			{
-				// Navigasi kembali ke ProdukMenu dan isi keranjang dengan data dari pesanan
-				var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja);
-				
-				// Pindah ke halaman ProdukMenu
-				Application.Current.MainPage = new NavigationPage(produkMenu);
-				
-				// Tutup popup ini
-				Close();
-			}
-		}
+ProdukMenu.xaml.cs line 1837
+try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+               
+                var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(url, content);
 
+                if (response.IsSuccessStatusCode)
+                {
+                    await DisplayAlert("Sukses",, "OK"); <- pada bagian ini saya ingin ambil pesan sukses dari server
 
-		var produk menu buatkan debug consolenya.WriteLine
-	    bawa juga kode_payment, dan simpan juga di public string KODE_PAYMENT (ProdukMenu.xaml.cs)
+                  berikut formatnya
+                  echo json_encode(['status' => 'success', 'message' => 'Pesanan berhasil diperbarui dan dibayar.']);
