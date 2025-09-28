@@ -102,6 +102,10 @@ public partial class ProdukMenu : ContentPage
 
         [JsonProperty("ta_dinein")]
         public string TaDinein { get; set; }
+
+        // TAMBAHKAN PROPERTI INI
+        [JsonProperty("is_frozen")]
+        public bool IsFrozen { get; set; }
     }
 
     // Model utama untuk JSON yang akan dikirim ke API
@@ -153,6 +157,9 @@ public partial class ProdukMenu : ContentPage
 
         [JsonProperty("total_diskon")]
         public double? TotalDiskon { get; set; }
+
+        [JsonProperty("kode_payment")]
+        public string KodePayment { get; set; }
 
         [JsonProperty("pembayaran_detail")]
         public ProsesPembayaranDetailPayload PembayaranDetail { get; set; }
@@ -1778,6 +1785,12 @@ public partial class ProdukMenu : ContentPage
             ProsesPembayaran = pembayaran // Masukkan objek pembayaran ke payload utama
         };
 
+        // Tambahkan KODE_PAYMENT ke payload agar bisa dikirim saat update
+        if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
+        {
+            payload.ProsesPembayaran.KodePayment = this.KODE_PAYMENT;
+        }
+
         // Isi detail pesanan (item keranjang)
         foreach (var item in keranjang)
         {
@@ -1785,19 +1798,23 @@ public partial class ProdukMenu : ContentPage
             {
                 IdProdukSell = item.IdProdukSell,
                 Qty = item.Jumlah,
+                IsFrozen = item.IsFrozen,
                 TaDinein = (item.IkonModePesanan == "takeaway.png") ? "1" : "0"
             });
         }
 
 
         string endpoint;
-        if (this.STATUS_BAYAR == 1) // Bayar Langsung
+        // Cek apakah ini transaksi baru atau update pesanan lama (berdasarkan KODE_PAYMENT)
+        if (string.IsNullOrEmpty(this.KODE_PAYMENT))
         {
-            endpoint = "pesanan/simpan_pesanan.php";
+            // KODE_PAYMENT kosong = Transaksi baru
+            endpoint = (this.STATUS_BAYAR == 1) ? "pesanan/simpan_pesanan.php" : "pesanan/simpan_invoice.php";
         }
-        else // Simpan sebagai Invoice (Belum Bayar)
+        else
         {
-            endpoint = "pesanan/simpan_invoice.php";
+            // KODE_PAYMENT ada = Update pesanan/invoice yang sudah ada
+            endpoint = "pesanan/update_pesanan.php";
         }
         string url = App.API_HOST + endpoint;
 
