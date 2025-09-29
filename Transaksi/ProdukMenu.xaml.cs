@@ -1,15 +1,16 @@
+using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls.Shapes;
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.Http;
-using CommunityToolkit.Maui.Behaviors;
-using System.Text;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Text;
 using static Microsoft.Maui.Controls.Compatibility.Grid;
 
 namespace Resto2025.Transaksi;
@@ -1674,7 +1675,18 @@ public partial class ProdukMenu : ContentPage
                 return;
             }
 
-            await SimpanSebagaiInvoiceAsync();
+            if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
+            {
+                System.Diagnostics.Debug.WriteLine($"=== kode payment : {this.KODE_PAYMENT} ====");
+                //return;
+                await ProsesDanSimpanTransaksiAsync(0);
+            }
+            else if (string.IsNullOrEmpty(this.KODE_PAYMENT))
+            {
+                System.Diagnostics.Debug.WriteLine($"=== kode payment : kosong ====");
+                //return;
+                await SimpanSebagaiInvoiceAsync();
+            } 
         }
     }
 
@@ -1810,11 +1822,23 @@ public partial class ProdukMenu : ContentPage
         {
             // KODE_PAYMENT kosong = Transaksi baru
             endpoint = (this.STATUS_BAYAR == 1) ? "pesanan/simpan_pesanan.php" : "pesanan/simpan_invoice.php";
+            System.Diagnostics.Debug.WriteLine("=== kode payment kosong ====");
         }
         else
         {
             // KODE_PAYMENT ada = Update pesanan/invoice yang sudah ada
-            endpoint = "pesanan/update_pesanan.php";
+            
+            if(STATUS_BAYAR == 0)
+            {
+                endpoint = "pesanan/update_invoice.php";
+                System.Diagnostics.Debug.WriteLine("=== UPDATE INVOICE ====");
+            }
+            else
+            {
+                endpoint = "pesanan/update_pesanan.php";
+                System.Diagnostics.Debug.WriteLine("=== UPDATE PESANAN ====");
+            }
+
         }
         string url = App.API_HOST + endpoint;
 
@@ -1914,7 +1938,8 @@ public partial class ProdukMenu : ContentPage
             {
                 var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(url, content);
-
+                
+               
                 if (response.IsSuccessStatusCode)
                 {
                     await DisplayAlert("Sukses", "Invoice berhasil disimpan!", "OK");

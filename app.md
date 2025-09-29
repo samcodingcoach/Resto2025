@@ -1,126 +1,133 @@
-# Aplikasi Resto2025 - Sistem POS Restoran
+# Resto2025 - Restaurant Management System
 
-## Deskripsi Umum
-Resto2025 adalah aplikasi Point of Sale (POS) untuk restoran yang dibangun menggunakan .NET MAUI. Aplikasi ini dirancang untuk mengelola seluruh proses pemesanan dan pembayaran di restoran, termasuk pemesanan takeaway dan makan di tempat.
+## Overview
+Resto2025 is a cross-platform restaurant management application built with .NET MAUI. It provides comprehensive functionality for restaurant operations including ordering, payment processing, table management, and customer management.
 
-## Struktur Proyek
-- **Transaksi/**: Berisi antarmuka utama sistem pemesanan (ProdukMenu)
-- **MetodePembayaran/**: Berisi antarmuka modal untuk berbagai metode pembayaran
-- **Resources/**: Berisi gambar, font, dan file sumber daya lainnya
-- **Platforms/**: Berisi konfigurasi platform spesifik
+## Platform Support
+- Android
+- iOS
+- macOS Catalyst
+- Windows
 
-## Fitur Utama
+## Core Features
 
-### 1. Manajemen Pelanggan
-- Pemilihan pelanggan antara Guest (Tamu) atau Member
-- Pencarian member berdasarkan nomor telepon
-- Formulir pendaftaran member baru dengan validasi data
+### 1. Product Menu Management
+- Displays products with images, prices, and stock levels
+- Categorized menu display
+- Search functionality for menu items
+- Real-time stock tracking
+- Product filtering by category
 
-### 2. Jenis Pesanan
-- **Takeaway**: Pesanan dibawa pulang dengan biaya tambahan per item
-- **Dine-in**: Pemesanan makan di tempat dengan pemilihan meja
-- Denah meja interaktif dengan kemampuan zoom
+### 2. Customer Management
+- Guest and member ordering options
+- Customer registration system
+- Customer search by phone number
+- Member management with contact details
 
-### 3. Manajemen Produk
-- Katalog produk berdasarkan kategori
-- Pencarian produk
-- Validasi stok untuk mencegah penjualan berlebih
-- Tampilan visual produk dengan gambar dan harga
+### 3. Order Types
+- Takeaway orders
+- Dine-in orders with table selection
+- Interactive table layout with zoom functionality
+- Real-time table status (occupied/available)
 
-### 4. Keranjang Belanja
-- Fungsi tambah, edit jumlah, dan hapus item
-- Validasi stok saat mengedit jumlah
-- Perhitungan subtotal real-time
+### 4. Shopping Cart
+- Add products to cart from menu
+- Edit item quantities
+- Split items between takeaway and dine-in
+- Real-time cart calculations
 
-### 5. Sistem Pembayaran
-- Bayar Langsung (Cash, Bank Transfer, QRIS)
-- Bayar Nanti (Invoice) hanya berlaku untuk Dine-in
-- Modal pembayaran yang berbeda untuk setiap metode
-- Perhitungan kembalian untuk pembayaran tunai
+### 5. Payment Processing
+- Multiple payment methods:
+  - Cash (with calculator interface)
+  - Bank transfer
+  - QRIS (QR Code payment)
+- Invoice system for later payments
+- Payment confirmation and receipt handling
 
-### 6. Fitur Keuangan
-- Perhitungan biaya admin yang bervariasi berdasarkan metode pembayaran
-- Diskon promosi dengan syarat minimum pembelian
-- Diskon manual yang dapat dimasukkan oleh pengguna
-- Perhitungan PPN (Pajak Pertambahan Nilai)
-- Biaya takeaway per item
+### 6. Order Tracking
+- View existing orders for tables
+- Order details with item breakdown
+- Payment status tracking
+- Table release functionality after payment
 
-## Arsitektur Aplikasi
+## Technical Architecture
 
-### File Utama
-1. **App.xaml & App.xaml.cs**
-   - Konfigurasi sumber daya aplikasi dan gaya
-   - Inisialisasi API_HOST dan IMAGE_HOST untuk koneksi backend
-   - Pemilihan halaman utama sebagai Transaksi.ProdukMenu
+### Backend Integration
+- API endpoints hosted at https://resto.samdev.org/_resto007/api/
+- Image hosting at https://resto.samdev.org/_resto007/public/images/
+- RESTful API communication using JSON
 
-2. **ProdukMenu.xaml & ProdukMenu.xaml.cs**
-   - Antarmuka utama sistem POS
-   - Layout dua kolom: navigasi dan ringkasan pesanan
-   - Logika bisnis untuk seluruh proses pemesanan
-   - Integrasi API untuk pengambilan data
+### Data Models
+- Products (with stock, pricing, images)
+- Categories
+- Customers
+- Tables
+- Orders
+- Payments
+- Promotions
 
-3. **File Modal Pembayaran**
-   - Tunai_Modal: Layar pembayaran tunai dengan perhitungan kembalian
-   - TransferBank_Modal: Layar konfirmasi pembayaran transfer
-   - Qris_Modal: Layar pembayaran QRIS
+### UI Components
+- Navigation flow with tab-based interface
+- Popup modals for payment processing
+- Interactive table layout
+- Real-time cart summary
+- Payment calculator with keypad
 
-### Teknologi yang Digunakan
-- .NET MAUI untuk pengembangan lintas platform
-- CommunityToolkit.Maui untuk komponen UI lanjutan
-- Newtonsoft.Json untuk serialisasi/deserialisasi data
-- HttpClient untuk koneksi API
-- SQLite (implisit) untuk penyimpanan data lokal
+### Key Classes
 
-## Alur Penggunaan Aplikasi
+#### ProdukMenu.xaml.cs
+- Main ordering interface with 4 main sections:
+  - Customer selection
+  - Order mode (takeaway/dine-in)
+  - Product menu with categories
+  - Payment methods
+- Handles cart management and calculations
+- Processes payments and saves orders
 
-1. **Pemilihan Pelanggan**
-   - Pilih antara Guest atau Member
-   - Jika Member, cari atau daftarkan member baru
+#### CekPesanan_Modal.xaml.cs
+- Modal for viewing existing orders for a table
+- Shows order details including items, pricing, and status
+- Allows payment processing or table release
 
-2. **Pemilihan Mode Pesanan**
-   - Pilih Takeaway atau Dine-in
-   - Jika Dine-in, pilih nomor meja yang tersedia
+#### Payment Modals
+- Tunai_Modal: Cash payment with calculator
+- TransferBank_Modal: Bank transfer details
+- Qris_Modal: QRIS payment processing
 
-3. **Pemilihan Produk**
-   - Jelajahi produk berdasarkan kategori
-   - Cari produk spesifik
-   - Tap produk untuk menambahkan ke keranjang
+### Dependencies
+- CommunityToolkit.Maui
+- Microsoft.Maui.Controls
+- Newtonsoft.Json
+- SkiaSharp
 
-4. **Manajemen Keranjang**
-   - Lihat ringkasan pesanan
-   - Edit jumlah atau hapus item
-   - Lihat perhitungan biaya secara real-time
+## Business Logic
 
-5. **Pemilihan Pembayaran**
-   - Pilih metode pembayaran
-   - Aplikasikan promosi atau diskon jika ada
+### Pricing Calculations
+- Subtotal: Sum of all products
+- Takeaway fees: Applied per takeaway item
+- Service charges: Based on payment method (especially QRIS)
+- Promotions: Percentage or fixed amount discounts
+- Tax (PPN): Applied to subtotal
+- Final total rounded to nearest 100
 
-6. **Checkout**
-   - Pilih Bayar Langsung atau Bayar Nanti
-   - Selesaikan proses pembayaran sesuai metode
-   - Dapatkan bukti transaksi
+### Order Flow
+1. Customer selection (Guest or Member)
+2. Order mode selection (Takeaway or Dine-in)
+3. Table selection (for dine-in orders)
+4. Product selection and cart building
+5. Payment method selection
+6. Payment processing
+7. Order confirmation
 
-## Integrasi API
-Aplikasi terintegrasi dengan backend untuk:
-- Pengambilan data produk dan kategori
-- Pengambilan data member dan meja
-- Pengambilan informasi promosi dan PPN
-- Pengiriman data transaksi
-- Pengambilan data metode pembayaran
+### Data Persistence
+- Temporary order storage using local files
+- Real-time synchronization with backend
+- Session management for user orders
 
-## Fitur Keamanan dan Validasi
-- Validasi input nomor telepon (format dan panjang)
-- Validasi stok produk sebelum penambahan ke keranjang
-- Validasi minimum pembelian untuk promosi
-- Validasi nomor meja yang telah digunakan
-
-## Penyimpanan Data Lokal
-- Pesanan sementara disimpan secara lokal jika aplikasi ditutup
-- Data dipulihkan saat aplikasi dibuka kembali
-- File pesanan sementara dihapus setelah transaksi selesai
-
-## Desain UI/UX
-- Warna utama hijau (#075E54) untuk tampilan profesional
-- Navigasi intuitif antara bagian pelanggan, pesanan, produk, dan pembayaran
-- Responsif dan mendukung interaksi sentuh
-- Umpan balik visual pada setiap interaksi pengguna
+## UI/UX Features
+- Modern, restaurant-themed interface
+- Green color scheme (#075E54) with complementary colors
+- Responsive layout with two-column design
+- Intuitive cart management
+- Visual indicators for stock availability
+- Interactive elements with animations
