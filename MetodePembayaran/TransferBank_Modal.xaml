@@ -20,7 +20,8 @@
                 </Grid>
                 <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
                     <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
-                        <Picker x:Name="PickerBank" Title="Pilih Bank" WidthRequest="150">
+                        <!--BANK-->
+                        <Picker x:Name="PickerBank" Title="Pilih Bank" WidthRequest="150" SelectedIndexChanged="PickerBank_SelectedIndexChanged">
                             <Picker.ItemsSource>
                                 <x:Array Type="{x:Type x:String}">
                                     <x:String>BCA</x:String>
@@ -61,11 +62,11 @@
 
             <Grid Grid.Row="3" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10" VerticalOptions="EndAndExpand">
 <!--Button Upload-->
-                <Button Grid.Column="0" x:Name="BUploadBukti" Text="BUKTI TRANSFER" 
+                <Button Grid.Column="0" x:Name="BUploadBukti" Text="BUKTI TRANSFER" Clicked="BUploadBukti_Clicked"
                     HorizontalOptions="Start" BackgroundColor="WhiteSmoke" TextColor="#333" CornerRadius="8" WidthRequest="200" HeightRequest="50" FontFamily="FontBold"
                     ImageSource="upload24.png" ContentLayout="Left, 10" />
 <!--Submit Button-->                
-                <Button Grid.Column="1" x:Name="BTerapkanBank" Text="TERAPKAN BANK" 
+                <Button Grid.Column="1" x:Name="BTerapkanBank" Text="TERAPKAN BANK" Clicked="BTerapkanBank_Clicked"
                     HorizontalOptions="End" BackgroundColor="#075E54" TextColor="White" 
                     FontFamily="FontBold"  CornerRadius="8" WidthRequest="200" HeightRequest="50" />
 
