@@ -23,10 +23,11 @@ public partial class TransferBank_Modal : Popup
     public string KODE_PAYMENT = "";
     public int transfer_or_edc = 0; // 0 untuk transfer, 1 untuk EDC
     private string imagePath = "";
-    public TransferBank_Modal(string kodePayment, Action<bool, string> onResultReceived)
+    public TransferBank_Modal(string kodePayment,double nominalTransfer, Action<bool, string> onResultReceived)
 	{
 		InitializeComponent();
         KODE_PAYMENT = kodePayment;
+        nominal_transfer = nominalTransfer;
         _onResultReceived = onResultReceived;
     }
 
@@ -123,6 +124,7 @@ public partial class TransferBank_Modal : Popup
             content.Add(new StringContent(transfer_or_edc.ToString()), "transfer_or_edc");
             content.Add(new StringContent(selectedBank), "nama_bank");
             content.Add(new StringContent(EntryNamaPengirim.Text), "nama_pengirim");
+            content.Add(new StringContent(nominal_transfer.ToString()), "nominal_transfer");
 
             // Tambahkan nomor referensi jika ada
             if (!string.IsNullOrEmpty(EntryReferensi.Text))

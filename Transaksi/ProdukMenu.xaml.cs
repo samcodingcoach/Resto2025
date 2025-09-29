@@ -1679,12 +1679,37 @@ public partial class ProdukMenu : ContentPage
             switch (ID_BAYAR)
             {
                 case "1":
-                    await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
+                    // Panggil ProsesDanSimpanTransaksiAsync dan simpan kode pembayaran yang dikembalikan
+                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
                     break;
 
                 case "2":
 
                     await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
+        
+        // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
+        if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
+        {
+            await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT,this.grandTotalFinal, (isSuccess, message) =>
+            {
+                OnPopupClosed();
+                // Tambahkan logika untuk menangani hasil dari modal di sini
+                if (isSuccess)
+                {
+                    // Penanganan jika berhasil
+                    System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
+                }
+                else
+                {
+                    // Penanganan jika gagal
+                    System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                }
+            }));
+        }
+        else
+        {
+            await DisplayAlert("Error", "Gagal mendapatkan kode pembayaran", "OK");
+        }
                     break;
 
                 case "3":
@@ -1712,6 +1737,8 @@ public partial class ProdukMenu : ContentPage
                 System.Diagnostics.Debug.WriteLine($"=== kode payment : {this.KODE_PAYMENT} ====");
                 //return;
                 await ProsesDanSimpanTransaksiAsync(0);
+                // Catatan: Kode pembayaran untuk kasus ini mungkin tidak digunakan
+                // karena ini adalah panggilan dari tempat lain, bukan dari case "2"
             }
             else if (string.IsNullOrEmpty(this.KODE_PAYMENT))
             {
@@ -1903,6 +1930,17 @@ public partial class ProdukMenu : ContentPage
                         await get_listproduk();
                         get_meja();
                     });
+
+                    // Simpan kode pembayaran dari response JSON ke properti
+                    if (responseObject != null && responseObject.ContainsKey("kode_payment"))
+                    {
+                        this.KODE_PAYMENT = responseObject["kode_payment"];
+                        System.Diagnostics.Debug.WriteLine($"Kode pembayaran diperbarui: {this.KODE_PAYMENT}");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Kode pembayaran tidak ditemukan dalam response");
+                    }
                 }
                 else
                 {
