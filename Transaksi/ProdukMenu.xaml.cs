@@ -206,6 +206,29 @@ public partial class ProdukMenu : ContentPage
         public List<KeranjangItem> ItemDiKeranjang { get; set; }
     }
 
+    private void RadioButton_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        // Pastikan kita hanya menjalankan logika saat RadioButton menjadi TERPILIH (e.Value == true)
+        if (e.Value)
+        {
+            // Mengidentifikasi RadioButton mana yang sedang dipilih
+            RadioButton selectedRadioButton = sender as RadioButton;
+
+            if (selectedRadioButton == TotalRadioButton)
+            {
+                // Jika "Total" dipilih
+                Kanan_Total.IsVisible = true;
+                Kanan_Detail.IsVisible = false;
+            }
+            else if (selectedRadioButton == DetailRadioButton)
+            {
+                // Jika "Detail" dipilih
+                Kanan_Total.IsVisible = false;
+                Kanan_Detail.IsVisible = true;
+            }
+        }
+    }
+
     private async void OnPopupClosed()
     {
 
