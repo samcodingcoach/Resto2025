@@ -32,7 +32,7 @@
                             </Picker.ItemsSource>
                         </Picker>
                     </Border>
-
+<!--Transfer or EDC Radio Buttons-->
                     <Border BackgroundColor="White" Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="20,0" StrokeThickness="0.5">
                         <HorizontalStackLayout Spacing="50" VerticalOptions="Center">
 
@@ -44,14 +44,14 @@
                     </Border>
                 </Grid>
             </StackLayout>
-
+<!--Nama Pengirim-->
             <StackLayout Grid.Row="1" Spacing="10">
                 <Label Text="Nama Pengirim / Atas Nama" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
                 <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
                     <Entry x:Name="EntryNamaPengirim" Placeholder="Masukkan Nama Pengirim / Atas Nama" ClearButtonVisibility="WhileEditing" />
                 </Border>
             </StackLayout>
-
+<!--Nomor Referensi-->
             <StackLayout Grid.Row="2" Spacing="10">
                 <Label Text="Nomor Referensi" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
                 <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
@@ -60,11 +60,11 @@
             </StackLayout>
 
             <Grid Grid.Row="3" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10" VerticalOptions="EndAndExpand">
-
+<!--Button Upload-->
                 <Button Grid.Column="0" x:Name="BUploadBukti" Text="BUKTI TRANSFER" 
                     HorizontalOptions="Start" BackgroundColor="WhiteSmoke" TextColor="#333" CornerRadius="8" WidthRequest="200" HeightRequest="50" FontFamily="FontBold"
                     ImageSource="upload24.png" ContentLayout="Left, 10" />
-
+<!--Submit Button-->                
                 <Button Grid.Column="1" x:Name="BTerapkanBank" Text="TERAPKAN BANK" 
                     HorizontalOptions="End" BackgroundColor="#075E54" TextColor="White" 
                     FontFamily="FontBold"  CornerRadius="8" WidthRequest="200" HeightRequest="50" />

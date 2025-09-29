@@ -2041,7 +2041,6 @@ public partial class ProdukMenu : ContentPage
 
     }
 
-
     private async Task InisialisasiDariPesananAsync(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja)
     {
         // Panggil dan TUNGGU semua data yang dibutuhkan, terutama PPN

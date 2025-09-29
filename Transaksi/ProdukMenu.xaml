@@ -8,7 +8,7 @@
     <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
         <!--KOLOM KIRI-->
         <Frame Grid.Column="0" BorderColor="Transparent" BackgroundColor="Transparent" Padding="10">
-
+            
             <Grid ColumnDefinitions="0.25*,0.25*,0.25*,0.25*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10">
                 
                 <!--MENU NAVBAR-->
@@ -282,7 +282,7 @@
                 </Frame>
                 
             </Grid>
-
+            
         </Frame>
         <!--KOLOM KANAN--> 
         <Frame Grid.Column="1" Padding="0" BorderColor="Transparent" >
