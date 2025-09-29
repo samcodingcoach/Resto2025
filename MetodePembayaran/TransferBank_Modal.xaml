@@ -36,7 +36,7 @@
                     <Border BackgroundColor="White" Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="20,0" StrokeThickness="0.5">
                         <HorizontalStackLayout Spacing="50" VerticalOptions="Center">
 
-                            <RadioButton x:Name="RadioTransfer" Content="TRANSFER" GroupName="MetodePembayaran" CheckedChanged="RadioTransfer_CheckedChanged" />
+                            <RadioButton x:Name="RadioTransfer" IsChecked="True" Content="TRANSFER" GroupName="MetodePembayaran" CheckedChanged="RadioTransfer_CheckedChanged" />
 
                             <RadioButton x:Name="RadioEDC" Content="EDC" GroupName="MetodePembayaran" CheckedChanged="RadioEDC_CheckedChanged" />
 
