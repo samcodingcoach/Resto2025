@@ -74,8 +74,16 @@ public partial class TransferBank_Modal : Popup
 
     private async void CloseModal_Tapped(object sender, TappedEventArgs e)
     {
-        _onResultReceived?.Invoke(false, "Dibatalkan");
-        Close();
+        // Tampilkan konfirmasi sebelum menutup modal
+        bool confirm = await Shell.Current.DisplayAlert("Konfirmasi", "Anda belum menyelesaikan proses transfer. Apakah Anda yakin ingin menutup modal ini?", "Ya", "Batal");
+        
+        if (confirm)
+        {
+            // Jika pengguna yakin, tutup modal
+            _onResultReceived?.Invoke(false, "Pengguna menutup modal tanpa menyelesaikan proses transfer");
+            Close();
+        }
+        // Jika tidak, biarkan modal tetap terbuka
     }
 
     private void PickerBank_SelectedIndexChanged(object sender, EventArgs e)

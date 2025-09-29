@@ -1450,21 +1450,21 @@ public partial class ProdukMenu : ContentPage
             // 4. Logika untuk menampilkan pop-up (tetap sama)
             if (selectedItem.kategori == "Transfer")
             {
-                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, (isSuccess, message) =>
-                {
-                    OnPopupClosed();
-                    // Tambahkan logika untuk menangani hasil dari modal di sini
-                    if (isSuccess)
-                    {
-                        // Penanganan jika berhasil
-                        System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
-                    }
-                    else
-                    {
-                        // Penanganan jika gagal
-                        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
-                    }
-                }));
+                //this.ShowPopup(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT,t (isSuccess, message) =>
+                //{
+                //    OnPopupClosed();
+                //    // Tambahkan logika untuk menangani hasil dari modal di sini
+                //    if (isSuccess)
+                //    {
+                //        // Penanganan jika berhasil
+                //        System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
+                //    }
+                //    else
+                //    {
+                //        // Penanganan jika gagal
+                //        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                //    }
+                //}));
             }
         }
     }
@@ -1692,17 +1692,45 @@ public partial class ProdukMenu : ContentPage
         {
             await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT,this.grandTotalFinal, (isSuccess, message) =>
             {
-                OnPopupClosed();
                 // Tambahkan logika untuk menangani hasil dari modal di sini
                 if (isSuccess)
                 {
                     // Penanganan jika berhasil
                     System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
+                    OnPopupClosed(); // Tutup modal dan refresh UI hanya saat berhasil
+                    
+                    // Tampilkan info sukses ke pengguna melalui MainThread
+                    MainThread.BeginInvokeOnMainThread(async () =>
+                    {
+                        await DisplayAlert("Sukses", message, "OK");
+                    });
                 }
                 else
                 {
-                    // Penanganan jika gagal
-                    System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                    // Cek apakah error karena pengguna menutup modal tanpa selesai
+                    if (message == "Pengguna menutup modal tanpa menyelesaikan proses transfer")
+                    {
+                        System.Diagnostics.Debug.WriteLine("Pengguna menutup modal tanpa menyelesaikan proses");
+                        // OnPopupClosed() akan dipanggil secara otomatis saat modal ditutup
+                        
+                        // Tampilkan peringatan ke pengguna melalui MainThread
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("Peringatan", "Proses transfer belum selesai", "OK");
+                        });
+                    }
+                    else
+                    {
+                        // Penanganan jika gagal karena alasan lain
+                        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                        OnPopupClosed(); // Tutup modal setelah menampilkan error
+                        
+                        // Tampilkan info error ke pengguna melalui MainThread
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await DisplayAlert("Gagal", message, "OK");
+                        });
+                    }
                 }
             }));
         }
