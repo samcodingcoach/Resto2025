@@ -1450,9 +1450,20 @@ public partial class ProdukMenu : ContentPage
             // 4. Logika untuk menampilkan pop-up (tetap sama)
             if (selectedItem.kategori == "Transfer")
             {
-                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(() =>
+                this.ShowPopup(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, (isSuccess, message) =>
                 {
                     OnPopupClosed();
+                    // Tambahkan logika untuk menangani hasil dari modal di sini
+                    if (isSuccess)
+                    {
+                        // Penanganan jika berhasil
+                        System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
+                    }
+                    else
+                    {
+                        // Penanganan jika gagal
+                        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                    }
                 }));
             }
         }
@@ -1672,10 +1683,8 @@ public partial class ProdukMenu : ContentPage
                     break;
 
                 case "2":
-                    await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(() =>
-                    {
-                        OnPopupClosed();
-                    }));
+
+                    await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
                     break;
 
                 case "3":
