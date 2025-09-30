@@ -1752,6 +1752,11 @@ public partial class ProdukMenu : ContentPage
                     await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(this.grandTotalFinal, () =>
                     {
                         OnPopupClosed();
+                    }, async () =>
+                    {
+                        // Panggil ProsesDanSimpanTransaksiAsync ketika Generate QR diklik
+                        // Untuk QRIS, uangDiterima = grandTotalFinal (tidak ada kembalian)
+                        await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
                     }));
                     break;
 

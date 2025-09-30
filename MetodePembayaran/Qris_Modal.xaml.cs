@@ -12,13 +12,15 @@ namespace Resto2025.MetodePembayaran;
 public partial class Qris_Modal : Popup
 {
     private readonly Action _onPopupClosed;
+    private readonly Func<Task> _onGenerateQR;
     public double grossAmount = 0;
-    public Qris_Modal(double grandTotal,Action onPopupClosed)
+    public Qris_Modal(double grandTotal, Action onPopupClosed, Func<Task> onGenerateQR)
 	{
 		InitializeComponent();
         grossAmount = grandTotal;
         L_grossAmount.Text = grossAmount.ToString("C0", new System.Globalization.CultureInfo("id-ID"));
         _onPopupClosed = onPopupClosed;
+        _onGenerateQR = onGenerateQR;
     }
 
     private void CheckSetuju_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -40,5 +42,23 @@ public partial class Qris_Modal : Popup
     {
         _onPopupClosed?.Invoke();
         Close();
+    }
+
+    private async void BGenerateQR_Clicked(object sender, EventArgs e)
+    {
+
+
+        if (sender is Image image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        // Panggil ProsesDanSimpanTransaksiAsync dari ProdukMenu
+        if (_onGenerateQR != null)
+        {
+            await _onGenerateQR();
+        }
+
     }
 }

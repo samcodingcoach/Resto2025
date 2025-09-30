@@ -48,7 +48,7 @@
                 </Label>
             </HorizontalStackLayout>
 
-            <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
+            <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" Clicked="BGenerateQR_Clicked" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
         </Grid>
     </Grid>
     </Frame>
