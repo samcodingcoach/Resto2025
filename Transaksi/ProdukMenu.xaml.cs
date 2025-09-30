@@ -1962,6 +1962,11 @@ public partial class ProdukMenu : ContentPage
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
                     string successMessage = responseObject != null && responseObject.ContainsKey("message") ? responseObject["message"] : "Transaksi berhasil diproses.";
+                    if(ID_BAYAR == "3")
+                    {
+                        string URL_QRIS = responseObject["qris_url"];
+                        System.Diagnostics.Debug.WriteLine($"URLQRIS = {URL_QRIS}");
+                    }
                     await DisplayAlert("Sukses", successMessage, "OK");
                     HapusPesananSementara();
                     ResetHalaman();
