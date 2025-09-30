@@ -27,7 +27,7 @@
             
             </Grid>
 
-            <Image x:Name="QrisWebView" HeightRequest="200" WidthRequest="200"></Image>
+            <Image Grid.Row="1" x:Name="QrisWebView" HeightRequest="300" WidthRequest="300"></Image>
             
             
             <Grid Padding="10" Grid.Row="2">

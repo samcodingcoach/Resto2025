@@ -1686,7 +1686,7 @@ public partial class ProdukMenu : ContentPage
             {
                 case "1":
                     // Panggil ProsesDanSimpanTransaksiAsync dan simpan kode pembayaran yang dikembalikan
-                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, ProsesDanSimpanTransaksiAsync));
+                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, async (uangDiterima) => await ProsesDanSimpanTransaksiAsync(uangDiterima)));
                     break;
 
                 case "2":
@@ -1750,15 +1750,17 @@ public partial class ProdukMenu : ContentPage
                     break;
 
                 case "3":
-                    await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(this.grandTotalFinal, () =>
+                    MetodePembayaran.Qris_Modal qrisModal = null; // Declare the variable first
+                    qrisModal = new MetodePembayaran.Qris_Modal(this.grandTotalFinal, () =>
                     {
                         OnPopupClosed();
                     }, async () =>
                     {
                         // Panggil ProsesDanSimpanTransaksiAsync ketika Generate QR diklik
                         // Untuk QRIS, uangDiterima = grandTotalFinal (tidak ada kembalian)
-                        await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
-                    }));
+                        await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal, qrisModal);
+                    });
+                    await this.ShowPopupAsync(qrisModal);
                     break;
 
                 default:
@@ -1858,7 +1860,7 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private async Task ProsesDanSimpanTransaksiAsync(double uangDiterima)
+    private async Task ProsesDanSimpanTransaksiAsync(double uangDiterima, MetodePembayaran.Qris_Modal qrisModal = null)
     {
         // 1. Kumpulkan data untuk detail pembayaran
         var pembayaranDetail = new ProsesPembayaranDetailPayload
@@ -1967,6 +1969,15 @@ public partial class ProdukMenu : ContentPage
                     {
                         URL_QRIS = responseObject["qris_url"];
                         System.Diagnostics.Debug.WriteLine($"URLQRIS = {URL_QRIS}");
+                        
+                        // Update the QR code in the modal if it exists
+                        if (qrisModal != null)
+                        {
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                qrisModal.SetQRCode(URL_QRIS);
+                            });
+                        }
                     }
                     await DisplayAlert("Sukses", successMessage, "OK");
                     HapusPesananSementara();
