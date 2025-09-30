@@ -12,10 +12,12 @@ namespace Resto2025.MetodePembayaran;
 public partial class Qris_Modal : Popup
 {
     private readonly Action _onPopupClosed;
-
-    public Qris_Modal(Action onPopupClosed)
+    public double grossAmount = 0;
+    public Qris_Modal(double grandTotal,Action onPopupClosed)
 	{
 		InitializeComponent();
+        grossAmount = grandTotal;
+        L_grossAmount.Text = grossAmount.ToString("C0", new System.Globalization.CultureInfo("id-ID"));
         _onPopupClosed = onPopupClosed;
     }
 

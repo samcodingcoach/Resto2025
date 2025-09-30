@@ -14,7 +14,7 @@
                 <Label Text="PEMBAYARAN DENGAN QRIS" FontFamily="FontBold" FontSize="Title"></Label>
                 <HorizontalStackLayout Spacing="10">
                     <Image Source="card2.png" HeightRequest="24"></Image>
-                    <Label FontSize="Subtitle" Text="RP 200.000" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
+                    <Label FontSize="Subtitle" Text="RP 0" x:Name="L_grossAmount" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
                 </HorizontalStackLayout>
             </StackLayout>
 
@@ -36,7 +36,7 @@
 
             <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
 
-                <CheckBox x:Name="CheckSetuju" IsChecked="True" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
+                <CheckBox x:Name="CheckSetuju" IsChecked="False" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
 
                 <Label VerticalOptions="Center" FontSize="Caption">
                     <Label.FormattedText>

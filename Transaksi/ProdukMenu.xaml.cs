@@ -1694,62 +1694,62 @@ public partial class ProdukMenu : ContentPage
                     double nominalTransfer = this.grandTotalFinal;
                     await ProsesDanSimpanTransaksiAsync(nominalTransfer);
         
-        // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
-        if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
-        {
-            System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
-            await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
-            {
-                // Tambahkan logika untuk menangani hasil dari modal di sini
-                if (isSuccess)
-                {
-                    // Penanganan jika berhasil
-                    System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
-                    OnPopupClosed(); // Tutup modal dan refresh UI hanya saat berhasil
-                    
-                    // Tampilkan info sukses ke pengguna melalui MainThread
-                    MainThread.BeginInvokeOnMainThread(async () =>
+                    // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
+                    if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
                     {
-                        await DisplayAlert("Sukses", message, "OK");
-                    });
-                }
-                else
-                {
-                    // Cek apakah error karena pengguna menutup modal tanpa selesai
-                    if (message == "Pengguna menutup modal tanpa menyelesaikan proses transfer")
-                    {
-                        System.Diagnostics.Debug.WriteLine("Pengguna menutup modal tanpa menyelesaikan proses");
-                        // OnPopupClosed() akan dipanggil secara otomatis saat modal ditutup
-                        
-                        // Tampilkan peringatan ke pengguna melalui MainThread
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
+                        await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
                         {
-                            await DisplayAlert("Peringatan", "Proses transfer belum selesai", "OK");
-                        });
+                            // Tambahkan logika untuk menangani hasil dari modal di sini
+                            if (isSuccess)
+                            {
+                                // Penanganan jika berhasil
+                                System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
+                                OnPopupClosed(); // Tutup modal dan refresh UI hanya saat berhasil
+                    
+                                // Tampilkan info sukses ke pengguna melalui MainThread
+                                MainThread.BeginInvokeOnMainThread(async () =>
+                                {
+                                    await DisplayAlert("Sukses", message, "OK");
+                                });
+                            }
+                            else
+                            {
+                                // Cek apakah error karena pengguna menutup modal tanpa selesai
+                                if (message == "Pengguna menutup modal tanpa menyelesaikan proses transfer")
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Pengguna menutup modal tanpa menyelesaikan proses");
+                                    // OnPopupClosed() akan dipanggil secara otomatis saat modal ditutup
+                        
+                                    // Tampilkan peringatan ke pengguna melalui MainThread
+                                    MainThread.BeginInvokeOnMainThread(async () =>
+                                    {
+                                        await DisplayAlert("Peringatan", "Proses transfer belum selesai", "OK");
+                                    });
+                                }
+                                else
+                                {
+                                    // Penanganan jika gagal karena alasan lain
+                                    System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
+                                    OnPopupClosed(); // Tutup modal setelah menampilkan error
+                        
+                                    // Tampilkan info error ke pengguna melalui MainThread
+                                    MainThread.BeginInvokeOnMainThread(async () =>
+                                    {
+                                        await DisplayAlert("Gagal", message, "OK");
+                                    });
+                                }
+                            }
+                        }));
                     }
                     else
                     {
-                        // Penanganan jika gagal karena alasan lain
-                        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
-                        OnPopupClosed(); // Tutup modal setelah menampilkan error
-                        
-                        // Tampilkan info error ke pengguna melalui MainThread
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            await DisplayAlert("Gagal", message, "OK");
-                        });
+                        await DisplayAlert("Error", "Gagal mendapatkan kode pembayaran", "OK");
                     }
-                }
-            }));
-        }
-        else
-        {
-            await DisplayAlert("Error", "Gagal mendapatkan kode pembayaran", "OK");
-        }
                     break;
 
                 case "3":
-                    await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(() =>
+                    await this.ShowPopupAsync(new MetodePembayaran.Qris_Modal(this.grandTotalFinal, () =>
                     {
                         OnPopupClosed();
                     }));
