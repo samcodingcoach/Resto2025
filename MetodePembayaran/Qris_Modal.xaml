@@ -8,48 +8,51 @@
 
     <Frame BackgroundColor="White" CornerRadius="15" Padding="0">
         <Grid Padding="10" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*" RowSpacing="10">
-        <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
+            <Grid ColumnDefinitions="*,Auto" Grid.Row="0">
 
-            <StackLayout Grid.Column="0" Spacing="5">
-                <Label Text="PEMBAYARAN DENGAN QRIS" FontFamily="FontBold" FontSize="Title"></Label>
-                <HorizontalStackLayout Spacing="10">
-                    <Image Source="card2.png" HeightRequest="24"></Image>
-                    <Label FontSize="Subtitle" Text="RP 0" x:Name="L_grossAmount" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
-                </HorizontalStackLayout>
-            </StackLayout>
+                <StackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="PEMBAYARAN DENGAN QRIS" FontFamily="FontBold" FontSize="Title"></Label>
+                    <HorizontalStackLayout Spacing="10">
+                        <Image Source="card2.png" HeightRequest="24"></Image>
+                        <Label FontSize="Subtitle" Text="RP 0" x:Name="L_grossAmount" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
+                    </HorizontalStackLayout>
+                </StackLayout>
 
-            <StackLayout Grid.Column="1">
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer x:Name="CloseModal" Tapped="CloseModal_Tapped"></TapGestureRecognizer>
-                </StackLayout.GestureRecognizers>
-                <Image Source="close.png"></Image>
-            </StackLayout>
+                <StackLayout Grid.Column="1">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="CloseModal" Tapped="CloseModal_Tapped"></TapGestureRecognizer>
+                    </StackLayout.GestureRecognizers>
+                    <Image Source="close.png"></Image>
+                </StackLayout>
             
+            </Grid>
+
+            <Image x:Name="QrisWebView" HeightRequest="200" WidthRequest="200"></Image>
+            
+            
+            <Grid Padding="10" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+
+                    <CheckBox x:Name="CheckSetuju" IsChecked="False" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
+
+                    <Label VerticalOptions="Center" FontSize="Caption">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Setujui, untuk melakukan pembayaran dengan QRIS," />
+                                <Span Text="&#10;action tidak bisa di batalkan" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </HorizontalStackLayout>
+
+                <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" Clicked="BGenerateQR_Clicked" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
+            </Grid>
         </Grid>
-
-        <Grid Padding="10" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
-
-                <CheckBox x:Name="CheckSetuju" IsChecked="False" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
-
-                <Label VerticalOptions="Center" FontSize="Caption">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="Setujui, untuk melakukan pembayaran dengan QRIS," />
-                            <Span Text="&#10;action tidak bisa di batalkan" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-            </HorizontalStackLayout>
-
-            <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" Clicked="BGenerateQR_Clicked" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
-        </Grid>
-    </Grid>
     </Frame>
 </toolkit:Popup>

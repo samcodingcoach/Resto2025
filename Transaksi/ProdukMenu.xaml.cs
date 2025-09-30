@@ -52,7 +52,8 @@ public partial class ProdukMenu : ContentPage
     public double totalBiayaTakeaway = 0;
     public double nilaiPPN = 0;
     private double grandTotalFinal = 0;
-    
+    string URL_QRIS = string.Empty;
+
 
     private list_metodepembayaran metodeBayarTerpilih;
 
@@ -1964,7 +1965,7 @@ public partial class ProdukMenu : ContentPage
                     string successMessage = responseObject != null && responseObject.ContainsKey("message") ? responseObject["message"] : "Transaksi berhasil diproses.";
                     if(ID_BAYAR == "3")
                     {
-                        string URL_QRIS = responseObject["qris_url"];
+                        URL_QRIS = responseObject["qris_url"];
                         System.Diagnostics.Debug.WriteLine($"URLQRIS = {URL_QRIS}");
                     }
                     await DisplayAlert("Sukses", successMessage, "OK");

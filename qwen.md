@@ -1,31 +1,33 @@
-Perubahan yang telah dilakukan untuk memastikan nilai nominal_transfer yang benar dikirim ke server:
+Qris_Modal.xaml.cs
 
-1. Dalam ProdukMenu.xaml.cs, case "2":
-   - Sebelumnya: Mengirim this.grandTotalFinal langsung ke ProsesDanSimpanTransaksiAsync dan modal
-   - Sekarang: Menyimpan nilai this.grandTotalFinal dalam variabel lokal sebelum diproses, 
-             agar memastikan nilainya tetap konsisten saat dibuka modal TransferBank
-   
-   Kode yang diubah:
-   ```csharp
-   // Simpan nilai grandTotalFinal sebelum diproses
-   double nominalTransfer = this.grandTotalFinal;
-   await ProsesDanSimpanTransaksiAsync(nominalTransfer);
-   
-   // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
-   if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
-   {
-       System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
-       await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
-   ```
+pada bagian kode dibawah ini line 47
+private async void BGenerateQR_Clicked(object sender, EventArgs e)
+    {
 
-2. Dalam TransferBank_Modal.xaml.cs:
-   - Ditambahkan log tambahan untuk melihat nilai sebelum dikirim
-   - Validasi hanya memastikan nilai bukan NaN atau Infinity, bukan memastikan nilai > 0
 
-   Kode yang ditambahkan:
-   ```csharp
-   // Tambahkan log untuk debugging nilai yang akan dikirim
-   Debug.WriteLine($"Nominal Transfer sebelum dikirim: {nominal_transfer}");
-   ```
+        if (sender is Image image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
 
-Perubahan ini akan membantu kita melacak dari mana nilai 0 berasal - apakah dari sisi MAUI atau dari sisi server.
+        // Panggil ProsesDanSimpanTransaksiAsync dari ProdukMenu
+        if (_onGenerateQR != null)
+        {
+            await _onGenerateQR();
+        }
+
+    }
+
+    setelah panggil proses dan simpan transaksi, tambahkan kode untuk menampilkan QR Code yang didapat dari
+    kode dibawah ini ProdukMenu.xaml.cs line 1966 (URL_QRIS))
+    if(ID_BAYAR == "3")
+    {
+        URL_QRIS = responseObject["qris_url"];
+        System.Diagnostics.Debug.WriteLine($"URLQRIS = {URL_QRIS}");
+    }
+
+    lalu ditampilkan di Image QRCode di  Qris_Modal.xaml bagian 
+    <Image x:Name="QrisWebView" HeightRequest="200" WidthRequest="200"></Image> di code behindnya pakai  QrisWebView.Source = ImageSource.FromUri(new Uri(...));
+
+
