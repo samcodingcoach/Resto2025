@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.ApplicationModel;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -19,10 +19,19 @@ public partial class TransferBank_Modal : Popup
     private readonly Action<bool, string> _onResultReceived; // Parameter: (isSuccess, message)
     public double nominal_transfer = 0;
     public string selectedPaymentMethod = "";
+    public static Stream stream;
     public string selectedBank = "";
     public string KODE_PAYMENT = "";
     public int transfer_or_edc = 0; // 0 untuk transfer, 1 untuk EDC
     private string imagePath = "";
+
+    private static string direktori_lokal;
+    private static string nama_file;
+    private static string nama_file_baru;
+    string ganti_nama;
+
+
+
     public TransferBank_Modal(string kodePayment,double nominalTransfer, Action<bool, string> onResultReceived)
 	{
 		InitializeComponent();
@@ -31,7 +40,82 @@ public partial class TransferBank_Modal : Popup
         _onResultReceived = onResultReceived;
     }
 
-    
+    //ambil foto dari camera
+    public async void TakePhoto()
+    {
+        try
+        {
+            if (MediaPicker.Default.IsCaptureSupported)
+            {
+                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+
+                if (photo != null)
+                {
+                    string fileName = string.IsNullOrEmpty(photo.FileName)
+                        ? $"IMG_{DateTime.Now:yyyyMMdd_HHmmss}.jpg"
+                        : photo.FileName;
+
+                    string localFilePath = Path.Combine(FileSystem.CacheDirectory, fileName);
+
+                    // **🔹 Simpan stream ke MemoryStream agar tetap bisa digunakan**
+                    using (Stream tempStream = await photo.OpenReadAsync())
+                    {
+                        stream = new MemoryStream();
+                        await tempStream.CopyToAsync(stream);
+                        stream.Position = 0; // Reset posisi stream
+                    }
+
+                    // Simpan file ke penyimpanan lokal
+                    using (FileStream localFileStream = File.OpenWrite(localFilePath))
+                    {
+                        stream.Position = 0;
+                        await stream.CopyToAsync(localFileStream);
+                    }
+
+                    if (string.IsNullOrEmpty(nama_file))
+                    {
+                        nama_file = $"IMG_{Guid.NewGuid()}.jpg";
+                    }
+
+                    string newLocalFilePath = Path.Combine(FileSystem.CacheDirectory, nama_file);
+
+                    if (File.Exists(localFilePath))
+                    {
+                        File.Move(localFilePath, newLocalFilePath);
+                    }
+
+                    direktori_lokal = newLocalFilePath;
+
+                    // **🔹 Buat salinan stream agar bisa digunakan di ImageSource**
+                    var imageStreamCopy = new MemoryStream();
+                    stream.Position = 0;
+                    await stream.CopyToAsync(imageStreamCopy);
+                    imageStreamCopy.Position = 0;
+
+                    // Gunakan salinan stream untuk ImageSource
+                    T_Buktitransfer.Source = ImageSource.FromStream(() => new MemoryStream(imageStreamCopy.ToArray()));
+                    T_Buktitransfer.IsVisible = true;
+
+                    // Update UI
+                    BUploadBukti.IsVisible = false;
+                   
+                
+
+                   
+                }
+            }
+            else
+            {
+                //await DisplayAlert("Error", "Kamera tidak didukung pada perangkat ini.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            //await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
+        }
+    }
+
+
 
     private string GetMimeType(string fileName)
     {
@@ -224,17 +308,19 @@ public partial class TransferBank_Modal : Popup
     {
         try
         {
-            var result = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                FileTypes = FilePickerFileType.Images,
-                PickerTitle = "Pilih gambar bukti transfer"
-            });
+            //var result = await FilePicker.Default.PickAsync(new PickOptions
+            //{
+            //    FileTypes = FilePickerFileType.Images,
+            //    PickerTitle = "Pilih gambar bukti transfer"
+            //});
 
-            if (result != null)
-            {
-                imagePath = result.FullPath;
-                Debug.WriteLine($"File dipilih: {imagePath}");
-            }
+            //if (result != null)
+            //{
+            //    imagePath = result.FullPath;
+            //    Debug.WriteLine($"File dipilih: {imagePath}");
+            //}
+
+            TakePhoto();
         }
         catch (Exception ex)
         {

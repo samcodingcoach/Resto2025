@@ -2079,7 +2079,8 @@ public partial class ProdukMenu : ContentPage
         KODE_PAYMENT = string.Empty;
         STATUS_BAYAR = 0;
         NILAI_POTONGAN = 0;
-       
+        SwitchInvoice.IsToggled = false;
+
         // Tap_Konsumen_Tapped(NavKonsumen, null);
 
         // Update tampilan
