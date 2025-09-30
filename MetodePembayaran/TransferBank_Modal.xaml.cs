@@ -31,6 +31,8 @@ public partial class TransferBank_Modal : Popup
         _onResultReceived = onResultReceived;
     }
 
+    
+
     private string GetMimeType(string fileName)
     {
         var ext = Path.GetExtension(fileName).ToLowerInvariant();
@@ -238,5 +240,35 @@ public partial class TransferBank_Modal : Popup
         {
             Debug.WriteLine($"Error saat memilih file: {ex.Message}");
         }
+    }
+
+    private async void Tap1_Tapped(object sender, TappedEventArgs e)
+    {
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        NavDataPembayaran.Opacity = 1;
+        NavBuktiPembayaran.Opacity = 0.7;
+        View_DataPembayaran.IsVisible = true;
+        View_UploadBukti.IsVisible = false;
+
+    }
+
+    private async void Tap2_Tapped(object sender, TappedEventArgs e)
+    {
+
+        if (sender is Frame image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        NavDataPembayaran.Opacity = 0.7;
+        NavBuktiPembayaran.Opacity = 1;
+        View_DataPembayaran.IsVisible = false;
+        View_UploadBukti.IsVisible = true;
     }
 }

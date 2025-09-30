@@ -3,23 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.MetodePembayaran.TransferBank_Modal"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-             Color="Transparent" Size="810, 550" CanBeDismissedByTappingOutsideOfPopup="False"
+             Color="Transparent" Size="500, 460" CanBeDismissedByTappingOutsideOfPopup="False"
              >
 
     <Frame CornerRadius="10" Padding="15" BorderColor="Transparent">
-        <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*" RowSpacing="30">
-
-            <StackLayout Grid.Row="0" Spacing="10">
+        <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*" RowSpacing="10">
+            
+            <StackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,15">
                 <Grid ColumnDefinitions="*,Auto">
-                    <Label Text="Bank" FontSize="Subtitle" Grid.Column="0" FontFamily="FontBold" TextColor="#333"></Label>
+                    <Label Text="Metode Pembayaran Transfer Bank" FontSize="Subtitle" Grid.Column="0" FontFamily="FontBold" TextColor="#333"></Label>
                     <Image Source="close.png" Grid.Column="1">
                         <Image.GestureRecognizers>
                             <TapGestureRecognizer x:Name="CloseModal" Tapped="CloseModal_Tapped"></TapGestureRecognizer>
                         </Image.GestureRecognizers>
                     </Image>
                 </Grid>
-                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
-                    <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
+<!--nav-->
+                <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="15">
+                    <Frame x:Name="NavDataPembayaran" BackgroundColor="WhiteSmoke" Grid.Column="0" Padding="15,10" BorderColor="Transparent" CornerRadius="8">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Tap1" Tapped="Tap1_Tapped"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Data Pembayaran" TextColor="#333" VerticalOptions="Center" FontFamily="FontBold"></Label>
+                    </Frame>
+                    <Frame x:Name="NavBuktiPembayaran" BackgroundColor="WhiteSmoke" Opacity="0.7" Grid.Column="1" Padding="15,10" BorderColor="Transparent" CornerRadius="8">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="Tap2" Tapped="Tap2_Tapped"></TapGestureRecognizer>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Upload Bukti" TextColor="#333" VerticalOptions="Center" FontFamily="FontBold"></Label>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+
+            <ContentView x:Name="View_DataPembayaran" Grid.Row="1" IsVisible="True">
+                <StackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="10">
+                        <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 5" Padding="10,4" StrokeThickness="0.5">
                         <!--BANK-->
                         <Picker x:Name="PickerBank" Title="Pilih Bank" WidthRequest="150" SelectedIndexChanged="PickerBank_SelectedIndexChanged">
                             <Picker.ItemsSource>
@@ -34,7 +53,7 @@
                         </Picker>
                     </Border>
 <!--Transfer or EDC Radio Buttons-->
-                    <Border BackgroundColor="White" Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="20,0" StrokeThickness="0.5">
+                        <Border BackgroundColor="White" Grid.Column="1" StrokeShape="RoundRectangle 5" Padding="10,0" StrokeThickness="0.5">
                         <HorizontalStackLayout Spacing="50" VerticalOptions="Center">
 
                             <RadioButton x:Name="RadioTransfer" IsChecked="True" Content="TRANSFER" GroupName="MetodePembayaran" CheckedChanged="RadioTransfer_CheckedChanged" />
@@ -43,29 +62,43 @@
 
                         </HorizontalStackLayout>
                     </Border>
-                </Grid>
-            </StackLayout>
+                    </Grid>
 <!--Nama Pengirim-->
-            <StackLayout Grid.Row="1" Spacing="10">
-                <Label Text="Nama Pengirim / Atas Nama" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
-                <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
-                    <Entry x:Name="EntryNamaPengirim" Placeholder="Masukkan Nama Pengirim / Atas Nama" ClearButtonVisibility="WhileEditing" />
-                </Border>
-            </StackLayout>
+                    <StackLayout Grid.Row="1" Spacing="7">
+                        <Label Text="Nama Pengirim / Atas Nama" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                        <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 5" Padding="10,4" StrokeThickness="0.5">
+                            <Entry x:Name="EntryNamaPengirim" Placeholder="Masukkan Nama Pengirim / Atas Nama" ClearButtonVisibility="WhileEditing" />
+                        </Border>
+                    </StackLayout>
 <!--Nomor Referensi-->
-            <StackLayout Grid.Row="2" Spacing="10">
-                <Label Text="Nomor Referensi" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
-                <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="10" StrokeThickness="0.5">
-                    <Entry x:Name="EntryReferensi" Placeholder="Masukan Nomor Referensi (Optional)" ClearButtonVisibility="WhileEditing" />
-                </Border>
-            </StackLayout>
+                    <StackLayout Grid.Row="2" Spacing="7">
+                        <Label Text="Nomor Ref #" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                        <Border BackgroundColor="White" Grid.Column="0" StrokeShape="RoundRectangle 5" Padding="10,4" StrokeThickness="0.5">
+                            <Entry x:Name="EntryReferensi" Placeholder="Masukan Nomor Referensi (Optional)" ClearButtonVisibility="WhileEditing" />
+                        </Border>
+                    </StackLayout>
 
-            <Grid Grid.Row="3" ColumnDefinitions="*,*" Padding="10" ColumnSpacing="10" VerticalOptions="EndAndExpand">
+
+                </StackLayout>
+            </ContentView>
+            <ContentView x:Name="View_UploadBukti" Grid.Row="1" IsVisible="False">
+                <Grid RowDefinitions="*" ColumnDefinitions="*">
 <!--Button Upload-->
-                <Button Grid.Column="0" x:Name="BUploadBukti" Text="BUKTI TRANSFER" Clicked="BUploadBukti_Clicked"
-                    HorizontalOptions="Start" BackgroundColor="WhiteSmoke" TextColor="#333" CornerRadius="8" WidthRequest="200" HeightRequest="50" FontFamily="FontBold"
-                    ImageSource="upload24.png" ContentLayout="Left, 10" />
-<!--Submit Button-->                
+                    <Button Grid.Column="0" HorizontalOptions="Center" TranslationY="75" IsVisible="True"
+                            x:Name="BUploadBukti" Text="UPLOAD BUKTI TRANSFER" Clicked="BUploadBukti_Clicked"
+                            BackgroundColor="Transparent" TextColor="#333" BorderColor="WhiteSmoke" BorderWidth="1"
+                            CornerRadius="8" WidthRequest="200" HeightRequest="100" FontFamily="FontBold"
+                            ImageSource="upload24.png" ContentLayout="Left, 10" />
+                    <Image x:Name="T_Buktitransfer" IsVisible="True" VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="FillAndExpand"  
+                           Aspect="AspectFill">
+
+                    </Image>
+                </Grid>
+            </ContentView>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,*" Padding="0" ColumnSpacing="10" VerticalOptions="EndAndExpand">
+                <!--Submit Button-->                
                 <Button Grid.Column="1" x:Name="BTerapkanBank" Text="TERAPKAN BANK" Clicked="BTerapkanBank_Clicked"
                     HorizontalOptions="End" BackgroundColor="#075E54" TextColor="White" 
                     FontFamily="FontBold"  CornerRadius="8" WidthRequest="200" HeightRequest="50" />

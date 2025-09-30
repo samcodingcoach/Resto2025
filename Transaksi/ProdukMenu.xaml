@@ -347,7 +347,8 @@
                             </StackLayout>
 
                             <ContentView x:Name="Kanan_Total" Grid.Row="1" IsVisible="True">
-                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*" RowSpacing="5">
+                                <ScrollView>       
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*" RowSpacing="5">
                                     
                                     <!--METODE PEMBAYARAN-->
                                     <Grid Grid.Column="0"  Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" RowDefinitions="Auto,Auto" RowSpacing="5">
@@ -402,6 +403,7 @@
                                     </Frame>
                                     
                                 </Grid>
+                                </ScrollView>
                             </ContentView>
 
                             <ContentView x:Name="Kanan_Detail" Grid.Row="1" IsVisible="False">
