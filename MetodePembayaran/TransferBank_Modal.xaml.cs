@@ -60,7 +60,13 @@ public partial class TransferBank_Modal : Popup
 
             if (MediaPicker.Default.IsCaptureSupported)
             {
-                FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+                // Set options untuk menggunakan kamera belakang
+                var options = new MediaPickerOptions
+                {
+                    Title = "Ambil Foto Bukti Transfer"
+                };
+
+                FileResult photo = await MediaPicker.Default.CapturePhotoAsync(options);
 
                 if (photo != null)
                 {
@@ -78,19 +84,31 @@ public partial class TransferBank_Modal : Popup
                         _imageStream.Dispose();
                     }
 
-                    // Simpan stream ke MemoryStream agar tetap bisa digunakan
+                    // Baca foto dan compress dengan SkiaSharp
+                    byte[] compressedBytes;
                     using (Stream tempStream = await photo.OpenReadAsync())
                     {
-                        _imageStream = new MemoryStream();
-                        await tempStream.CopyToAsync(_imageStream);
-                        _imageStream.Position = 0; // Reset posisi stream
+                        // Baca seluruh stream ke byte array
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await tempStream.CopyToAsync(memoryStream);
+                            byte[] originalBytes = memoryStream.ToArray();
+                            
+                            // Compress image dengan SkiaSharp
+                            Debug.WriteLine("Memulai kompresi gambar...");
+                            compressedBytes = CompressImage(originalBytes);
+                            Debug.WriteLine($"Original size: {originalBytes.Length / 1024} KB, Compressed: {compressedBytes.Length / 1024} KB");
+                        }
                     }
 
-                    // Simpan file ke penyimpanan lokal
+                    // Simpan compressed image ke MemoryStream untuk display
+                    _imageStream = new MemoryStream(compressedBytes);
+                    _imageStream.Position = 0;
+
+                    // Simpan compressed file ke penyimpanan lokal
                     using (FileStream localFileStream = File.OpenWrite(localFilePath))
                     {
-                        _imageStream.Position = 0;
-                        await _imageStream.CopyToAsync(localFileStream);
+                        await localFileStream.WriteAsync(compressedBytes, 0, compressedBytes.Length);
                     }
 
                     if (string.IsNullOrEmpty(nama_file))
@@ -146,6 +164,53 @@ public partial class TransferBank_Modal : Popup
     }
 
 
+
+    // Compress image menggunakan SkiaSharp
+    private byte[] CompressImage(byte[] originalBytes)
+    {
+        try
+        {
+            using (var bitmap = SKBitmap.Decode(originalBytes))
+            {
+                if (bitmap == null)
+                {
+                    Debug.WriteLine("Gagal decode bitmap, menggunakan original image");
+                    return originalBytes;
+                }
+
+                int width = bitmap.Width;
+                int height = bitmap.Height;
+
+                // Resize image untuk mengurangi ukuran (scale 25% dari original)
+                float scale = 0.25f; // Ubah nilai ini untuk mengatur ratio kompresi
+                int newWidth = (int)(width * scale);
+                int newHeight = (int)(height * scale);
+
+                Debug.WriteLine($"Resizing dari {width}x{height} ke {newWidth}x{newHeight}");
+
+                var resizedBitmap = new SKBitmap(newWidth, newHeight);
+                using (var canvas = new SKCanvas(resizedBitmap))
+                {
+                    canvas.Clear(SKColors.White);
+                    canvas.DrawBitmap(bitmap, new SKRect(0, 0, newWidth, newHeight), 
+                        new SKPaint { FilterQuality = SKFilterQuality.High });
+                }
+
+                // Encode ke JPEG dengan kualitas 60%
+                using (var image = SKImage.FromBitmap(resizedBitmap))
+                {
+                    var encodedData = image.Encode(SKEncodedImageFormat.Jpeg, 60);
+                    return encodedData.ToArray();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saat compress image: {ex.Message}");
+            Debug.WriteLine("Menggunakan original image tanpa kompresi");
+            return originalBytes;
+        }
+    }
 
     private string GetMimeType(string fileName)
     {
