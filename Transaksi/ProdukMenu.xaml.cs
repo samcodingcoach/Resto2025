@@ -1922,6 +1922,7 @@ public partial class ProdukMenu : ContentPage
             {
                 endpoint = "pesanan/update_invoice.php";
                 System.Diagnostics.Debug.WriteLine("=== UPDATE INVOICE ====");
+
             }
             else
             {
@@ -2075,6 +2076,8 @@ public partial class ProdukMenu : ContentPage
         ID_MEJA = "0";
         ID_BAYAR = "1";
         ID_PROMO = "0";
+        KODE_PAYMENT = string.Empty;
+        STATUS_BAYAR = 0;
         NILAI_POTONGAN = 0;
        
         // Tap_Konsumen_Tapped(NavKonsumen, null);
