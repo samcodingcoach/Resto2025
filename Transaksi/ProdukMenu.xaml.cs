@@ -1685,12 +1685,15 @@ public partial class ProdukMenu : ContentPage
 
                 case "2":
 
-                    await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
+                    // Simpan nilai grandTotalFinal sebelum diproses
+                    double nominalTransfer = this.grandTotalFinal;
+                    await ProsesDanSimpanTransaksiAsync(nominalTransfer);
         
         // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
         if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
         {
-            await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT,this.grandTotalFinal, (isSuccess, message) =>
+            System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
+            await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
             {
                 // Tambahkan logika untuk menangani hasil dari modal di sini
                 if (isSuccess)

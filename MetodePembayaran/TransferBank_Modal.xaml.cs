@@ -121,6 +121,17 @@ public partial class TransferBank_Modal : Popup
                 Close();
                 return;
             }
+            
+            // Validasi bahwa nominal_transfer adalah angka yang valid (bukan NaN atau infinity)
+            if (double.IsNaN(nominal_transfer) || double.IsInfinity(nominal_transfer))
+            {
+                _onResultReceived?.Invoke(false, "Nominal transfer tidak valid");
+                Close();
+                return;
+            }
+            
+            // Tambahkan log untuk debugging nilai yang akan dikirim
+            Debug.WriteLine($"Nominal Transfer sebelum dikirim: {nominal_transfer}");
 
             // Kirim data ke API
             var client = new HttpClient();
@@ -133,6 +144,13 @@ public partial class TransferBank_Modal : Popup
             content.Add(new StringContent(selectedBank), "nama_bank");
             content.Add(new StringContent(EntryNamaPengirim.Text), "nama_pengirim");
             content.Add(new StringContent(nominal_transfer.ToString()), "nominal_transfer");
+            
+            // Log nilai yang dikirim
+            System.Diagnostics.Debug.WriteLine($"Kode Payment: {KODE_PAYMENT}");
+            System.Diagnostics.Debug.WriteLine($"Transfer or EDC: {transfer_or_edc}");
+            System.Diagnostics.Debug.WriteLine($"Nama Bank: {selectedBank}");
+            System.Diagnostics.Debug.WriteLine($"Nama Pengirim: {EntryNamaPengirim.Text}");
+            System.Diagnostics.Debug.WriteLine($"Nominal Transfer: {nominal_transfer}");
 
             // Tambahkan nomor referensi jika ada
             if (!string.IsNullOrEmpty(EntryReferensi.Text))

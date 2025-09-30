@@ -1,35 +1,31 @@
-TransferBank_Modal.xaml & TransferBank_Modal.xaml.cs, pada bagian
+Perubahan yang telah dilakukan untuk memastikan nilai nominal_transfer yang benar dikirim ke server:
 
-baca dengan seksama dan pahami permintaan saya
-sepertinya berhasil namun perlu koreksi
- 
- pada Summary_TotalCheckout_Clicked bagian line 1686
- case "2":
+1. Dalam ProdukMenu.xaml.cs, case "2":
+   - Sebelumnya: Mengirim this.grandTotalFinal langsung ke ProsesDanSimpanTransaksiAsync dan modal
+   - Sekarang: Menyimpan nilai this.grandTotalFinal dalam variabel lokal sebelum diproses, 
+             agar memastikan nilainya tetap konsisten saat dibuka modal TransferBank
+   
+   Kode yang diubah:
+   ```csharp
+   // Simpan nilai grandTotalFinal sebelum diproses
+   double nominalTransfer = this.grandTotalFinal;
+   await ProsesDanSimpanTransaksiAsync(nominalTransfer);
+   
+   // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
+   if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
+   {
+       System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
+       await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
+   ```
 
-await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal);
-break;
+2. Dalam TransferBank_Modal.xaml.cs:
+   - Ditambahkan log tambahan untuk melihat nilai sebelum dikirim
+   - Validasi hanya memastikan nilai bukan NaN atau Infinity, bukan memastikan nilai > 0
 
-step yang benar
-await ProsesDanSimpanTransaksiAsync(this.grandTotalFinal); <-- ini sudah benar namun jika success dapatkan  kode_payment dari output jsonnya
+   Kode yang ditambahkan:
+   ```csharp
+   // Tambahkan log untuk debugging nilai yang akan dikirim
+   Debug.WriteLine($"Nominal Transfer sebelum dikirim: {nominal_transfer}");
+   ```
 
-kemudian isi ke variable KODE_PAYMENT,
-kemudian membuka transferbank_modal.xaml.cs
- await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, (isSuccess, message) =>
-{
-    OnPopupClosed();
-    // Tambahkan logika untuk menangani hasil dari modal di sini
-    if (isSuccess)
-    {
-        // Penanganan jika berhasil
-        System.Diagnostics.Debug.WriteLine($"Transfer berhasil: {message}");
-    }
-    else
-    {
-        // Penanganan jika gagal
-        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
-    }
-}));
-
-
-
-
+Perubahan ini akan membantu kita melacak dari mana nilai 0 berasal - apakah dari sisi MAUI atau dari sisi server.
