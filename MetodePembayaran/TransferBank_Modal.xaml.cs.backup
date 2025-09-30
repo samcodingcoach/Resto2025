@@ -1,4 +1,4 @@
-using CommunityToolkit.Maui.Views;
+﻿using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.ApplicationModel;
 using Newtonsoft.Json;
 using SkiaSharp;
@@ -19,78 +19,57 @@ public partial class TransferBank_Modal : Popup
     private readonly Action<bool, string> _onResultReceived; // Parameter: (isSuccess, message)
     public double nominal_transfer = 0;
     public string selectedPaymentMethod = "";
-    private Stream _imageStream;  // Instance variable untuk image stream
+    public static Stream stream;
     public string selectedBank = "";
     public string KODE_PAYMENT = "";
     public int transfer_or_edc = 0; // 0 untuk transfer, 1 untuk EDC
+    private string imagePath = "";
 
-    private string direktori_lokal;  // Path foto dari kamera
-    private string nama_file;  // Nama file foto
+    private static string direktori_lokal;
+    private static string nama_file;
+    private static string nama_file_baru;
+    string ganti_nama;
 
 
-    public TransferBank_Modal(string kodePayment, double nominalTransfer, Action<bool, string> onResultReceived)
-    {
-        InitializeComponent();
+
+    public TransferBank_Modal(string kodePayment,double nominalTransfer, Action<bool, string> onResultReceived)
+	{
+		InitializeComponent();
         KODE_PAYMENT = kodePayment;
         nominal_transfer = nominalTransfer;
         _onResultReceived = onResultReceived;
     }
 
     //ambil foto dari camera
-    public async Task TakePhoto()
+    public async void TakePhoto()
     {
         try
         {
-            // Request camera permission terlebih dahulu
-            Debug.WriteLine("Meminta permission kamera...");
-            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted)
-            {
-                Debug.WriteLine("Permission belum granted, requesting...");
-                status = await Permissions.RequestAsync<Permissions.Camera>();
-            }
-
-            if (status != PermissionStatus.Granted)
-            {
-                Debug.WriteLine("Permission kamera ditolak oleh user");
-                return;
-            }
-
-            Debug.WriteLine("Permission kamera granted, membuka kamera...");
-
             if (MediaPicker.Default.IsCaptureSupported)
             {
                 FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
 
                 if (photo != null)
                 {
-                    Debug.WriteLine($"Foto berhasil diambil: {photo.FileName}");
-                    
                     string fileName = string.IsNullOrEmpty(photo.FileName)
                         ? $"IMG_{DateTime.Now:yyyyMMdd_HHmmss}.jpg"
                         : photo.FileName;
 
                     string localFilePath = Path.Combine(FileSystem.CacheDirectory, fileName);
 
-                    // Dispose stream lama jika ada
-                    if (_imageStream != null)
-                    {
-                        _imageStream.Dispose();
-                    }
-
-                    // Simpan stream ke MemoryStream agar tetap bisa digunakan
+                    // **🔹 Simpan stream ke MemoryStream agar tetap bisa digunakan**
                     using (Stream tempStream = await photo.OpenReadAsync())
                     {
-                        _imageStream = new MemoryStream();
-                        await tempStream.CopyToAsync(_imageStream);
-                        _imageStream.Position = 0; // Reset posisi stream
+                        stream = new MemoryStream();
+                        await tempStream.CopyToAsync(stream);
+                        stream.Position = 0; // Reset posisi stream
                     }
 
                     // Simpan file ke penyimpanan lokal
                     using (FileStream localFileStream = File.OpenWrite(localFilePath))
                     {
-                        _imageStream.Position = 0;
-                        await _imageStream.CopyToAsync(localFileStream);
+                        stream.Position = 0;
+                        await stream.CopyToAsync(localFileStream);
                     }
 
                     if (string.IsNullOrEmpty(nama_file))
@@ -102,46 +81,37 @@ public partial class TransferBank_Modal : Popup
 
                     if (File.Exists(localFilePath))
                     {
-                        if (File.Exists(newLocalFilePath))
-                        {
-                            File.Delete(newLocalFilePath);
-                        }
                         File.Move(localFilePath, newLocalFilePath);
                     }
 
                     direktori_lokal = newLocalFilePath;
-                    Debug.WriteLine($"File disimpan di: {direktori_lokal}");
 
-                    // Buat salinan stream agar bisa digunakan di ImageSource
+                    // **🔹 Buat salinan stream agar bisa digunakan di ImageSource**
                     var imageStreamCopy = new MemoryStream();
-                    _imageStream.Position = 0;
-                    await _imageStream.CopyToAsync(imageStreamCopy);
+                    stream.Position = 0;
+                    await stream.CopyToAsync(imageStreamCopy);
                     imageStreamCopy.Position = 0;
 
                     // Gunakan salinan stream untuk ImageSource
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        T_Buktitransfer.Source = ImageSource.FromStream(() => new MemoryStream(imageStreamCopy.ToArray()));
-                        T_Buktitransfer.IsVisible = true;
-                        BUploadBukti.IsVisible = false;
-                    });
+                    T_Buktitransfer.Source = ImageSource.FromStream(() => new MemoryStream(imageStreamCopy.ToArray()));
+                    T_Buktitransfer.IsVisible = true;
 
-                    Debug.WriteLine("Foto berhasil ditampilkan di UI");
-                }
-                else
-                {
-                    Debug.WriteLine("User membatalkan pengambilan foto");
+                    // Update UI
+                    BUploadBukti.IsVisible = false;
+                   
+                
+
+                   
                 }
             }
             else
             {
-                Debug.WriteLine("Kamera tidak didukung pada perangkat ini");
+                //await DisplayAlert("Error", "Kamera tidak didukung pada perangkat ini.", "OK");
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error saat mengambil foto: {ex.Message}");
-            Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+            //await DisplayAlert("Error", $"Terjadi kesalahan: {ex.Message}", "OK");
         }
     }
 
@@ -190,7 +160,16 @@ public partial class TransferBank_Modal : Popup
 
     private async void CloseModal_Tapped(object sender, TappedEventArgs e)
     {
-       
+        // Tampilkan konfirmasi sebelum menutup modal
+        bool confirm = await Shell.Current.DisplayAlert("Konfirmasi", "Anda belum menyelesaikan proses transfer. Apakah Anda yakin ingin menutup modal ini?", "Ya", "Batal");
+        
+        if (confirm)
+        {
+            // Jika pengguna yakin, tutup modal
+            _onResultReceived?.Invoke(false, "Pengguna menutup modal tanpa menyelesaikan proses transfer");
+            Close();
+        }
+        // Jika tidak, biarkan modal tetap terbuka
     }
 
     private void PickerBank_SelectedIndexChanged(object sender, EventArgs e)
@@ -228,7 +207,7 @@ public partial class TransferBank_Modal : Popup
                 Close();
                 return;
             }
-
+            
             // Validasi bahwa nominal_transfer adalah angka yang valid (bukan NaN atau infinity)
             if (double.IsNaN(nominal_transfer) || double.IsInfinity(nominal_transfer))
             {
@@ -236,7 +215,7 @@ public partial class TransferBank_Modal : Popup
                 Close();
                 return;
             }
-
+            
             // Tambahkan log untuk debugging nilai yang akan dikirim
             Debug.WriteLine($"Nominal Transfer sebelum dikirim: {nominal_transfer}");
 
@@ -251,7 +230,7 @@ public partial class TransferBank_Modal : Popup
             content.Add(new StringContent(selectedBank), "nama_bank");
             content.Add(new StringContent(EntryNamaPengirim.Text), "nama_pengirim");
             content.Add(new StringContent(nominal_transfer.ToString()), "nominal_transfer");
-
+            
             // Log nilai yang dikirim
             System.Diagnostics.Debug.WriteLine($"Kode Payment: {KODE_PAYMENT}");
             System.Diagnostics.Debug.WriteLine($"Transfer or EDC: {transfer_or_edc}");
@@ -269,27 +248,22 @@ public partial class TransferBank_Modal : Popup
                 content.Add(new StringContent(""), "no_referensi");
             }
 
-            // Upload file gambar dari kamera
-            if (!string.IsNullOrEmpty(direktori_lokal) && File.Exists(direktori_lokal))
+            // Tambahkan file gambar jika dipilih
+            if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
             {
-                Debug.WriteLine($"Upload file dari kamera: {direktori_lokal}");
-                var fileStream = File.OpenRead(direktori_lokal);
-                var streamContent = new StreamContent(fileStream);
-
+                var stream = File.OpenRead(imagePath);
+                var streamContent = new StreamContent(stream);
+                
                 // Menentukan contentType berdasarkan ekstensi file
-                string mimeType = GetMimeType(direktori_lokal);
+                string mimeType = GetMimeType(imagePath);
                 streamContent.Headers.ContentType = new MediaTypeHeaderValue(mimeType);
-
-                content.Add(streamContent, "img_ss", Path.GetFileName(direktori_lokal));
-            }
-            else
-            {
-                Debug.WriteLine("Tidak ada file gambar yang akan diupload");
+                
+                content.Add(streamContent, "img_ss", Path.GetFileName(imagePath));
             }
 
             request.Content = content;
             var response = await client.SendAsync(request);
-
+            
             var responseContent = await response.Content.ReadAsStringAsync();
             Debug.WriteLine(responseContent);
 
@@ -297,7 +271,7 @@ public partial class TransferBank_Modal : Popup
             {
                 // Parsing response hanya jika status sukses
                 var responseObject = JsonConvert.DeserializeObject<dynamic>(responseContent);
-
+                
                 if (responseObject != null && responseObject.status != null && responseObject.status == "success")
                 {
                     // Kirim hasil sukses ke halaman sebelumnya
@@ -317,7 +291,7 @@ public partial class TransferBank_Modal : Popup
                 // Tangani kasus error response
                 var errorResponseObject = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 string errorMessage = errorResponseObject?.message?.ToString() ?? $"Error: {response.StatusCode} - Gagal menyimpan data";
-
+                
                 _onResultReceived?.Invoke(false, errorMessage);
                 Close();
             }
@@ -330,7 +304,29 @@ public partial class TransferBank_Modal : Popup
         }
     }
 
-   
+    private async void BUploadBukti_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            //var result = await FilePicker.Default.PickAsync(new PickOptions
+            //{
+            //    FileTypes = FilePickerFileType.Images,
+            //    PickerTitle = "Pilih gambar bukti transfer"
+            //});
+
+            //if (result != null)
+            //{
+            //    imagePath = result.FullPath;
+            //    Debug.WriteLine($"File dipilih: {imagePath}");
+            //}
+
+            TakePhoto();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error saat memilih file: {ex.Message}");
+        }
+    }
 
     private async void Tap1_Tapped(object sender, TappedEventArgs e)
     {
@@ -360,20 +356,5 @@ public partial class TransferBank_Modal : Popup
         NavBuktiPembayaran.Opacity = 1;
         View_DataPembayaran.IsVisible = false;
         View_UploadBukti.IsVisible = true;
-    }
-
-    private async void BUploadBukti_Clicked(object sender, EventArgs e)
-    {
-        System.Diagnostics.Debug.WriteLine("Tombol Upload Bukti Diklik");
-        try
-        {
-            Debug.WriteLine("BUploadBukti_Clicked - Langsung buka kamera...");
-            await TakePhoto();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Error saat BUploadBukti_Clicked: {ex.Message}");
-            Debug.WriteLine($"StackTrace: {ex.StackTrace}");
-        }
     }
 }

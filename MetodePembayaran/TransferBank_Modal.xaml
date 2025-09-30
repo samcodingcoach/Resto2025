@@ -82,14 +82,16 @@
                 </StackLayout>
             </ContentView>
             <ContentView x:Name="View_UploadBukti" Grid.Row="1" IsVisible="False">
-                <Grid RowDefinitions="*" ColumnDefinitions="*">
+                <Grid RowDefinitions="Auto" ColumnDefinitions="Auto">
 <!--Button Upload-->
-                    <Button Grid.Column="0" HorizontalOptions="Center" TranslationY="75" IsVisible="True"
+                    <Button Grid.Column="0"  IsVisible="True"
                             x:Name="BUploadBukti" Text="UPLOAD BUKTI TRANSFER" Clicked="BUploadBukti_Clicked"
-                            BackgroundColor="Transparent" TextColor="#333" BorderColor="WhiteSmoke" BorderWidth="1"
-                            CornerRadius="8" WidthRequest="200" HeightRequest="100" FontFamily="FontBold"
-                            ImageSource="upload24.png" ContentLayout="Left, 10" />
-                    <Image x:Name="T_Buktitransfer" IsVisible="True" VerticalOptions="CenterAndExpand" 
+                            BackgroundColor="White" TextColor="#333" BorderColor="WhiteSmoke" BorderWidth="1"
+                            CornerRadius="8" FontFamily="FontBold"
+                            ImageSource="upload24.png" ContentLayout="Left, 10">
+                        
+                    </Button>
+                    <Image Grid.Column="0" x:Name="T_Buktitransfer" IsVisible="False" VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="FillAndExpand"  
                            Aspect="AspectFill">
 
