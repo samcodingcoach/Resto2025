@@ -1450,7 +1450,7 @@ public partial class ProdukMenu : ContentPage
             // 4. Logika untuk menampilkan pop-up (tetap sama)
             if (selectedItem.kategori == "Transfer")
             {
-                //this.ShowPopup(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT,t (isSuccess, message) =>
+                //this.ShowPopup(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, (isSuccess, message) =>
                 //{
                 //    OnPopupClosed();
                 //    // Tambahkan logika untuk menangani hasil dari modal di sini
@@ -1465,6 +1465,11 @@ public partial class ProdukMenu : ContentPage
                 //        System.Diagnostics.Debug.WriteLine($"Transfer gagal: {message}");
                 //    }
                 //}));
+            }
+
+            if(selectedItem.kategori == "Qris")
+            {
+
             }
         }
     }
