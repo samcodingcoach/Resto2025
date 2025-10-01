@@ -1751,7 +1751,7 @@ public partial class ProdukMenu : ContentPage
 
                 case "3":
                     MetodePembayaran.Qris_Modal qrisModal = null; // Declare the variable first
-                    qrisModal = new MetodePembayaran.Qris_Modal(this.grandTotalFinal, () =>
+                    qrisModal = new MetodePembayaran.Qris_Modal(this.grandTotalFinal, this.KODE_PAYMENT, () =>
                     {
                         OnPopupClosed();
                     }, async () =>
@@ -1995,6 +1995,17 @@ public partial class ProdukMenu : ContentPage
                     {
                         this.KODE_PAYMENT = responseObject["kode_payment"];
                         System.Diagnostics.Debug.WriteLine($"Kode pembayaran diperbarui: {this.KODE_PAYMENT}");
+                        
+                        // Update kode payment di QRIS modal setelah kode payment di-generate
+                        Debug.WriteLine($"DEBUG: qrisModal != null = {qrisModal != null}");
+                        if (qrisModal != null)
+                        {
+                            Debug.WriteLine($"DEBUG: Akan memanggil SetKodePayment dengan: {this.KODE_PAYMENT}");
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                qrisModal.SetKodePayment(this.KODE_PAYMENT);
+                            });
+                        }
                     }
                     else
                     {

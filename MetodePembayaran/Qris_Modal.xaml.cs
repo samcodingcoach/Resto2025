@@ -20,13 +20,17 @@ public partial class Qris_Modal : Popup
     private string QR_STATUS = string.Empty;
 	public double grossAmount = 0;
     
+    // Kode Payment
+    private string kode_payment = string.Empty;
+    
     // Countdown Timer
     private System.Timers.Timer _countdownTimer;
-    private int _remainingSeconds = 300; // 5 menit = 300 detik
-    public Qris_Modal(double grandTotal, Action onPopupClosed, Func<Task> onGenerateQR, Action<string> onQRReady = null)
+    private int _remainingSeconds = 420; 
+    public Qris_Modal(double grandTotal, string kodePayment, Action onPopupClosed, Func<Task> onGenerateQR, Action<string> onQRReady = null)
     {
         InitializeComponent();
         grossAmount = grandTotal;
+        kode_payment = kodePayment;
         L_grossAmount.Text = grossAmount.ToString("C0", new System.Globalization.CultureInfo("id-ID"));
         _onPopupClosed = onPopupClosed;
         _onGenerateQR = onGenerateQR;
@@ -46,6 +50,7 @@ public partial class Qris_Modal : Popup
         try
         {
             string url = App.API_HOST + "midtrans/midtrans_status.php?kode_payment=" + kode_payment;
+            Debug.WriteLine($"Cek status pembayaran URL: {url}");
 
             using (HttpClient client = new HttpClient())
             {
@@ -54,46 +59,104 @@ public partial class Qris_Modal : Popup
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    List<status_pembayaran> rowData = JsonConvert.DeserializeObject<List<status_pembayaran>>(json);
+                    Debug.WriteLine($"Response JSON: {json}");
 
-                    if (rowData != null && rowData.Count > 0)
+                    // Handle berbagai format response
+                    bool parseSuccess = await TryParseStatusResponse(json);
+                    
+                    if (parseSuccess && QR_STATUS == "SETTLEMENT")
                     {
-                        status_pembayaran row = rowData[0];
-                        QR_STATUS = row.transaction_status.ToUpper();
-                       
-                        if (QR_STATUS == "SETTLEMENT")
-                        {
-                           
-                            //update status
-                        }
-                        else
-                        {
-
-                        }
+                        Debug.WriteLine("Status SETTLEMENT, memperbarui status pembayaran...");
+                        settlement_update();
+                    }
+                    else if (parseSuccess)
+                    {
+                        Debug.WriteLine($"Status belum SETTLEMENT: {QR_STATUS}");
                     }
                     else
                     {
-                        
-                        System.Diagnostics.Debug.WriteLine($"Terjadi kesalahan pada permintaan ({response.StatusCode}): {response.ReasonPhrase}");
+                        Debug.WriteLine("Gagal memparse response atau data kosong");
                     }
+                }
+                else
+                {
+                    Debug.WriteLine($"HTTP Error ({response.StatusCode}): {response.ReasonPhrase}");
                 }
             }
         }
         catch (Exception ex)
         {
-           
-            System.Diagnostics.Debug.WriteLine($"Terjadi kesalahan: {ex.Message}");
+            Debug.WriteLine($"Terjadi kesalahan: {ex.Message}");
+            Debug.WriteLine($"Stack trace: {ex.StackTrace}");
         }
+    }
 
+    // Method tambahan untuk handle berbagai format response
+    private async Task<bool> TryParseStatusResponse(string json)
+    {
+        try
+        {
+            Debug.WriteLine($"Mencoba parse JSON: {json}");
+
+            // Cek jika response adalah error object
+            if (json.TrimStart().StartsWith("{") && json.Contains("error"))
+            {
+                var errorObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                if (errorObj.ContainsKey("error"))
+                {
+                    Debug.WriteLine($"Server error: {errorObj["error"]}");
+                    return false;
+                }
+            }
+
+            // Coba deserialize sebagai array dulu (sesuai format yang Anda berikan)
+            if (json.TrimStart().StartsWith("["))
+            {
+                var arrayData = JsonConvert.DeserializeObject<List<status_pembayaran>>(json);
+                if (arrayData != null && arrayData.Count > 0)
+                {
+                    var row = arrayData[0];
+                    QR_STATUS = row.transaction_status.ToUpper();
+                    Debug.WriteLine($"Status dari array: {QR_STATUS}");
+                    return true;
+                }
+            }
+            // Jika bukan array, coba deserialize sebagai single object
+            else if (json.TrimStart().StartsWith("{"))
+            {
+                var singleData = JsonConvert.DeserializeObject<status_pembayaran>(json);
+                if (singleData != null && !string.IsNullOrEmpty(singleData.transaction_status))
+                {
+                    QR_STATUS = singleData.transaction_status.ToUpper();
+                    Debug.WriteLine($"Status dari object: {QR_STATUS}");
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error parsing response: {ex.Message}");
+            return false;
+        }
     }
 
     private async void settlement_update()
     {
+        Debug.WriteLine($"Memperbarui status pembayaran menjadi SETTLEMENT: {kode_payment}");
+        
+        if (string.IsNullOrEmpty(kode_payment))
+        {
+            
+            Debug.WriteLine("Kode payment kosong, tidak dapat memperbarui status pembayaran.");
+            return;
+        }
         var data = new Dictionary<string, string>
-                {
-                     { "kode", kode_payment },
+        {
+                { "kode_payment", kode_payment },
                      
-                };
+        };
 
         var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
         var client = new HttpClient();
@@ -167,6 +230,13 @@ public partial class Qris_Modal : Popup
             // Mulai countdown timer
             StartCountdownTimer();
         }
+    }
+
+    // Method untuk update kode payment setelah di-generate
+    public void SetKodePayment(string kodePayment)
+    {
+        kode_payment = kodePayment;
+        Debug.WriteLine($"Kode payment di-update di Qris_Modal: {kode_payment}");
     }
 
     private async void Button_CekStatus_Clicked(object sender, EventArgs e)
