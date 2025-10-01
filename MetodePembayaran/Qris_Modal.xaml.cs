@@ -78,7 +78,8 @@ public partial class Qris_Modal : Popup
             
             // Tampilkan countdown UI
             HitungMundur.IsVisible = true;
-            
+            BGenerateQR.IsEnabled = false; BGenerateQR.Opacity=0.3;
+
             // Mulai countdown timer
             StartCountdownTimer();
         }
@@ -102,8 +103,8 @@ public partial class Qris_Modal : Popup
         // Stop timer yang ada jika sedang berjalan
         StopCountdownTimer();
         
-        // Reset countdown ke 5 menit
-        _remainingSeconds = 300;
+        // Reset countdown ke 7 menit
+        _remainingSeconds = 420;
         
         // Update label pertama kali
         UpdateCountdownLabel();
@@ -114,7 +115,7 @@ public partial class Qris_Modal : Popup
         _countdownTimer.AutoReset = true;
         _countdownTimer.Start();
         
-        Debug.WriteLine("Countdown timer dimulai - 5 menit (300 detik)");
+        Debug.WriteLine("Countdown timer dimulai - 7 menit (420 detik)");
     }
     
     private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -142,7 +143,7 @@ public partial class Qris_Modal : Popup
         string timeText = $"QR EXPIRED DALAM {minutes:D2}:{seconds:D2}";
         Label_HitungMundur.Text = timeText;
         
-        Debug.WriteLine($"Countdown update: {timeText}");
+       // Debug.WriteLine($"Countdown update: {timeText}");
     }
     
     private void OnTimerExpired()
