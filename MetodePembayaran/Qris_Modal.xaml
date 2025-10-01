@@ -14,7 +14,7 @@
                     <Label Text="PEMBAYARAN DENGAN QRIS" FontFamily="FontBold" FontSize="Title"></Label>
                     <HorizontalStackLayout Spacing="10">
                         <Image Source="card2.png" HeightRequest="24"></Image>
-                        <Label FontSize="Subtitle" Text="RP 0" x:Name="L_grossAmount" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
+<!--gross amount-->      <Label FontSize="Subtitle" Text="RP 0" x:Name="L_grossAmount" FontFamily="FontBold" TextColor="#FF2D2D" ></Label>
                     </HorizontalStackLayout>
                 </StackLayout>
 
@@ -27,8 +27,18 @@
             
             </Grid>
 
-            <Image Grid.Row="1" x:Name="QrisWebView" HeightRequest="300" WidthRequest="300"></Image>
-            
+<!--QRCODE IMAGE-->
+            <StackLayout Grid.Row="1">
+                <Image Grid.Row="1" x:Name="QrisWebView" HeightRequest="300" WidthRequest="300"></Image>
+                <ContentView x:Name="HitungMundur" IsVisible="False">
+<!--hitung mundur dengan format MM:SS-->
+                    <StackLayout Spacing="10">
+<!--ketika qr muncul, hitung mundur 5 menit-->
+                        <Label Text="QR EXPIRED DALAM 05:00" x:Name="Label_HitungMundur"  HorizontalOptions="Center" TextColor="#FF2D2D" FontFamily="FontBold" Margin="0,10,0,0"></Label>
+                        <Button Text="CEK STATUS" CornerRadius="8" HorizontalOptions="Center" x:Name="Button_CekStatus" Clicked="Button_CekStatus_Clicked"></Button>
+                    </StackLayout>
+                </ContentView>
+            </StackLayout>
             
             <Grid Padding="10" Grid.Row="2">
                 <Grid.ColumnDefinitions>

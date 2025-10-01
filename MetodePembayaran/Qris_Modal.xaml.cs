@@ -28,7 +28,6 @@ public partial class Qris_Modal : Popup
 
     private void CheckSetuju_CheckedChanged(object sender, CheckedChangedEventArgs e)
     {
-      
         if (e.Value == true)
         {
             BGenerateQR.IsEnabled = e.Value;
@@ -50,7 +49,6 @@ public partial class Qris_Modal : Popup
     private async void BGenerateQR_Clicked(object sender, EventArgs e)
     {
 
-
         if (sender is Image image)
         {
             await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
@@ -71,5 +69,18 @@ public partial class Qris_Modal : Popup
         {
             QrisWebView.Source = ImageSource.FromUri(new Uri(qrCodeUrl));
         }
+    }
+
+    private async void Button_CekStatus_Clicked(object sender, EventArgs e)
+    {
+
+
+        if (sender is Image image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+
     }
 }
