@@ -1,12 +1,14 @@
-using Newtonsoft.Json;
-using System;
-using System.Threading.Tasks;
-using SkiaSharp;
-using System.Text;
-using Microsoft.Maui.ApplicationModel;
-using System.Net.Http.Headers;
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+using Newtonsoft.Json;
+using SkiaSharp;
+using System;
 using System.Diagnostics;
+using System.Globalization;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Resto2025.MetodePembayaran;
 
@@ -15,19 +17,102 @@ public partial class Qris_Modal : Popup
     private readonly Action _onPopupClosed;
     private readonly Func<Task> _onGenerateQR;
 	private readonly Action<string> _onQRReady;
+    private string QR_STATUS = string.Empty;
 	public double grossAmount = 0;
     
     // Countdown Timer
     private System.Timers.Timer _countdownTimer;
     private int _remainingSeconds = 300; // 5 menit = 300 detik
     public Qris_Modal(double grandTotal, Action onPopupClosed, Func<Task> onGenerateQR, Action<string> onQRReady = null)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         grossAmount = grandTotal;
         L_grossAmount.Text = grossAmount.ToString("C0", new System.Globalization.CultureInfo("id-ID"));
         _onPopupClosed = onPopupClosed;
         _onGenerateQR = onGenerateQR;
         _onQRReady = onQRReady;
+    }
+
+    public class status_pembayaran
+    {
+        public string order_id { get; set; } = string.Empty; 
+        public string gross_amount { get; set; } = string.Empty; 
+        public string transaction_status { get; set; } = string.Empty;
+        public string settlement_time { get; set; } = string.Empty;
+    }
+
+    private async Task cek_status_pembayaran()
+    {
+        try
+        {
+            string url = App.API_HOST + "midtrans/midtrans_status.php?kode_payment=" + kode_payment;
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<status_pembayaran> rowData = JsonConvert.DeserializeObject<List<status_pembayaran>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        status_pembayaran row = rowData[0];
+                        QR_STATUS = row.transaction_status.ToUpper();
+                       
+                        if (QR_STATUS == "SETTLEMENT")
+                        {
+                           
+                            //update status
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        
+                        System.Diagnostics.Debug.WriteLine($"Terjadi kesalahan pada permintaan ({response.StatusCode}): {response.ReasonPhrase}");
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+           
+            System.Diagnostics.Debug.WriteLine($"Terjadi kesalahan: {ex.Message}");
+        }
+
+    }
+
+    private async void settlement_update()
+    {
+        var data = new Dictionary<string, string>
+                {
+                     { "kode", kode_payment },
+                     
+                };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "pembayaran/settlement_update.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject["status"] == "success")
+        {
+
+            //tutup modal
+
+        }
+        else
+        {
+           System.Diagnostics.Debug.WriteLine("Gagal memperbarui status pembayaran.");
+        }
     }
 
     private void CheckSetuju_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -67,7 +152,6 @@ public partial class Qris_Modal : Popup
         {
             await _onGenerateQR();
         }
-
     }
     
     public void SetQRCode(string qrCodeUrl)
@@ -95,7 +179,7 @@ public partial class Qris_Modal : Popup
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
 
-
+        await cek_status_pembayaran();
     }
     
     private void StartCountdownTimer()
@@ -161,8 +245,7 @@ public partial class Qris_Modal : Popup
         QrisWebView.IsVisible = false;
         
         // Show alert
-        Application.Current?.MainPage?.DisplayAlert("QR Expired", 
-            "QR Code telah expired. Silakan generate QR baru.", "OK");
+        Debug.WriteLine("QR Code telah expired. Silakan generate QR baru.");
     }
     
     private void StopCountdownTimer()
