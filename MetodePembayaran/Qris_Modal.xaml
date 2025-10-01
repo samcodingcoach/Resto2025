@@ -41,7 +41,7 @@
 
                     <CheckBox x:Name="CheckSetuju" IsChecked="False" CheckedChanged="CheckSetuju_CheckedChanged" VerticalOptions="Center" />
 
-                    <Label VerticalOptions="Center" FontSize="Caption">
+                        <Label VerticalOptions="Center" FontSize="Caption">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Setujui, untuk melakukan pembayaran dengan QRIS," />
@@ -51,7 +51,9 @@
                     </Label>
                 </HorizontalStackLayout>
 
-                <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" Clicked="BGenerateQR_Clicked" BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
+                <Button Grid.Column="2" x:Name="BGenerateQR" Text="GENERATE QR" Clicked="BGenerateQR_Clicked" 
+                        Opacity="0.3" IsEnabled="False"
+                        BackgroundColor="Red" TextColor="White" FontAttributes="Bold" CornerRadius="8" VerticalOptions="Center" />
             </Grid>
         </Grid>
     </Frame>
