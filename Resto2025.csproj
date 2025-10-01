@@ -71,6 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Login.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="MetodePembayaran\Qris_Modal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -2173,7 +2173,7 @@ public partial class ProdukMenu : ContentPage
         get_data_kategori();
         get_data_promo();
         get_biaya_takeaway();
-        get_listproduk();
+        await get_listproduk();
         get_metode_pembayaran();
 
         // Isi keranjang dari data pesanan
@@ -2200,7 +2200,7 @@ public partial class ProdukMenu : ContentPage
             Summary_ModePesanan.Text = $"Dine In - Meja #{idMeja.PadLeft(2, '0')}";
         }
 
-        // Panggil UpdateTotalBelanja SETELAH get_ppn() dijamin selesai
+        // Panggil UpdateTotalBelanja SETELAH get_ppn
         UpdateTotalBelanja();
         
         System.Diagnostics.Debug.WriteLine($"ProdukMenu initialized from order data with KODE_PAYMENT: {this.KODE_PAYMENT}");
