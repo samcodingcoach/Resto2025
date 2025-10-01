@@ -245,6 +245,10 @@ public partial class Qris_Modal : Popup
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
 
+        // Tampilkan Activity Indicator
+        LoadingIndicator.IsVisible = true;
+        LoadingIndicator.IsRunning = true;
+
         // Panggil ProsesDanSimpanTransaksiAsync dari ProdukMenu
         if (_onGenerateQR != null)
         {
@@ -256,6 +260,10 @@ public partial class Qris_Modal : Popup
     {
         if (!string.IsNullOrEmpty(qrCodeUrl))
         {
+            // Sembunyikan Activity Indicator
+            LoadingIndicator.IsVisible = false;
+            LoadingIndicator.IsRunning = false;
+            
             QrisWebView.Source = ImageSource.FromUri(new Uri(qrCodeUrl));
             
             // Tampilkan countdown UI

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False"
-         
-             Title="ProdukMenu">
+             x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False">
 
-    <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="10" Padding="0" VerticalOptions="FillAndExpand">
+    <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="0" Padding="0" VerticalOptions="FillAndExpand">
         <!--KOLOM KIRI-->
         <Frame Grid.Column="0" BorderColor="Transparent" BackgroundColor="Transparent" Padding="10">
             
@@ -46,7 +44,7 @@
                     </StackLayout>
                 </Frame>
                 
-                <!--PRODUKLIST-->
+             
                 <!--FRAME-->
 
                 <Frame BackgroundColor="#F9F9F9" BorderColor="Transparent" Padding="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
@@ -254,30 +252,33 @@
                             </Border>
                         </Grid>
                         <!--PEMBAYARAN-->
-                       <ListView HasUnevenRows="True" x:Name="lv_metodepembayaran" SeparatorVisibility="None" SelectionMode="None" IsVisible="False">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Border Margin="0,0,0,15" BackgroundColor="White" StrokeShape="RoundRectangle 10" Grid.Column="0"  StrokeThickness="0.1">
-                                            <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" RowDefinitions="Auto">
-                                                <Image Source="{Binding kategori,StringFormat='{0}.png'}" HeightRequest="32" VerticalOptions="Center"  Grid.Column="0"></Image>
 
-                                                <StackLayout Grid.Column="1" VerticalOptions="Center">
-                                                    <Label Text="{Binding kategori}" TextTransform="Uppercase" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
-                                                    <Label Text="{Binding no_rek, StringFormat='No.Rek : {0}'}" FontFamily="FontRegular" VerticalOptions="Center"></Label>
-                                                </StackLayout>
+                        <Grid ColumnDefinitions="*" x:Name="GridModePembayaran" RowDefinitions="*" Padding="0"  IsVisible="False">
 
-                                                <StackLayout Grid.Column="2" VerticalOptions="Center">
-                                                    <RadioButton IsChecked="False" GroupName="TipePembayaran"  x:Name="RadioTipePembayaran" CheckedChanged="RadioTipePembayaran_CheckedChanged"  />
-                                                </StackLayout>
+                            <ListView HasUnevenRows="True"  Grid.Row="0" Grid.Column="0" x:Name="lv_metodepembayaran" SeparatorVisibility="None" SelectionMode="None">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <Border Margin="0,0,0,15" BackgroundColor="White" StrokeShape="RoundRectangle 10" StrokeThickness="0.1">
+                                                <Grid Padding="15" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" RowDefinitions="Auto">
+                                                    <Image Source="{Binding kategori,StringFormat='{0}.png'}" HeightRequest="32" VerticalOptions="Center"  Grid.Column="0"></Image>
 
-                                            </Grid>
-                                        </Border>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                      
+                                                    <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                                        <Label Text="{Binding kategori}" TextTransform="Uppercase" FontSize="Subtitle" FontFamily="FontBold" TextColor="#333"></Label>
+                                                        <Label Text="{Binding no_rek, StringFormat='No.Rek : {0}'}" FontFamily="FontRegular" VerticalOptions="Center"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Grid.Column="2" VerticalOptions="Center">
+                                                        <RadioButton IsChecked="False" GroupName="TipePembayaran"  x:Name="RadioTipePembayaran" CheckedChanged="RadioTipePembayaran_CheckedChanged"  />
+                                                    </StackLayout>
+
+                                                </Grid>
+                                            </Border>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
                     </Grid>
                 </Frame>
                 

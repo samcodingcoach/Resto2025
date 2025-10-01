@@ -28,17 +28,25 @@
             </Grid>
 
 <!--QRCODE IMAGE-->
-            <StackLayout Grid.Row="1">
-                <Image Grid.Row="1" x:Name="QrisWebView" HeightRequest="300" WidthRequest="300"></Image>
-                <ContentView x:Name="HitungMundur" IsVisible="False">
+            <Grid Grid.Row="1">
+                <!-- Activity Indicator -->
+                <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="False" 
+                                 Color="Red" VerticalOptions="Center" HorizontalOptions="Center"
+                                 HeightRequest="50" WidthRequest="50" />
+                
+                <!-- QR Content -->
+                <StackLayout>
+                    <Image x:Name="QrisWebView" HeightRequest="300" WidthRequest="300"></Image>
+                    <ContentView x:Name="HitungMundur" IsVisible="False">
 <!--hitung mundur dengan format MM:SS-->
-                    <StackLayout Spacing="10">
+                        <StackLayout Spacing="10">
 <!--ketika qr muncul, hitung mundur 5 menit-->
-                        <Label Text="QR EXPIRED DALAM 05:00" x:Name="Label_HitungMundur"  HorizontalOptions="Center" TextColor="#FF2D2D" FontFamily="FontBold" Margin="0,10,0,0"></Label>
-                        <Button Text="CEK STATUS (10s)" CornerRadius="8" HorizontalOptions="Center" x:Name="Button_CekStatus" Clicked="Button_CekStatus_Clicked"></Button>
-                    </StackLayout>
-                </ContentView>
-            </StackLayout>
+                            <Label Text="QR EXPIRED DALAM 05:00" x:Name="Label_HitungMundur"  HorizontalOptions="Center" TextColor="#FF2D2D" FontFamily="FontBold" Margin="0,10,0,0"></Label>
+                            <Button Text="CEK STATUS (10s)" CornerRadius="8" HorizontalOptions="Center" x:Name="Button_CekStatus" Clicked="Button_CekStatus_Clicked"></Button>
+                        </StackLayout>
+                    </ContentView>
+                </StackLayout>
+            </Grid>
             
             <Grid Padding="10" Grid.Row="2">
                 <Grid.ColumnDefinitions>

@@ -1139,7 +1139,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = true;
         GridProduk.IsVisible = false;
-        lv_metodepembayaran.IsVisible = false;
+        GridModePembayaran.IsVisible = false;
         GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#FFFFFF");
@@ -1166,7 +1166,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = false;
-        lv_metodepembayaran.IsVisible = false;
+        GridModePembayaran.IsVisible = false;
         GridModeKonsumen.IsVisible = true;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
@@ -1192,7 +1192,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = true;
-        lv_metodepembayaran.IsVisible = false;
+        GridModePembayaran.IsVisible = false;
         GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
@@ -1218,7 +1218,7 @@ public partial class ProdukMenu : ContentPage
 
         GridModePesanan.IsVisible = false;
         GridProduk.IsVisible = false;
-        lv_metodepembayaran.IsVisible = true; GridModeKonsumen.IsVisible = false;
+        GridModePembayaran.IsVisible = true; GridModeKonsumen.IsVisible = false;
 
         LNavModePesanan.TextColor = Color.FromArgb("#333");
         NavModePesanan.BackgroundColor = Color.FromArgb("#F2F2F2");
@@ -1984,11 +1984,7 @@ public partial class ProdukMenu : ContentPage
                     ResetHalaman();
                     
                     // Perbarui data meja dan produk setelah transaksi selesai - harus di main thread
-                    MainThread.BeginInvokeOnMainThread(async () =>
-                    {
-                        await get_listproduk();
-                        get_meja();
-                    });
+                    
 
                     // Simpan kode pembayaran dari response JSON ke properti
                     if (responseObject != null && responseObject.ContainsKey("kode_payment"))
@@ -2119,6 +2115,12 @@ public partial class ProdukMenu : ContentPage
         NILAI_POTONGAN = 0;
         SwitchInvoice.IsToggled = false;
 
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await get_listproduk();
+            get_meja();
+        });
+
         // Tap_Konsumen_Tapped(NavKonsumen, null);
 
         // Update tampilan
@@ -2156,6 +2158,7 @@ public partial class ProdukMenu : ContentPage
         }
         else
         {
+            ID_BAYAR = "1";
             LabelSwitch.Text = "Pembayaran Nanti (Invoice)";
         }
 
