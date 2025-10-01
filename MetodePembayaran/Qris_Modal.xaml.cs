@@ -25,7 +25,18 @@ public partial class Qris_Modal : Popup
     
     // Countdown Timer
     private System.Timers.Timer _countdownTimer;
-    private int _remainingSeconds = 420; 
+    private int _remainingSeconds = 420;
+    
+    // Auto Check Status Timer
+    private System.Timers.Timer _autoCheckTimer;
+    private int _checkStatusSeconds = 10;
+    
+    // Success Countdown Timer
+    private System.Timers.Timer _successTimer;
+    private int _successCountdown = 5;
+    
+    // Store settlement data
+    private status_pembayaran _settlementData; 
     public Qris_Modal(double grandTotal, string kodePayment, Action onPopupClosed, Func<Task> onGenerateQR, Action<string> onQRReady = null)
     {
         InitializeComponent();
@@ -67,6 +78,10 @@ public partial class Qris_Modal : Popup
                     if (parseSuccess && QR_STATUS == "SETTLEMENT")
                     {
                         Debug.WriteLine("Status SETTLEMENT, memperbarui status pembayaran...");
+                        
+                        // Simpan settlement data untuk ditampilkan nanti
+                        bool parseSuccess2 = await TryParseStatusResponse(json);
+                        
                         settlement_update();
                     }
                     else if (parseSuccess)
@@ -116,6 +131,7 @@ public partial class Qris_Modal : Popup
                 if (arrayData != null && arrayData.Count > 0)
                 {
                     var row = arrayData[0];
+                    _settlementData = row; // Simpan data settlement
                     QR_STATUS = row.transaction_status.ToUpper();
                     Debug.WriteLine($"Status dari array: {QR_STATUS}");
                     return true;
@@ -127,6 +143,7 @@ public partial class Qris_Modal : Popup
                 var singleData = JsonConvert.DeserializeObject<status_pembayaran>(json);
                 if (singleData != null && !string.IsNullOrEmpty(singleData.transaction_status))
                 {
+                    _settlementData = singleData; // Simpan data settlement
                     QR_STATUS = singleData.transaction_status.ToUpper();
                     Debug.WriteLine($"Status dari object: {QR_STATUS}");
                     return true;
@@ -168,9 +185,26 @@ public partial class Qris_Modal : Popup
 
         if (responseObject["status"] == "success")
         {
-
-            //tutup modal
-
+            // Debug info pembayaran sukses
+            if (_settlementData != null)
+            {
+                Debug.WriteLine($"=== PEMBAYARAN QRIS SUKSES ===");
+                Debug.WriteLine($"Order ID: {_settlementData.order_id}");
+                Debug.WriteLine($"Gross Amount: {_settlementData.gross_amount}");
+                Debug.WriteLine($"Transaction Status: {_settlementData.transaction_status}");
+                Debug.WriteLine($"Settlement Time: {_settlementData.settlement_time}");
+                Debug.WriteLine($"===============================");
+            }
+            
+            // Stop auto check timer dan QR expired timer
+            StopAutoCheckTimer();
+            StopCountdownTimer();
+            
+            // Tampilkan info sukses di UI dan mulai countdown 5 detik untuk tutup modal
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                ShowSuccessAndStartCloseCountdown();
+            });
         }
         else
         {
@@ -194,8 +228,9 @@ public partial class Qris_Modal : Popup
 
     private async void CloseModal_Tapped(object sender, TappedEventArgs e)
     {
-        // Stop countdown timer saat popup ditutup
+        // Stop semua timer saat popup ditutup
         StopCountdownTimer();
+        StopAutoCheckTimer();
         
         _onPopupClosed?.Invoke();
         Close();
@@ -227,8 +262,9 @@ public partial class Qris_Modal : Popup
             HitungMundur.IsVisible = true;
             BGenerateQR.IsEnabled = false; BGenerateQR.Opacity=0.3;
 
-            // Mulai countdown timer
+            // Mulai countdown timer dan auto check status
             StartCountdownTimer();
+            StartAutoCheckTimer();
         }
     }
 
@@ -327,6 +363,121 @@ public partial class Qris_Modal : Popup
             _countdownTimer = null;
             Debug.WriteLine("Countdown timer dihentikan");
         }
+    }
+    
+    private void StartAutoCheckTimer()
+    {
+        // Stop timer yang ada jika sedang berjalan
+        StopAutoCheckTimer();
+        
+        // Reset countdown ke 10 detik
+        _checkStatusSeconds = 10;
+        
+        // Update button text pertama kali
+        UpdateCheckStatusButton();
+        
+        // Buat timer baru
+        _autoCheckTimer = new System.Timers.Timer(1000); // 1 detik interval
+        _autoCheckTimer.Elapsed += OnAutoCheckTimerElapsed;
+        _autoCheckTimer.AutoReset = true;
+        _autoCheckTimer.Start();
+        
+        Debug.WriteLine("Auto check status timer dimulai - 10 detik interval");
+    }
+    
+    private void OnAutoCheckTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        _checkStatusSeconds--;
+        
+        // Update UI di main thread
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            UpdateCheckStatusButton();
+            
+            // Cek apakah waktu habis (auto click)
+            if (_checkStatusSeconds <= 0)
+            {
+                // Auto click CEK STATUS
+                _ = Task.Run(async () => await cek_status_pembayaran());
+                
+                // Reset countdown ke 10 detik untuk interval berikutnya
+                _checkStatusSeconds = 10;
+            }
+        });
+    }
+    
+    private void UpdateCheckStatusButton()
+    {
+        string buttonText = $"CEK STATUS ({_checkStatusSeconds}s)";
+        Button_CekStatus.Text = buttonText;
+    }
+    
+    private void StopAutoCheckTimer()
+    {
+        if (_autoCheckTimer != null)
+        {
+            _autoCheckTimer.Stop();
+            _autoCheckTimer.Dispose();
+            _autoCheckTimer = null;
+            Debug.WriteLine("Auto check timer dihentikan");
+        }
+    }
+    
+    private void ShowSuccessAndStartCloseCountdown()
+    {
+        // Tampilkan info settlement di label
+        if (_settlementData != null)
+        {
+            Label_HitungMundur.Text = $"{_settlementData.transaction_status.ToUpper()} - {_settlementData.settlement_time}";
+            Label_HitungMundur.TextColor = Colors.Green;
+        }
+        else
+        {
+            Label_HitungMundur.Text = "PEMBAYARAN BERHASIL";
+            Label_HitungMundur.TextColor = Colors.Green;
+        }
+        
+        // Sembunyikan button CEK STATUS
+        Button_CekStatus.IsVisible = false;
+        
+        // Start success countdown timer
+        _successCountdown = 5;
+        _successTimer = new System.Timers.Timer(1000); // 1 detik
+        _successTimer.Elapsed += OnSuccessTimerElapsed;
+        _successTimer.AutoReset = true;
+        _successTimer.Start();
+        
+        Debug.WriteLine("Success countdown dimulai - 5 detik");
+    }
+    
+    private void OnSuccessTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        _successCountdown--;
+        
+        // Update UI di main thread
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            if (_settlementData != null)
+            {
+                Label_HitungMundur.Text = $"{_settlementData.transaction_status.ToUpper()} - Tutup dalam {_successCountdown}s";
+            }
+            else
+            {
+                Label_HitungMundur.Text = $"PEMBAYARAN BERHASIL - Tutup dalam {_successCountdown}s";
+            }
+            
+            // Tutup modal setelah countdown habis
+            if (_successCountdown <= 0)
+            {
+                _successTimer?.Stop();
+                _successTimer?.Dispose();
+                _successTimer = null;
+                
+                // Tutup modal
+                _onPopupClosed?.Invoke();
+                Close();
+            }
+        });
     }
 
 }
