@@ -1,3 +1,8 @@
+using Newtonsoft.Json;
+using System.Text;
+using System.Diagnostics;
+using System.Net.Http;
+
 namespace Resto2025;
 
 public partial class Login : ContentPage
@@ -5,6 +10,51 @@ public partial class Login : ContentPage
 	public Login()
 	{
 		InitializeComponent();
+		// Don't set the text immediately since data might not be loaded yet
+		System.Diagnostics.Debug.WriteLine($"Nama APP: {L_NamaApp.Text}");
+		
+		// Start a timer or check periodically for the value
+		_ = Task.Run(async () => await WaitForAppName());
+	}
+	
+	protected override void OnAppearing()
+	{
+		base.OnAppearing();
+		UpdateNamaApp();
+	}
+	
+	private void UpdateNamaApp()
+	{
+		if (!string.IsNullOrEmpty(App.NAMA_APLIKASI))
+		{
+			L_NamaApp.Text = App.NAMA_APLIKASI;
+			System.Diagnostics.Debug.WriteLine($"Nama APP: {L_NamaApp.Text}");
+		}
+	}
+	
+	private async Task WaitForAppName()
+	{
+		// Wait up to 10 seconds for the app name to be loaded
+		int attempts = 0;
+		const int maxAttempts = 20; // 20 attempts * 500ms = 10 seconds
+		const int delayMs = 500;
+		
+		while (attempts < maxAttempts)
+		{
+			await Task.Delay(delayMs);
+			
+			if (!string.IsNullOrEmpty(App.NAMA_APLIKASI))
+			{
+				// Run UI update on the main thread
+				MainThread.BeginInvokeOnMainThread(() => {
+					L_NamaApp.Text = App.NAMA_APLIKASI;
+					System.Diagnostics.Debug.WriteLine($"Nama APP: {L_NamaApp.Text}");
+				});
+				return; // Exit if we found the value
+			}
+			
+			attempts++;
+		}
 	}
 
     private void TapViewPW_Tapped(object sender, TappedEventArgs e)

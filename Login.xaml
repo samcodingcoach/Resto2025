@@ -17,9 +17,9 @@
                 <StackLayout Padding="40, 60" Spacing="20">
 
                     <!-- Header -->
-                    <Label Text="NAMA APLIKASI" FontSize="Large" FontFamily="FontBold"  HorizontalOptions="Center" VerticalOptions="Start" />
+                    <Label Text="NAMA APLIKASI" x:Name="L_NamaApp" FontSize="Large" FontFamily="FontBold"  HorizontalOptions="Center" VerticalOptions="Start" />
 
-                    <Label Text="Point of Sales Version 1.0" FontSize="Small" Opacity="0.7" FontFamily="FontRegular" HorizontalOptions="Center" />
+                    <Label Text="Point of Sales Version 1.0" x:Name="L_Version" FontSize="Small" Opacity="0.7" FontFamily="FontRegular" HorizontalOptions="Center" />
 
                     <!-- Email Input -->
                     <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,30,0,0" Padding="10">
