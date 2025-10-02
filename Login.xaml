@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Resto2025.Login"
-             Title="Login">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="Resto2025.Login" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
+             >
+    <!--
+    PSEUDOCODE / PLAN:
+    1. In the left Grid column (Grid.Column="0") add a Border control to create a visible border area.
+    2. Configure Border properties:
+       - Stroke: subtle gray color for the border line.
+       - StrokeThickness: set to 1 or 2 for visibility.
+       - CornerRadius: rounded corners for a modern look.
+       - BackgroundColor: white to contrast with page background.
+       - Padding and Margin: internal spacing and separation from grid edges.
+       - HorizontalOptions & VerticalOptions: Fill to occupy available cell space.
+    3. Inside the Border place a simple StackLayout as placeholder content (Label / Entries) so the border is visible.
+    4. Leave the right Grid column unchanged.
+    -->
+
+    <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Padding="16">
+<!--kolom kiri-->       
+        <Grid Grid.Column="0">
+           
+                
+         
+        </Grid>
+<!--kolom kanan-->
+        <Grid Grid.Column="1" Padding="0">
+            <Border Stroke="pink" StrokeThickness="0.2" StrokeShape="RoundRectangle 10" Background="Transparent" Padding="10">
+                <StackLayout Padding="40, 60" Spacing="20">
+
+                    <!-- Header -->
+                    <Label Text="NAMA APLIKASI" FontSize="Large" FontFamily="FontBold"  HorizontalOptions="Center" VerticalOptions="Start" />
+
+                    <Label Text="Point of Sales Version 1.0" FontSize="Small" Opacity="0.7" FontFamily="FontRegular" HorizontalOptions="Center" />
+
+                    <!-- Email Input -->
+                    <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,30,0,0" Padding="10">
+                        <StackLayout Orientation="Horizontal">
+                            <Entry Placeholder="Email" PlaceholderColor="#999999" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                            <Image Source="email_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Password Input -->
+                    <Frame BorderColor="#E0E0E0" CornerRadius="8" Padding="10">
+                        <StackLayout Orientation="Horizontal">
+                            <Entry Placeholder="Password" PlaceholderColor="#999999" IsPassword="True" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                            <Image Source="lock_icon.png" WidthRequest="24" HeightRequest="24" Margin="10,0,0,0" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- Show Password Toggle -->
+                    <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
+                        <Image Source="eye_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
+                        <Label Text="Lihat Password" Margin="5,0,0,0" VerticalOptions="Center" />
+                    </StackLayout>
+
+                    <!-- Login Button -->
+                    <Button Text="LOGIN" TextColor="White" CornerRadius="8" 
+                            Margin="0,30,0,0" HeightRequest="50" VerticalOptions="End" />
+
+                </StackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
 </ContentPage>
