@@ -3,6 +3,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Net.Http;
 
+
 namespace Resto2025;
 
 public partial class Login : ContentPage
@@ -15,6 +16,9 @@ public partial class Login : ContentPage
 		
 		// Start a timer or check periodically for the value
 		_ = Task.Run(async () => await WaitForAppName());
+		
+		// Set the version from the project properties
+		SetVersion();
 	}
 	
 	protected override void OnAppearing()
@@ -55,6 +59,13 @@ public partial class Login : ContentPage
 			
 			attempts++;
 		}
+	}
+	
+	private void SetVersion()
+	{
+		// Get the application version from the project properties
+		var version = AppInfo.Current.Version;
+		L_Version.Text = $"Point of Sales Version {version}";
 	}
 
     private void TapViewPW_Tapped(object sender, TappedEventArgs e)
