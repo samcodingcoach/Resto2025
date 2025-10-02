@@ -10,16 +10,17 @@ namespace Resto2025
         public static string API_HOST { get; set; }
         public static string IMAGE_HOST { get; set; }
         public static string NAMA_APLIKASI { get; set; }
+        public static string API_LOGIN { get; set; }
         public App()
         {
             InitializeComponent();
 
             //MainPage = new AppShell();
-            string lokal = "http://192.168.77.8/";
-            string publik = "https://resto.samdev.org/";
-            API_HOST = publik + "_resto007/api/";
-            IMAGE_HOST = publik + "_resto007/public/images/";
-
+            string lokal = "http://192.168.77.8/_resto007/";
+            string publik = "https://resto.samdev.org/_resto007/";
+            API_HOST = publik + "api/";
+            IMAGE_HOST = publik + "public/images/";
+            API_LOGIN = publik + "config/login.php";
             // Start loading the app data in background since it's async
             _ = Task.Run(async () => await LoadAppDataAsync());
 

@@ -14,43 +14,48 @@
 <!--kolom kanan-->
         <Grid Grid.Column="1" Padding="0">
             <Border Stroke="pink" StrokeThickness="0.2" StrokeShape="RoundRectangle 10" Background="Transparent" Padding="10">
-                <StackLayout Padding="40, 60" Spacing="20">
+                <StackLayout >
+                    <ActivityIndicator x:Name="LoadingIndicator" Margin="40,180" IsVisible="False" IsRunning="False" 
+                                       Color="Red" VerticalOptions="Center" HorizontalOptions="Center"
+                                       HeightRequest="100" WidthRequest="100" />
+                    <StackLayout x:Name="FormLogin" IsVisible="True" Padding="40, 60" Spacing="20">
+                        <!-- Header -->
+                        <Label Text="NAMA APLIKASI" x:Name="L_NamaApp" FontSize="Large" FontFamily="FontBold"  HorizontalOptions="Center" VerticalOptions="Start" />
 
-                    <!-- Header -->
-                    <Label Text="NAMA APLIKASI" x:Name="L_NamaApp" FontSize="Large" FontFamily="FontBold"  HorizontalOptions="Center" VerticalOptions="Start" />
+                        <Label Text="Point of Sales Version X" x:Name="L_Version" FontSize="Small" Opacity="0.7" FontFamily="FontRegular" HorizontalOptions="Center" />
 
-                    <Label Text="Point of Sales Version X" x:Name="L_Version" FontSize="Small" Opacity="0.7" FontFamily="FontRegular" HorizontalOptions="Center" />
+                        <!-- Email Input -->
+                        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,30,0,0" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Entry Placeholder="Email" x:Name="L_Email" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" 
+                                       Keyboard="Email"
+                                       VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                                <Image Source="email_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+                            </StackLayout>
+                        </Frame>
 
-                    <!-- Email Input -->
-                    <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,30,0,0" Padding="10">
-                        <StackLayout Orientation="Horizontal">
-                            <Entry Placeholder="Email" x:Name="L_Email" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" 
-                                   Keyboard="Email"
-                                   VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
-                            <Image Source="email_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+                        <!-- Password Input -->
+                        <Frame BorderColor="#E0E0E0" CornerRadius="8" Padding="10">
+                            <StackLayout Orientation="Horizontal">
+                                <Entry Placeholder="Password" ClearButtonVisibility="WhileEditing" x:Name="L_Password" PlaceholderColor="#999999" IsPassword="True" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                                <Image Source="lock_icon.png" WidthRequest="24" HeightRequest="24" Margin="10,0,0,0" />
+                            </StackLayout>
+                        </Frame>
+
+                        <!-- Show Password Toggle -->
+                        <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="TapViewPW" Tapped="TapViewPW_Tapped"></TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+                            <Image Source="eye_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
+                            <Label Text="Lihat Password" x:Name="L_Lihat_Password" Margin="5,0,0,0" VerticalOptions="Center" />
                         </StackLayout>
-                    </Frame>
 
-                    <!-- Password Input -->
-                    <Frame BorderColor="#E0E0E0" CornerRadius="8" Padding="10">
-                        <StackLayout Orientation="Horizontal">
-                            <Entry Placeholder="Password" ClearButtonVisibility="WhileEditing" x:Name="L_Password" PlaceholderColor="#999999" IsPassword="True" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
-                            <Image Source="lock_icon.png" WidthRequest="24" HeightRequest="24" Margin="10,0,0,0" />
-                        </StackLayout>
-                    </Frame>
-
-                    <!-- Show Password Toggle -->
-                    <StackLayout Orientation="Horizontal" Margin="0,10,0,0">
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer x:Name="TapViewPW" Tapped="TapViewPW_Tapped"></TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>
-                        <Image Source="eye_icon.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" />
-                        <Label Text="Lihat Password" x:Name="L_Lihat_Password" Margin="5,0,0,0" VerticalOptions="Center" />
+                        <!-- Login Button -->
+                        <Button Text="LOGIN" TextColor="White" CornerRadius="8" x:Name="B_Login" Clicked="B_Login_Clicked"
+                                Margin="0,30,0,0" HeightRequest="50" VerticalOptions="End" />
+                        
                     </StackLayout>
-
-                    <!-- Login Button -->
-                    <Button Text="LOGIN" TextColor="White" CornerRadius="8" x:Name="B_Login" Clicked="B_Login_Clicked"
-                            Margin="0,30,0,0" HeightRequest="50" VerticalOptions="End" />
 
                 </StackLayout>
             </Border>

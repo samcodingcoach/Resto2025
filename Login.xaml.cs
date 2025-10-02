@@ -91,6 +91,8 @@ public partial class Login : ContentPage
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
 
+		
+
         // Validasi email dan password
         string email = L_Email.Text?.Trim();
         string password = L_Password.Text?.Trim();
@@ -126,6 +128,48 @@ public partial class Login : ContentPage
             return;
         }
 
-       
+        FormLogin.IsVisible = false;
+        LoadingIndicator.IsVisible = true; LoadingIndicator.IsRunning = true;
+
+		cek_login();
+
     }
+
+
+
+
+    private async void cek_login()
+    {
+      
+        var data = new Dictionary<string, string>
+        {
+            { "email", L_Email.Text.ToString() },
+            { "password", L_Password.Text.ToString() }
+        };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_LOGIN;
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+		
+		if (responseObject["status"] == "success")
+        {
+
+			await Task.Delay(3000);
+            LoadingIndicator.IsVisible = false; LoadingIndicator.IsRunning = false;
+
+            System.Diagnostics.Debug.WriteLine($"id_user:{responseObject["id_user"]}");
+			await DisplayAlert("Informasi Login", responseObject["message"], "OK");			
+        }
+		else
+		{
+            await Task.Delay(3000);
+            FormLogin.IsVisible = true;
+            LoadingIndicator.IsVisible = false; LoadingIndicator.IsRunning = false;
+        }
+    }
+
 }
