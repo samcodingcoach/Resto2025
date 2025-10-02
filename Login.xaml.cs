@@ -162,9 +162,14 @@ public partial class Login : ContentPage
             LoadingIndicator.IsVisible = false; LoadingIndicator.IsRunning = false;
 
             System.Diagnostics.Debug.WriteLine($"id_user:{responseObject["id_user"]}");
-			await DisplayAlert("Informasi Login", responseObject["message"], "OK");			
+            //await DisplayAlert("Informasi Login", responseObject["message"], "OK");	
+
+            Preferences.Set("ID_USER", responseObject["id_user"]);
+            Preferences.Set("NAMA_LENGKAP", responseObject["nama_lengkap"]);
+
+
         }
-		else
+        else
 		{
             await Task.Delay(3000);
             FormLogin.IsVisible = true;
