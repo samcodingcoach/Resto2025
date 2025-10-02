@@ -49,7 +49,7 @@
                     </StackLayout>
 
                     <!-- Login Button -->
-                    <Button Text="LOGIN" TextColor="White" CornerRadius="8" 
+                    <Button Text="LOGIN" TextColor="White" CornerRadius="8" x:Name="B_Login" Clicked="B_Login_Clicked"
                             Margin="0,30,0,0" HeightRequest="50" VerticalOptions="End" />
 
                 </StackLayout>
