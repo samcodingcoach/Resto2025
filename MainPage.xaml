@@ -1,12 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        xmlns:views1="clr-namespace:Resto2025.Beranda"
+        xmlns:views2="clr-namespace:Resto2025.Transaksi"
+       xmlns:views3="clr-namespace:Resto2025.History"
+        xmlns:views4="clr-namespace:Resto2025.Akun"
              x:Class="Resto2025.MainPage">
 
-    <ScrollView>
-        <Grid>
-            
-        </Grid>
-    </ScrollView>
+    <TabBar>
+        <Tab Title="Beranda"
+            Icon="tab_beranda.png">
+            <ShellContent ContentTemplate="{DataTemplate views1:Dashboard}" />
+        </Tab>
+        <Tab Title="Order"
+            Icon="tab_transaksi.png">
+            <ShellContent ContentTemplate="{DataTemplate views2:ProdukMenu}" />
+        </Tab>
+        <Tab Title="Riwayat"
+            Icon="tab_history.png">
+            <ShellContent ContentTemplate="{DataTemplate views3:Riwayat}" />
+        </Tab>
+        <Tab Title="Pengaturan"
+            Icon="tab_setting.png">
+            <ShellContent ContentTemplate="{DataTemplate views4:Akun}" />
+        </Tab>
+    </TabBar>
 
-</ContentPage>
+</Shell>

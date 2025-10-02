@@ -26,8 +26,8 @@ namespace Resto2025
 
 
 
-         // MainPage =  new NavigationPage(new Transaksi.ProdukMenu());
-         MainPage = new NavigationPage(new Login());
+         MainPage =  new MainPage();
+         // MainPage = new NavigationPage(new Login());
         }
         
         private async Task LoadAppDataAsync()
