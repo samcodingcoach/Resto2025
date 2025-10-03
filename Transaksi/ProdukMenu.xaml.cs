@@ -54,7 +54,7 @@ public partial class ProdukMenu : ContentPage
     public double nilaiPPN = 0;
     private double grandTotalFinal = 0;
     string URL_QRIS = string.Empty;
-
+    string ID_ORDER_QRIS = string.Empty;
 
     private list_metodepembayaran metodeBayarTerpilih;
 
@@ -1752,7 +1752,7 @@ public partial class ProdukMenu : ContentPage
 
                 case "3":
                     MetodePembayaran.Qris_Modal qrisModal = null; // Declare the variable first
-                    qrisModal = new MetodePembayaran.Qris_Modal(this.grandTotalFinal, this.KODE_PAYMENT, () =>
+                    qrisModal = new MetodePembayaran.Qris_Modal(this.grandTotalFinal, ID_ORDER_QRIS, () =>
                     {
                         OnPopupClosed();
                     }, async () =>
@@ -1780,15 +1780,14 @@ public partial class ProdukMenu : ContentPage
             if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
             {
                 System.Diagnostics.Debug.WriteLine($"=== kode payment : {this.KODE_PAYMENT} ====");
-                //return;
+              
                 await ProsesDanSimpanTransaksiAsync(0);
-                // Catatan: Kode pembayaran untuk kasus ini mungkin tidak digunakan
-                // karena ini adalah panggilan dari tempat lain, bukan dari case "2"
+               
             }
             else if (string.IsNullOrEmpty(this.KODE_PAYMENT))
             {
                 System.Diagnostics.Debug.WriteLine($"=== kode payment : kosong ====");
-                //return;
+              
                 await SimpanSebagaiInvoiceAsync();
             } 
         }
@@ -1990,17 +1989,17 @@ public partial class ProdukMenu : ContentPage
                     // Simpan kode pembayaran dari response JSON ke properti
                     if (responseObject != null && responseObject.ContainsKey("kode_payment"))
                     {
-                        this.KODE_PAYMENT = responseObject["kode_payment"];
-                        System.Diagnostics.Debug.WriteLine($"Kode pembayaran diperbarui: {this.KODE_PAYMENT}");
+                        ID_ORDER_QRIS = responseObject["kode_payment"];
+                        System.Diagnostics.Debug.WriteLine($"Kode pembayaran diperbarui: {ID_ORDER_QRIS}");
                         
                         // Update kode payment di QRIS modal setelah kode payment di-generate
                         Debug.WriteLine($"DEBUG: qrisModal != null = {qrisModal != null}");
                         if (qrisModal != null)
                         {
-                            Debug.WriteLine($"DEBUG: Akan memanggil SetKodePayment dengan: {this.KODE_PAYMENT}");
+                            Debug.WriteLine($"DEBUG: Akan memanggil ID_ORDER dengan: {ID_ORDER_QRIS}");
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
-                                qrisModal.SetKodePayment(this.KODE_PAYMENT);
+                                qrisModal.SetKodePayment(ID_ORDER_QRIS);
                             });
                         }
                     }
