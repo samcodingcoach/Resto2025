@@ -3,18 +3,91 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Beranda.Dashboard" NavigationPage.HasNavigationBar="False" BackgroundColor="#f9f9f9"
              >
-    <Grid RowDefinitions="Auto" Padding="20">
-        <Border Stroke="LightGrey" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" >
-            <Border.Shadow>
-                <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
-            </Border.Shadow>
-            <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
-                <StackLayout Grid.Column="0" VerticalOptions="Center">
-                    <Label Text="Kas" TextColor="#333" FontSize="Caption"></Label>
-                    <Label Text="Rp 50.000.000" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
-                </StackLayout>
-                <Image Source="tunai.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
-            </Grid>
-        </Border>
+    <Grid RowDefinitions="Auto,Auto" Padding="20" RowSpacing="10">
+
+        <StackLayout Grid.Row="0" Spacing="5">
+            <Label Text="Ringkasan Penjualan Hari Ini" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
+            <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
+        </StackLayout>
+        
+        <FlexLayout Direction="Row" Grid.Row="1" Wrap="Wrap" AlignItems="Start">
+            <Border WidthRequest="240"  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="Awal Kas" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="Rp 50.000.000" x:Name="L_TunaiAwal" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="kas_awal.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+            <!--qris-->
+            <Border WidthRequest="240"  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="QRIS" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="Rp 0" x:Name="L_Qris" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="qris.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+            <!--transfer-->
+            <Border WidthRequest="240" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="Transfer EDC" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="Rp 0" x:Name="L_Transfer" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="transfer.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+            <!--tunai-->
+            <Border WidthRequest="240"  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="Tunai" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="Rp 0" x:Name="L_Tunai" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="tunai.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+            <!--Jumlah Transaksi-->
+            <Border WidthRequest="240"  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="Jumlah Transaksi" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="1234" x:Name="L_JumlahTransaksi" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="jumlah_transksi.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+<!--Total Transaksi-->
+            <Border  WidthRequest="240" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="Total Transaksi" TextColor="#333" FontSize="Caption"></Label>
+                        <Label Text="Rp 0" x:Name="L_Total" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <Image Source="total_transaksi.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
+                </Grid>
+            </Border>
+        </FlexLayout>
     </Grid>
 </ContentPage>
