@@ -17,7 +17,7 @@ namespace Resto2025.Transaksi;
 
 public partial class ProdukMenu : ContentPage
 {
-    public string ID_USER= Preferences.Get("ID_USER", string.Empty);
+    public string ID_USER = "4";//Preferences.Get("ID_USER", string.Empty);
     // sementara nanti ganti sama temp login
     private Border borderMejaTerpilih;
     private double currentScale = 1;

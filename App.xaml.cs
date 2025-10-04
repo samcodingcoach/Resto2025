@@ -14,13 +14,17 @@ namespace Resto2025
         public App()
         {
             InitializeComponent();
+            //combobox windows 
+            
+
+
 
             //MainPage = new AppShell();
             string lokal = "http://192.168.77.8/_resto007/";
             string publik = "https://resto.samdev.org/_resto007/";
-            API_HOST = lokal + "api/";
-            IMAGE_HOST = lokal + "public/images/";
-            API_LOGIN = lokal + "config/login.php";
+            API_HOST = publik + "api/";
+            IMAGE_HOST = publik + "public/images/";
+            API_LOGIN = publik + "config/login.php";
             // Start loading the app data in background since it's async
             _ = Task.Run(async () => await LoadAppDataAsync());
 
