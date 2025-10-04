@@ -94,45 +94,54 @@
             <Label Text="Daftar Order" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
             <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
         </StackLayout>
-
+<!--daftar orderan-->
         <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Grid.Row="3">
 
             <Border Grid.Column="0" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
                 <Border.Shadow>
                     <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
                 </Border.Shadow>
-                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10">
+<!--listview orderan-->
+                <ListView HasUnevenRows="True" x:Name="lv_dapurorder" SeparatorVisibility="None" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10">
 
-                    <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
-                        <Label Text="Pesanan #INV-14-2510040001" FontFamily="FontBold" TextColor="#333"></Label>
-                        <Label Text="19:00 WITA" FontSize="Caption"></Label>
-                    </StackLayout>
+                                    <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
+                                        <Label Text="{Binding kode_payment,StringFormat='Pesanan #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
+                                        <Label Text="{Binding waktu_terima}" FontSize="Caption"></Label>
+                                    </StackLayout>
 
 
-                    <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Center">
-                        <Label Text="Total item: 30" HorizontalTextAlignment="End" FontFamily="FontBold"></Label>
-                    </StackLayout>
+                                    <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Center">
+                                        <Label Text="{Binding total_item,StringFormat='Total item: {0}'}" HorizontalTextAlignment="End" FontFamily="FontBold"></Label>
+                                    </StackLayout>
 
-                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3" BackgroundColor="Gray" Opacity="0.3" Grid.Row="1"></BoxView>
+                                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3" BackgroundColor="Gray" Opacity="0.3" Grid.Row="1"></BoxView>
 
-                    <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Grid.ColumnSpan="3">
-                        <StackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="5">
-                            <Label Text="11" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#1A86F2"></Label>
-                            <Label Text="SIAP DIAMBIL" FontSize="Caption"></Label>
-                        </StackLayout>
-                        <StackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="5">
-                            <Label Text="0" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#52D356"></Label>
-                            <Label Text="TERIKIRIM KE KONSUMEN" FontSize="Caption"></Label>
-                        </StackLayout>
-                        <StackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="5">
-                            <Label Text="0" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#ED0D58"></Label>
-                            <Label Text="DIBATALKAN" FontSize="Caption"></Label>
-                        </StackLayout>
+                                    <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Grid.ColumnSpan="3">
+                                        <StackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="5">
+                                            <Label Text="{Binding siap}" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#1A86F2"></Label>
+                                            <Label Text="SIAP DIAMBIL" FontSize="Caption"></Label>
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="5">
+                                            <Label Text="{Binding tersaji}" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#52D356"></Label>
+                                            <Label Text="TERIKIRIM KE KONSUMEN" FontSize="Caption"></Label>
+                                        </StackLayout>
+                                        <StackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="5">
+                                            <Label Text="{Binding batal}" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#ED0D58"></Label>
+                                            <Label Text="DIBATALKAN" FontSize="Caption"></Label>
+                                        </StackLayout>
 
-                    </Grid>
-                    
-                    
-                </Grid>
+                                    </Grid>
+
+
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Border>
 
         </Grid>
