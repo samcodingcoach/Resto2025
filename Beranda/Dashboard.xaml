@@ -110,7 +110,12 @@
 
                                     <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
                                         <Label Text="{Binding kode_payment,StringFormat='Pesanan #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
-                                        <Label Text="{Binding waktu_terima}" FontSize="Caption"></Label>
+                                        <StackLayout Orientation="Horizontal" Spacing="15">
+                                            <Label Text="{Binding waktu_terima_jam}" FontSize="Caption"></Label>
+                                            <Label Text="{Binding jumlah_menit_tampil}" FontSize="Caption" IsVisible="{Binding jumlah_menit_is_visible}"></Label>
+                                        </StackLayout>
+                                        
+                                     
                                     </StackLayout>
 
 
@@ -118,7 +123,7 @@
                                         <Label Text="{Binding total_item,StringFormat='Total item: {0}'}" HorizontalTextAlignment="End" FontFamily="FontBold"></Label>
                                     </StackLayout>
 
-                                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3" BackgroundColor="Gray" Opacity="0.3" Grid.Row="1"></BoxView>
+                                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3" BackgroundColor="Gray" Opacity="0.1" Grid.Row="1"></BoxView>
 
                                     <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Grid.ColumnSpan="3">
                                         <StackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="5">

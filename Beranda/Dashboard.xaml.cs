@@ -29,6 +29,83 @@ public partial class Dashboard : ContentPage
         public int tersaji { get; set; } = 0;
         public int batal { get; set; } = 0;
 
+        // Hanya jam-menit dari waktu_terima (contoh: 14:07)
+        public string waktu_terima_jam
+        {
+            get
+            {
+                if (TryParseDateTime(waktu_terima, out var dt))
+                    return dt.ToLocalTime().ToString("HH:mm");
+                return waktu_terima;
+            }
+        }
+
+        // Selisih menit dari sekarang terhadap waktu_terima (output hanya angka menit)
+        public string jumlah_menit
+        {
+            get
+            {
+                if (TryParseDateTime(waktu_terima, out var dt))
+                {
+                    var minutes = (int)Math.Max(0, (DateTime.Now - dt.ToLocalTime()).TotalMinutes);
+                    return minutes.ToString();
+                }
+                return "0";
+            }
+        }
+
+        public string jumlah_menit_tampil
+        {
+            get
+            {
+                if (TryParseDateTime(waktu_terima, out var dt))
+                {
+                    var minutes = (int)Math.Max(0, (DateTime.Now - dt.ToLocalTime()).TotalMinutes);
+                    return minutes <= 60 ? $"{minutes} menit" : string.Empty;
+                }
+                return string.Empty;
+            }
+        }
+
+        public bool jumlah_menit_is_visible
+        {
+            get
+            {
+                if (TryParseDateTime(waktu_terima, out var dt))
+                {
+                    var minutes = (int)Math.Max(0, (DateTime.Now - dt.ToLocalTime()).TotalMinutes);
+                    return minutes <= 60;
+                }
+                return false;
+            }
+        }
+
+        private static bool TryParseDateTime(string value, out DateTime dt)
+        {
+            // Coba beberapa format umum, fallback ke DateTime.TryParse
+            var formats = new[]
+            {
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm",
+                "yyyy/MM/dd HH:mm:ss",
+                "dd/MM/yyyy HH:mm:ss",
+                "yyyy-MM-ddTHH:mm:ss",
+                "yyyy-MM-ddTHH:mm:ssZ"
+            };
+
+            foreach (var fmt in formats)
+            {
+                if (DateTime.TryParseExact(value, fmt, System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AllowWhiteSpaces,
+                        out dt))
+                {
+                    return true;
+                }
+            }
+
+            return DateTime.TryParse(value, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AllowWhiteSpaces, out dt);
+        }
     }
 
     public class list_summary
