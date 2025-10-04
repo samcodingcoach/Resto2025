@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Beranda.Dashboard" NavigationPage.HasNavigationBar="False" BackgroundColor="#f9f9f9"
              >
-    <Grid RowDefinitions="Auto,Auto" Padding="20" RowSpacing="10">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="10">
 
         <StackLayout Grid.Row="0" Spacing="5">
             <Label Text="Ringkasan Penjualan Hari Ini" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
@@ -89,5 +89,11 @@
                 </Grid>
             </Border>
         </FlexLayout>
+
+        <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Padding="10">
+            <StackLayout>
+                
+            </StackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
