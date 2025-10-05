@@ -30,8 +30,8 @@ namespace Resto2025
 
 
 
-         MainPage =  new MainPage();
-         // MainPage = new NavigationPage(new Login());
+        // MainPage =  new MainPage();
+            MainPage = new NavigationPage(new Beranda.DetailOrder());
         }
         
         private async Task LoadAppDataAsync()

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Resto2025.Beranda.DetailOrder" BackgroundColor="#f9f9f9"
+             >
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="20">
+        
+        
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+            <Image Source="back.png" Grid.Column="0" HeightRequest="26"></Image>
+            <Label Grid.Column="1" Text="Detail Pesanan: INV-XXXX" HorizontalTextAlignment="Center" TextColor="#B3b3b3" FontSize="Subtitle" FontFamily="FontBold"></Label>
+        </Grid>
+
+
+
+        <CollectionView x:Name="CV_ListOrder" Grid.Row="1">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                <Border  HorizontalOptions="Start" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
+                    
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+                        <Border Grid.Column="0" VerticalOptions="Start" Grid.Row="0"  WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                            <Image Source="{Binding url_gambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                        </Border>
+
+                        <StackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Start">
+                            <Label Text="{Binding nama_produk}" LineBreakMode="TailTruncation" TranslationY="-2" FontFamily="FontBold" TextColor="#333"></Label>
+                            <Label Text="{Binding nama_kategori}" FontSize="Caption"></Label>
+
+                            <Label Text="Kuantitas / QTY" FontSize="Caption" Margin="0,12,0,0"></Label>
+                            <Label Text="Mode Pesanan" FontSize="Caption" Margin="0,0,0,0"></Label>
+                        </StackLayout>
+
+
+                        <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Start">
+                            <Border VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" Background="#8AC1F8" Padding="12,5">
+                                <Label Text="{Binding ready_string}" TextColor="#1A86F2" FontFamily="FontBold"></Label>
+                            </Border>
+                            <Label Text="{Binding qty}"  Margin="0,14,0,0" TextColor="#333" FontFamily="FontBold"></Label>
+                            <Label Text="{Binding mode_pesanan}" FontSize="Caption" TextColor="#333" FontFamily="FontBold"></Label>
+                        </StackLayout>
+
+                        <BoxView HeightRequest="0.5" Margin="0,5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" BackgroundColor="Gray" Opacity="0.2"></BoxView>
+
+                        <StackLayout Grid.Column="1" Grid.Row="2" VerticalOptions="Start">
+                            <Label Text="Siap diambil" FontSize="Caption" ></Label>
+                            <Label Text="Disajikan" FontSize="Caption" Margin="0,0,0,0"></Label>
+                            <Label Text="Batal" FontSize="Caption" Margin="0,0,0,0"></Label>
+                        </StackLayout>
+
+                        <StackLayout Grid.Column="2" Grid.Row="2" VerticalOptions="Start">
+                            <Label Text="09:10" FontSize="Caption"   TextColor="#1A86F2" FontFamily="FontBold"></Label>
+                            <Label Text="09:11" FontSize="Caption" TextColor="#52D356" FontFamily="FontBold"></Label>
+                            <Label Text="-" FontSize="Caption" TextColor="#ED0D58" FontFamily="FontBold"></Label>
+                        </StackLayout>
+
+
+
+                    </Grid>
+                </Border>
+            </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+      
+    </Grid>
+</ContentPage>

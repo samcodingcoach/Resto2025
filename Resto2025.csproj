@@ -78,6 +78,9 @@
 	  <MauiXaml Update="Beranda\Dashboard.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Beranda\DetailOrder.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="History\Riwayat.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
