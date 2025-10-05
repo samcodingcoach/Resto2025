@@ -15,7 +15,7 @@
 
         <CollectionView x:Name="CV_ListOrder" Grid.Row="1">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+                <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -38,8 +38,8 @@
 
 
                         <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Start">
-                            <Border VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" Background="#8AC1F8" Padding="12,5">
-                                <Label Text="{Binding ready_string}" TextColor="#1A86F2" FontFamily="FontBold"></Label>
+                            <Border VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" Background="{Binding warna_bg_ready}" Padding="12,5">
+                                <Label Text="{Binding ready_string}" TextColor="{Binding warna_tx_ready}" FontFamily="FontBold"></Label>
                             </Border>
                             <Label Text="{Binding qty}"  Margin="0,14,0,0" TextColor="#333" FontFamily="FontBold"></Label>
                             <Label Text="{Binding mode_pesanan}" FontSize="Caption" TextColor="#333" FontFamily="FontBold"></Label>
@@ -54,9 +54,9 @@
                         </StackLayout>
 
                         <StackLayout Grid.Column="2" Grid.Row="2" VerticalOptions="Start">
-                            <Label Text="09:10" FontSize="Caption"   TextColor="#1A86F2" FontFamily="FontBold"></Label>
-                            <Label Text="09:11" FontSize="Caption" TextColor="#52D356" FontFamily="FontBold"></Label>
-                            <Label Text="-" FontSize="Caption" TextColor="#ED0D58" FontFamily="FontBold"></Label>
+                            <Label Text="{Binding waktu_ready}" FontSize="Caption" TextColor="#1A86F2" FontFamily="FontBold"></Label>
+                            <Label Text="{Binding waktu_delivered}" FontSize="Caption" TextColor="#52D356" FontFamily="FontBold"></Label>
+                            <Label Text="{Binding waktu_batal}" FontSize="Caption" TextColor="#ED0D58" FontFamily="FontBold"></Label>
                         </StackLayout>
 
 

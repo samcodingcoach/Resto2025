@@ -203,7 +203,20 @@ public partial class Dashboard : ContentPage
         }
         else
         {
-           
+
         }
+    }
+
+    private async void TapOrderList_Tapped(object sender, EventArgs e)
+    {
+
+       
+        var i = (ViewCell)sender;
+        var rows = (list_order)i.BindingContext;
+
+        string id_order_selected = rows.id_order;
+        string kode_payment_selected = rows.kode_payment;
+        System.Diagnostics.Debug.WriteLine($"ID:{id_order_selected}, KODE:{kode_payment_selected}");
+
     }
 }

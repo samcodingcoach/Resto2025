@@ -30,10 +30,12 @@ public partial class DetailOrder : ContentPage
         public string ta_dinein { get; set; } = string.Empty;    
         public string mode_pesanan { get; set; } = string.Empty;
         public string id_order { get; set; } = string.Empty;
-        public string waktu_batal { get; set; } = string.Empty;
-        public string waktu_terima { get; set; } = string.Empty;
-        public string waktu_delivered { get; set; } = string.Empty;
+        public string waktu_batal { get; set; } = "-";
+        public string waktu_ready { get; set; } = "-";
+        public string waktu_delivered { get; set; } = "-";
 
+        public string warna_bg_ready { get; set; } = string.Empty;
+        public string warna_tx_ready { get; set; } = string.Empty;
 
     }
 
@@ -61,25 +63,39 @@ public partial class DetailOrder : ContentPage
                         if (produk.ready == "1")
                         {
                             produk.ready_string = "SIAP DIAMBIL";
+                            produk.warna_tx_ready = "#1A86F2";
+                            produk.warna_bg_ready = "#8AC1F8";
                         }
                         else if (produk.ready == "2")
                         {
                             produk.ready_string = "DISAJIKAN";
+                            produk.warna_tx_ready = "#52D356";
+                            produk.warna_bg_ready = "#B3F1B5";
                         }
                         else if (produk.ready == "3")
                         {
                             produk.ready_string = "BATAL";
+                            produk.warna_tx_ready = "#ED0D58";
+                            produk.warna_bg_ready = "#EAA6BD";
+                        }
+                        else if(produk.ready == "0")
+                        {
+                            produk.ready_string = "DALAM PROSES";
+                            produk.warna_tx_ready = "Grey";
+                            produk.warna_bg_ready = "LightGrey";
                         }
 
-                        if(produk.ta_dinein == "1")
+                        if (produk.ta_dinein == "1")
                         {
                             produk.mode_pesanan = "TAKEAWAY";
                         }
-                        else if(produk.ta_dinein=="0")
+                        else if (produk.ta_dinein == "0")
                         {
                             produk.mode_pesanan = "DINE IN";
                         }
-                            
+
+                        //warna ready 1 #8AC1F8 #1A86F2
+
                         _listorder.Add(produk);
                     }
 
