@@ -1,17 +1,23 @@
 using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
+using CommunityToolkit.Maui.Views;
 namespace Resto2025.Beranda;
 
-public partial class DetailOrder : ContentPage
+public partial class DetailOrder : Popup
 {
     private List<list_order> _listorder;
-    string ID_ORDER = "605";//string.Empty;
+    string ID_ORDER = "0";
+    string KODE_PAYMENT=string.Empty;
    
-    public DetailOrder()
+
+    public DetailOrder(string idOrder, string kodePayment)
     {
-        InitializeComponent(); 
+        InitializeComponent();
         _listorder = new List<list_order>();
+        ID_ORDER = idOrder ?? "0";
+        KODE_PAYMENT = kodePayment ?? string.Empty;
+        L_Title.Text = $"Detail Pesanan: {KODE_PAYMENT}";
         get_listorder();
     }
 
@@ -106,7 +112,7 @@ public partial class DetailOrder : ContentPage
                 else
                 {
                     // Handle jika server tidak merespon dengan baik
-                    await DisplayAlert("Gagal Terhubung", $"Server merespon dengan status: {response.StatusCode}", "OK");
+                    //await DisplayAlert("Gagal Terhubung", $"Server merespon dengan status: {response.StatusCode}", "OK");
                     CV_ListOrder.ItemsSource = null; // Kosongkan list jika gagal
                 }
             }
@@ -114,7 +120,7 @@ public partial class DetailOrder : ContentPage
         catch (Exception ex)
         {
             // Handle jika terjadi error (misal: tidak ada koneksi internet)
-            await DisplayAlert("Error Produk", $"Terjadi kesalahan saat memuat produk: {ex.Message}", "OK");
+           // await DisplayAlert("Error Produk", $"Terjadi kesalahan saat memuat produk: {ex.Message}", "OK");
         }
         finally
         {

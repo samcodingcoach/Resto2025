@@ -1,6 +1,7 @@
 using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
+using CommunityToolkit.Maui.Views;
 namespace Resto2025.Beranda;
 
 public partial class Dashboard : ContentPage
@@ -217,6 +218,16 @@ public partial class Dashboard : ContentPage
         string id_order_selected = rows.id_order;
         string kode_payment_selected = rows.kode_payment;
         System.Diagnostics.Debug.WriteLine($"ID:{id_order_selected}, KODE:{kode_payment_selected}");
+
+        try
+        {
+            var popup = new DetailOrder(id_order_selected, kode_payment_selected);
+            await this.ShowPopupAsync(popup);
+        }
+        catch (Exception)
+        {
+            // ignore
+        }
 
     }
 }
