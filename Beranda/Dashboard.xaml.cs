@@ -7,7 +7,7 @@ namespace Resto2025.Beranda;
 public partial class Dashboard : ContentPage
 {
     string ID_USER = "4"; //Preferences.Get("ID_USER", string.Empty);
-    private List<list_order> _listorder;
+    private List<list_order> _listorder; private List<list_invoice> _listinvoice;
     public Dashboard()
     {
         InitializeComponent();
@@ -15,8 +15,12 @@ public partial class Dashboard : ContentPage
         get_summary();
 
         _listorder = new List<list_order>(); // taruh di public load 
-
+       
         get_listorder();
+
+        _listinvoice = new List<list_invoice>();
+
+        get_listinvoice();
     }
 
     public class list_order
@@ -109,6 +113,18 @@ public partial class Dashboard : ContentPage
         }
     }
 
+    public class list_invoice
+    {
+        public string tgl { get; set; } = string.Empty;
+        public string kode_payment { get; set; } = string.Empty;
+        public string nama_konsumen { get; set; } = string.Empty;
+        public string id_meja { get; set; } = string.Empty;
+        public double total_cart { get; set; } = 0;
+        public string total_cart_string { get;set; } = string.Empty;
+        public string id_tagihan { get; set; } = string.Empty;
+
+    }
+
     public class list_summary
     {
         public string tanggal_open { get; set; } = string.Empty;
@@ -168,6 +184,8 @@ public partial class Dashboard : ContentPage
 
         }
     }
+
+    
 
     private string FormatCurrency(double amount)
     {
@@ -229,5 +247,35 @@ public partial class Dashboard : ContentPage
             // ignore
         }
 
+    }
+
+    private async void get_listinvoice()
+    {
+        string url = App.API_HOST + "kasir/list_invoice.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            List<list_invoice> rowData = JsonConvert.DeserializeObject<List<list_invoice>>(json);
+
+            _listinvoice.Clear(); // Hapus list sebelum diisi
+
+
+            for (int i = 0; i < rowData.Count; i++)
+            {
+                rowData[i].total_cart_string = FormatCurrency(rowData[i].total_cart);
+                _listinvoice.Add(rowData[i]);
+            }
+
+            //total = rowData.Count;
+            lv_invoice.ItemsSource = _listinvoice;
+
+        }
+        else
+        {
+
+        }
     }
 }
