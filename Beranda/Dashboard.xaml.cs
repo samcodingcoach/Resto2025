@@ -16,10 +16,18 @@ public partial class Dashboard : ContentPage
 
         _listorder = new List<list_order>(); // taruh di public load 
        
-        get_listorder();
+      
 
         _listinvoice = new List<list_invoice>();
 
+      
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        get_summary();
+        get_listorder();
         get_listinvoice();
     }
 

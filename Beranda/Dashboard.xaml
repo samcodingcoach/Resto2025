@@ -158,7 +158,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Border  VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
+                            <Border Margin="0,0,0,8" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
                                 <Border.Shadow>
                                     <Shadow Brush="#333" Offset="1,1" Radius="5" Opacity="0.1" />
                                 </Border.Shadow>
