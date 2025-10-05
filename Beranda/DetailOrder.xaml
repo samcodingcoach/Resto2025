@@ -5,11 +5,15 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
              Color="Transparent" Size="990,550"
              >
-    <Frame BackgroundColor="#F9F9F9" CornerRadius="15" Padding="0">
+    <Frame BackgroundColor="#F9F9F9" CornerRadius="15" Padding="0" BorderColor="Transparent">
         <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="20">
 
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
-                <Image Source="back.png" Grid.Column="0" HeightRequest="26"></Image>
+                <Image Source="back.png" Grid.Column="0" HeightRequest="26">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="TapClose" Tapped="TapClose_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
                 <Label Grid.Column="1" x:Name="L_Title" Text="" HorizontalTextAlignment="Center" TextColor="#B3b3b3" FontSize="Subtitle" FontFamily="FontBold"></Label>
             </Grid>
 

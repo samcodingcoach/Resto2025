@@ -91,7 +91,10 @@
         </FlexLayout>
 
         <StackLayout Grid.Row="2" Spacing="5">
-            <Label Text="Daftar Order" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Daftar Order" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
+                <Label Text="Daftar Invoice" HorizontalOptions="EndAndExpand" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
+            </StackLayout>
             <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
         </StackLayout>
 <!--daftar orderan-->
@@ -99,18 +102,18 @@
 
            
 <!--listview orderan-->
-            <ListView HasUnevenRows="True" x:Name="lv_dapurorder" SeparatorVisibility="None" SelectionMode="None">
+            <ListView HasUnevenRows="True" Grid.Column="0" x:Name="lv_dapurorder" SeparatorVisibility="None" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell x:Name="TapOrderList" Tapped="TapOrderList_Tapped">
-                            <Border Grid.Column="0" Margin="0,0,0,8" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
+                            <Border Margin="0,0,0,8" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
                                 <Border.Shadow>
                                     <Shadow Brush="#333" Offset="1,1" Radius="5" Opacity="0.1" />
                                 </Border.Shadow>
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10">
 
                                     <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
-                                        <Label Text="{Binding kode_payment,StringFormat='Pesanan #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
+                                        <Label Text="{Binding kode_payment,StringFormat='Order #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
                                         <StackLayout Orientation="Horizontal" Spacing="15">
                                             <Label Text="{Binding waktu_terima_jam}" FontSize="Caption"></Label>
                                             <Label Text="{Binding jumlah_menit_tampil}" FontSize="Caption" IsVisible="{Binding jumlah_menit_is_visible}"></Label>
@@ -133,7 +136,7 @@
                                         </StackLayout>
                                         <StackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="5">
                                             <Label Text="{Binding tersaji}" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#52D356"></Label>
-                                            <Label Text="TERIKIRIM KE KONSUMEN" FontSize="Caption"></Label>
+                                            <Label Text="TERSAJI KE KONSUMEN" FontSize="Caption"></Label>
                                         </StackLayout>
                                         <StackLayout Grid.Column="2" HorizontalOptions="Center" Spacing="5">
                                             <Label Text="{Binding batal}" HorizontalTextAlignment="Center" FontFamily="FontBold" FontSize="Subtitle" TextColor="#ED0D58"></Label>
@@ -149,6 +152,39 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+            <Border  Grid.Column="1" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="5" Opacity="0.1" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*,*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="10">
+                    <StackLayout Grid.Column="0" Grid.Row="0">
+                        <Label Text="ID INVOICE" FontSize="Caption"></Label>
+                        <Label Text="INV-21-2510050001" TextColor="#333" FontFamily="FontBold"></Label>
+                    </StackLayout>
+                    <StackLayout Grid.Column="1" Orientation="Horizontal" HorizontalOptions="End" Spacing="6" Grid.Row="0">
+                        <Image Source="time.png" HeightRequest="22"></Image>
+                        <Label Text="10:00" VerticalTextAlignment="Center" TranslationY="-1"></Label>
+                    </StackLayout>
+
+                    <BoxView HeightRequest="0.5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="Gray" Opacity="0.1"></BoxView>
+                    <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="12">
+                        <Image Source="guest.png" HeightRequest="22"></Image>
+                        <Label Text="Guest" FontSize="Caption" VerticalTextAlignment="Center" Margin="0,0,20,0"></Label>
+                        <Image Source="dine.png" HeightRequest="22"></Image>
+                        <Label Text="MEJA: 12" FontSize="Caption" VerticalTextAlignment="Center"></Label>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalOptions="End" Spacing="12">
+                        <Label Text="Rp 150.000" FontFamily="FontBold" TextColor="#ED0D58" ></Label>
+                    </StackLayout>
+
+                    <Image Source="forward.png" HeightRequest="24" Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" VerticalOptions="Center"></Image>
+
+
+                </Grid>
+
+            </Border>
 
 
         </Grid>

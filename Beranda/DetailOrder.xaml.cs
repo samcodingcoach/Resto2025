@@ -131,11 +131,8 @@ public partial class DetailOrder : Popup
 
     }
 
-
-
-
-
-
-
-
+    private async void TapClose_Tapped(object sender, TappedEventArgs e)
+    {
+        Close();
+    }
 }
