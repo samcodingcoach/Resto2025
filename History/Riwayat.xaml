@@ -23,8 +23,8 @@
                 <DatePicker x:Name="DatePicker_tgl" Format="yyyy-MM-dd" DateSelected="OnDatePickerSelected" />
             </Frame>
         </Grid>
-
-
+        
+        
         <CollectionView x:Name="CV_List" Grid.Column="0" Grid.Row="1">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="5" HorizontalItemSpacing="5" />

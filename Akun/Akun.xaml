@@ -1,12 +1,85 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Resto2025.Akun.Akun"
-             Title="Akun">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="Resto2025.Akun.Akun" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
+             >
+
+
+    <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Padding="10">
+
+        <Grid Grid.Column="0" RowDefinitions="Auto,*" RowSpacing="10" Padding="10">
+            <Label Text="Pengaturan Akun" Grid.Row="0" FontFamily="FontBold" TextColor="#333"></Label>
+            <Border VerticalOptions="Start" Grid.Row="1"  Stroke="LightGray" StrokeThickness="0.2" StrokeShape="RoundRectangle 8" Background="White" Padding="15,10">
+                <StackLayout Spacing="5" Padding="6">
+                    <Label Text="Nama Lengkap" FontSize="Caption"></Label>
+                    <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
+                        <Entry Placeholder="Inputkan Nama Lengkap" PlaceholderColor="LightGrey"></Entry>
+                    </Frame>
+
+                    <Label Text="Jabatan" FontSize="Caption" Margin="0,10,0,0"></Label>
+                    <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
+                        <Entry PlaceholderColor="LightGrey"></Entry>
+                    </Frame>
+
+                    <Label Text="Nomor Handphone" FontSize="Caption" Margin="0,10,0,0"></Label>
+                    <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
+                        <Entry Placeholder="Inputkan Nomor Handphone" Keyboard="Telephone" PlaceholderColor="LightGrey"></Entry>
+                    </Frame>
+
+                    <Label Text="Email" FontSize="Caption" Margin="0,10,0,0"></Label>
+                    <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
+                        <Entry Placeholder="Inputkan Email" Keyboard="Email" PlaceholderColor="LightGrey"></Entry>
+                    </Frame>
+
+                    <Label Text="Password" FontSize="Caption" Margin="0,10,0,0"></Label>
+                    <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
+                        <Entry Placeholder="Inputkan Password" IsPassword="True" PlaceholderColor="LightGrey"></Entry>
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*,*" Margin="0,15,0,0" ColumnSpacing="10">
+                        <Button Text="Ubah Password" BackgroundColor="Transparent" TextColor="#075E54" BorderColor="#075E54" CornerRadius="5" HeightRequest="40" Grid.Column="0"></Button>
+                        <Button Text="Update Info Akun" CornerRadius="5" Grid.Column="1"></Button>
+                    </Grid>
+
+                    <Label Text="Logout" HorizontalTextAlignment="Center" Margin="0,25,0,0"></Label>
+                </StackLayout>
+                
+            </Border>
+        </Grid>
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*" RowSpacing="10" Padding="10">
+            <Label Text="Daftar Promo" Grid.Row="0" FontFamily="FontBold" TextColor="#333"></Label>
+            <Border VerticalOptions="Start" Grid.Row="1"  Stroke="LightGray" StrokeThickness="0.2" StrokeShape="RoundRectangle 8" Background="White" Padding="20">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
+                    <StackLayout Orientation="Horizontal" Spacing="12" Grid.Column="0" Grid.Row="0">
+                        <Image Source="diskon2.png" HeightRequest="22"></Image>
+                        <Label Text="Diskon Oktober 2025" TranslationY="3" TextColor="#333" FontFamily="FontBold" ></Label>
+                    </StackLayout>
+                    <Border Grid.Column="2" Grid.Row="0" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" BackgroundColor="ForestGreen" Padding="12,5">
+                        <Label Text="OKT25" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
+                    </Border>
+
+                    <StackLayout Orientation="Horizontal" Spacing="5" Grid.Column="0" Grid.Row="1">
+                        <Image Source="date.png" HeightRequest="16" TranslationX="2"></Image>
+                        <Label Margin="13,0,0,0" Text="Tanggal Berakhir: " FontSize="Caption" TranslationY="1" ></Label>
+                        <Label Text="31 Oktober 2025" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Spacing="5" Grid.Column="0" Grid.Row="2">
+                        <Image Source="quota.png" HeightRequest="18" TranslationX="2"></Image>
+                        <Label Margin="13,0,0,0" Text="Sisa Kuota: " FontSize="Caption" TranslationY="1" ></Label>
+                        <Label Text="200" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
+                    </StackLayout>
+
+                    <Label Text="Rp 100.000" Grid.Column="2" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"
+                           Grid.Row="1" Grid.RowSpan="2" VerticalTextAlignment="Center" HorizontalTextAlignment="End"></Label>
+    
+
+
+                </Grid>
+            </Border>
+        </Grid>
+
+    </Grid>
+    
 </ContentPage>
