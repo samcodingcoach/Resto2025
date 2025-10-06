@@ -8,7 +8,7 @@
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="10">
             <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="0"  Padding="10,2">
                 <StackLayout Orientation="Horizontal">
-                    <Entry Placeholder="Cari Order" HorizontalOptions="FillAndExpand"></Entry>
+                    <Entry Placeholder="Cari Order" x:Name="L_Search" HorizontalOptions="FillAndExpand"></Entry>
                     <Image Source="search_gray.png"  WidthRequest="22" HeightRequest="22"  Margin="10,0,0,0" />
                 </StackLayout>
             </Frame>
@@ -27,7 +27,7 @@
 
         <CollectionView x:Name="CV_List" Grid.Column="0" Grid.Row="1">
             <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+                <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="5" HorizontalItemSpacing="5" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
@@ -35,7 +35,7 @@
                         <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="0">
                             <Label Text="{Binding kode_payment}" FontFamily="FontBold" FontSize="Caption" TextColor="#333" Grid.Column="0" Grid.Row="0"></Label>
                             <Label Text="{Binding total_cart_string}" FontFamily="FontBold" TextColor="#075E54" HorizontalOptions="EndAndExpand" 
-                       Grid.Column="1" Grid.Row="0"></Label>
+                                Grid.Column="1" Grid.Row="0"></Label>
 
                             <Label Text="Nama Konsumen" FontSize="Caption" Grid.Column="0" Grid.Row="1"></Label>
                             <Label Text="{Binding tanggal_payment}" FontSize="Caption" Grid.Column="1" Grid.Row="1" HorizontalOptions="EndAndExpand"></Label>
@@ -51,7 +51,7 @@
 
                             </StackLayout>
 
-                            <Border Grid.Column="1"  Margin="0,15,0,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 10" Background="{Binding warna_bg_terbayar}" Padding="12,5">
+                            <Border Grid.Column="1"  Margin="0,15,0,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 10" BackgroundColor="{Binding warna_bg_terbayar}" Padding="12,5">
                                 <Label Text="{Binding keterangan}" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
                             </Border>
                         </Grid>
