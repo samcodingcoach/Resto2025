@@ -129,7 +129,7 @@ public partial class Riwayat : ContentPage
         }
         else
         {
-            
+
         }
     }
 
@@ -137,6 +137,9 @@ public partial class Riwayat : ContentPage
     {
         TGL_PAYMENT = e.NewDate.ToString("yyyy-MM-dd");
         System.Diagnostics.Debug.WriteLine($"tanggal:{TGL_PAYMENT}");
+
+        CV_List.ItemsSource = null;
+        get_list();
     }
 
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
