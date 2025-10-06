@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Resto2025.History.Riwayat"
-             Title="Riwayat">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:Class="Resto2025.History.Riwayat" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
+             >
+    <Grid RowDefinitions="Auto,*" RowSpacing="10" ColumnDefinitions="*" ColumnSpacing="10" Padding="10">
+
+        <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="10">
+            <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="0"  Padding="10,2">
+                <StackLayout Orientation="Horizontal">
+                    <Entry Placeholder="Cari Order" HorizontalOptions="FillAndExpand"></Entry>
+                    <Image Source="search_gray.png"  WidthRequest="22" HeightRequest="22"  Margin="10,0,0,0" />
+                </StackLayout>
+            </Frame>
+
+            <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="1" Padding="10,2">
+                <Picker  FontSize="Subtitle" x:Name="Picker_Kategori">
+                    
+                </Picker>
+            </Frame>
+
+            <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="2"  Padding="10,2">
+                <DatePicker></DatePicker>
+            </Frame>
+        </Grid>
+        
+    </Grid>
 </ContentPage>

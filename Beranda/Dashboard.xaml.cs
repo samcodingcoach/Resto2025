@@ -27,7 +27,9 @@ public partial class Dashboard : ContentPage
     {
         base.OnAppearing();
         get_summary();
+        lv_dapurorder.ItemsSource = null;
         get_listorder();
+        lv_invoice.ItemsSource = null;
         get_listinvoice();
     }
 

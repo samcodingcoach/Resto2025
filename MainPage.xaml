@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:views1="clr-namespace:Resto2025.Beranda"
         xmlns:views2="clr-namespace:Resto2025.Transaksi"
-       xmlns:views3="clr-namespace:Resto2025.History"
+        xmlns:views3="clr-namespace:Resto2025.History"
         xmlns:views4="clr-namespace:Resto2025.Akun"
-             x:Class="Resto2025.MainPage">
+        x:Class="Resto2025.MainPage">
 
     <TabBar>
         <Tab Title="Beranda"

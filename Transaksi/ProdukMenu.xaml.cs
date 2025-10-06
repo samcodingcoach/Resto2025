@@ -55,6 +55,7 @@ public partial class ProdukMenu : ContentPage
     private double grandTotalFinal = 0;
     string URL_QRIS = string.Empty;
     string ID_ORDER_QRIS = string.Empty;
+    string KODE_PAYMENT_BANK = string.Empty;
 
     private list_metodepembayaran metodeBayarTerpilih;
 
@@ -1694,13 +1695,14 @@ public partial class ProdukMenu : ContentPage
 
                     // Simpan nilai grandTotalFinal sebelum diproses
                     double nominalTransfer = this.grandTotalFinal;
+
                     await ProsesDanSimpanTransaksiAsync(nominalTransfer);
         
                     // Buka modal TransferBank setelah kode pembayaran telah diperbarui dalam fungsi
-                    if (!string.IsNullOrEmpty(this.KODE_PAYMENT))
+                    if (!string.IsNullOrEmpty(KODE_PAYMENT_BANK))
                     {
                         System.Diagnostics.Debug.WriteLine($"Mengirim nilai nominal transfer: {nominalTransfer} ke modal");
-                        await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(this.KODE_PAYMENT, nominalTransfer, (isSuccess, message) =>
+                        await this.ShowPopupAsync(new MetodePembayaran.TransferBank_Modal(KODE_PAYMENT_BANK, nominalTransfer, (isSuccess, message) =>
                         {
                             // Tambahkan logika untuk menangani hasil dari modal di sini
                             if (isSuccess)
@@ -1713,6 +1715,7 @@ public partial class ProdukMenu : ContentPage
                                 MainThread.BeginInvokeOnMainThread(async () =>
                                 {
                                     await DisplayAlert("Sukses", message, "OK");
+                                    KODE_PAYMENT_BANK = string.Empty;
                                 });
                             }
                             else
@@ -1982,8 +1985,9 @@ public partial class ProdukMenu : ContentPage
                     await DisplayAlert("Sukses", successMessage, "OK");
                     HapusPesananSementara();
                     ResetHalaman();
-                    
-                    // Perbarui data meja dan produk setelah transaksi selesai - harus di main thread
+
+                    KODE_PAYMENT_BANK = responseObject["kode_payment"];
+                    System.Diagnostics.Debug.WriteLine($"BANK: {KODE_PAYMENT_BANK}");
                     
 
                     // Simpan kode pembayaran dari response JSON ke properti
