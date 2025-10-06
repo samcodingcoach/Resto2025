@@ -11,7 +11,7 @@ public partial class Riwayat : ContentPage
     private string? TGL_PAYMENT;
     private List<list_riwayat> _listriwayat;
     private List<list_metodebayar> _listmetodebayar;
-    private string? ID_BAYAR;
+    private string? ID_BAYAR; private string? KATEGORI_PEMBAYARAN;
 
     public Riwayat()
     {
@@ -146,17 +146,19 @@ public partial class Riwayat : ContentPage
 
     private void ApplyFilter(string? query)
     {
-        if (string.IsNullOrWhiteSpace(query))
+        IEnumerable<list_riwayat> items = _listriwayat;
+
+        if (!string.IsNullOrWhiteSpace(KATEGORI_PEMBAYARAN))
         {
-            CV_List.ItemsSource = _listriwayat;
-            return;
+            items = items.Where(item => string.Equals(item.kategori, KATEGORI_PEMBAYARAN, StringComparison.OrdinalIgnoreCase));
         }
 
-        var filtered = _listriwayat
-            .Where(item => item.kode_payment.Contains(query, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            items = items.Where(item => item.kode_payment.Contains(query, StringComparison.OrdinalIgnoreCase));
+        }
 
-        CV_List.ItemsSource = filtered;
+        CV_List.ItemsSource = items.ToList();
     }
 
     private void OnKategoriSelected(object sender, EventArgs e)
@@ -164,10 +166,14 @@ public partial class Riwayat : ContentPage
         if (Picker_Kategori.SelectedItem is list_metodebayar selected)
         {
             ID_BAYAR = selected.id_bayar;
+            KATEGORI_PEMBAYARAN = selected.kategori;
+            ApplyFilter(L_Search?.Text);
         }
         else
         {
             ID_BAYAR = null;
+            KATEGORI_PEMBAYARAN = null;
+            ApplyFilter(L_Search?.Text);
         }
     }
 }
