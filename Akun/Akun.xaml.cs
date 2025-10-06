@@ -6,19 +6,27 @@ namespace Resto2025.Akun;
 public partial class Akun : ContentPage
 {
     private List<list_promo> _listpromo;
+    string ID_USER = "4";
+    string PASSWORD_ENC = string.Empty;
     public Akun()
 	{
 		InitializeComponent();
         _listpromo = new List<list_promo>(); // taruh di public load 
-        get_list();
+        get_listpromo();
+        get_profile();  
     }
 
 
 
-    
-  
-
-        
+    public class list_profile
+    {
+        public string id_user { get; set; }= string.Empty;
+        public string nama_lengkap { get; set; }= string.Empty;
+        public string jabatan { get; set; } = string.Empty;
+        public string nomor_hp { get; set; }= string.Empty;
+        public string email { get;set; }= string.Empty;
+        public string password { get; set; }= string.Empty;
+    }
 
     public class list_promo
     {
@@ -37,8 +45,56 @@ public partial class Akun : ContentPage
     }
 
 
+   
+    private async void get_profile()
+    {
+        try
+        {
 
-    private async void get_list()
+
+            string url = App.API_HOST + "kasir/pegawai.php?id_user=" + ID_USER;
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<list_profile> rowData = JsonConvert.DeserializeObject<List<list_profile>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        list_profile row = rowData[0];
+                        L_Nama.Text = row.nama_lengkap;
+                        L_NoHP.Text = row.nomor_hp;
+                        L_Jabatan.Text = row.jabatan;
+                        L_Email.Text = row.email;
+                        PASSWORD_ENC = row.password;
+
+                    }
+                    else
+                    {
+                      
+
+                    }
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+
+
+    private async void get_listpromo()
     {
 
 
@@ -83,8 +139,6 @@ public partial class Akun : ContentPage
         // Format the amount as Indonesian Rupiah with thousand separators
         return "Rp " + amount.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
     }
-
-
 
     private void B_Update_Clicked(object sender, EventArgs e)
     {

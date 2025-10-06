@@ -18,7 +18,7 @@
 
                     <Label Text="Jabatan" FontSize="Caption" Margin="0,10,0,0"></Label>
                     <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
-                        <Entry PlaceholderColor="LightGrey"></Entry>
+                        <Entry PlaceholderColor="LightGrey" x:Name="L_Jabatan"></Entry>
                     </Frame>
 
                     <Label Text="Nomor Handphone" FontSize="Caption" Margin="0,10,0,0"></Label>
@@ -53,7 +53,7 @@
 
         <Grid Grid.Column="1" RowDefinitions="Auto,*" RowSpacing="10" Padding="10">
             <Label Text="Daftar Promo" Grid.Row="0" FontFamily="FontBold" TextColor="#333"></Label>
-            <ListView HasUnevenRows="True" x:Name="lv_promo" SeparatorVisibility="None" SelectionMode="None">
+            <ListView HasUnevenRows="True" x:Name="lv_promo" Grid.Row="1" SeparatorVisibility="None" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell x:Name="TapPromo" Tapped="TapPromo_Tapped">
