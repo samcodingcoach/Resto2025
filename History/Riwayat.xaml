@@ -4,8 +4,8 @@
              x:Class="Resto2025.History.Riwayat" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
              >
     <Grid RowDefinitions="Auto,*" RowSpacing="10" ColumnDefinitions="*" ColumnSpacing="10" Padding="10">
-
-        <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="10">
+<!--search filter-->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto" ColumnSpacing="10">
             <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="0"  Padding="10,2">
                 <StackLayout Orientation="Horizontal">
                     <Entry Placeholder="Cari Order" HorizontalOptions="FillAndExpand"></Entry>
@@ -20,9 +20,35 @@
             </Frame>
 
             <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="2"  Padding="10,2">
-                <DatePicker></DatePicker>
+                <DatePicker x:Name="DatePicker_tgl" Format="yyyy-MM-dd" DateSelected="OnDatePickerSelected" />
             </Frame>
         </Grid>
-        
+
+
+
+        <Border VerticalOptions="Start" HorizontalOptions="Start" Grid.Row="1" WidthRequest="450" Stroke="LightGray" StrokeThickness="0.2" StrokeShape="RoundRectangle 8" Background="White" Padding="15,10">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="0">
+                <Label Text="POS-14-2510060001" FontFamily="FontBold" FontSize="Caption" TextColor="#333" Grid.Column="0" Grid.Row="0"></Label>
+                <Label Text="Rp 50.000.000" FontFamily="FontBold" TextColor="#075E54" HorizontalOptions="EndAndExpand" 
+                       Grid.Column="1" Grid.Row="0"></Label>
+
+                <Label Text="Nama Konsumen" FontSize="Caption" Grid.Column="0" Grid.Row="1"></Label>
+                <Label Text="2025-10-06" FontSize="Caption" Grid.Column="1" Grid.Row="1" HorizontalOptions="EndAndExpand"></Label>
+
+                <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
+                    <Image Source="dine.png" HeightRequest="18"></Image>
+                    <Label Text="DINE IN: 20" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
+                    <Label Text="" Margin="15,0,0,0"></Label>
+                    <Image Source="time.png" HeightRequest="18"></Image>
+                    <Label Text="NO. ANTRI: 100" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
+
+                </StackLayout>
+
+                <Border Grid.Column="1"  Margin="0,15,0,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 10" Background="OrangeRed" Padding="12,5">
+                    <Label Text="BELUM BAYAR" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
+                </Border>
+            </Grid>
+        </Border>
+
     </Grid>
 </ContentPage>
