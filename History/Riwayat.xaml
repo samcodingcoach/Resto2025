@@ -14,7 +14,7 @@
             </Frame>
 
             <Frame BorderColor="#E0E0E0" CornerRadius="8" Grid.Column="1" Padding="10,2">
-                <Picker  FontSize="Subtitle" x:Name="Picker_Kategori">
+                <Picker FontSize="Subtitle" x:Name="Picker_Kategori" ItemDisplayBinding="{Binding kategori}" SelectedIndexChanged="OnKategoriSelected">
                     
                 </Picker>
             </Frame>
