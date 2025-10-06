@@ -2,6 +2,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Diagnostics;
+using System.Linq;
 namespace Resto2025.History;
 
 public partial class Riwayat : ContentPage
@@ -62,34 +63,34 @@ public partial class Riwayat : ContentPage
         if (response.IsSuccessStatusCode)
         {
             string json = await response.Content.ReadAsStringAsync();
-            List<list_riwayat> rowData = JsonConvert.DeserializeObject<List<list_riwayat>>(json);
+            var rowData = JsonConvert.DeserializeObject<List<list_riwayat>>(json);
+            _listriwayat.Clear();
 
-            _listriwayat.Clear(); 
-
-            
-            for (int i = 0; i < rowData.Count; i++)
+            if (rowData != null)
             {
-                rowData[i].total_cart_string = FormatCurrency(rowData[i].total_cart);
-                string x = rowData[i].keterangan;
-                if(x == "DIBAYARKAN")
+                for (int i = 0; i < rowData.Count; i++)
                 {
-                    rowData[i].warna_bg_terbayar = "#14AE5C";
-                }
-                else if(x == "BELUM BAYAR")
-                {
-                    rowData[i].warna_bg_terbayar = "#FF2D2D";
-                }
+                    rowData[i].total_cart_string = FormatCurrency(rowData[i].total_cart);
+                    string x = rowData[i].keterangan;
+                    if (x == "DIBAYARKAN")
+                    {
+                        rowData[i].warna_bg_terbayar = "#14AE5C";
+                    }
+                    else if (x == "BELUM BAYAR")
+                    {
+                        rowData[i].warna_bg_terbayar = "#FF2D2D";
+                    }
 
-                if (rowData[i].id_meja == "0")
-                {
-                    rowData[i].nomor_meja = $"MEJA: {rowData[i].id_meja}";
-                }
+                    if (rowData[i].id_meja == "0")
+                    {
+                        rowData[i].nomor_meja = $"MEJA: {rowData[i].id_meja}";
+                    }
 
-                    _listriwayat.Add(rowData[i]); 
+                    _listriwayat.Add(rowData[i]);
+                }
             }
 
-            
-            CV_List.ItemsSource = _listriwayat; 
+            ApplyFilter(L_Search?.Text);
 
         }
         else
@@ -108,5 +109,25 @@ public partial class Riwayat : ContentPage
 		TGL_PAYMENT = e.NewDate.ToString("yyyy-MM-dd");
 		System.Diagnostics.Debug.WriteLine($"tanggal:{TGL_PAYMENT}");
 
+	}
+
+	private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
+	{
+		ApplyFilter(e.NewTextValue);
+	}
+
+	private void ApplyFilter(string? query)
+	{
+		if (string.IsNullOrWhiteSpace(query))
+		{
+			CV_List.ItemsSource = _listriwayat;
+			return;
+		}
+
+		var filtered = _listriwayat
+			.Where(item => item.kode_payment.Contains(query, StringComparison.OrdinalIgnoreCase))
+			.ToList();
+
+		CV_List.ItemsSource = filtered;
 	}
 }
