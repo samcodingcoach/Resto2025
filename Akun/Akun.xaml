@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Akun.Akun" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
              >
-
+    
 
     <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Padding="10">
 
@@ -61,26 +61,26 @@
                                 <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="5">
                                     <StackLayout Orientation="Horizontal" Spacing="12" Grid.Column="0" Grid.Row="0">
                                         <Image Source="diskon2.png" HeightRequest="22"></Image>
-                                        <Label Text="Diskon Oktober 2025" TranslationY="3" TextColor="#333" FontFamily="FontBold" ></Label>
+                                        <Label Text="{Binding nama_promo}" TranslationY="3" TextColor="#333" FontFamily="FontBold" ></Label>
                                     </StackLayout>
                                     <Border Grid.Column="2" Grid.Row="0" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" BackgroundColor="ForestGreen" Padding="12,5">
-                                        <Label Text="OKT25" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
+                                        <Label Text="{Binding kode_promo}" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
                                     </Border>
 
                                     <StackLayout Orientation="Horizontal" Spacing="5" Grid.Column="0" Grid.Row="1">
                                         <Image Source="date.png" HeightRequest="16" TranslationX="2"></Image>
                                         <Label Margin="13,0,0,0" Text="Tanggal Berakhir: " FontSize="Caption" TranslationY="1" ></Label>
-                                        <Label Text="31 Oktober 2025" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
+                                        <Label Text="{Binding tanggalselesai_promo}" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
                                     </StackLayout>
 
                                     <StackLayout Orientation="Horizontal" Spacing="5" Grid.Column="0" Grid.Row="2">
                                         <Image Source="quota.png" HeightRequest="18" TranslationX="2"></Image>
                                         <Label Margin="13,0,0,0" Text="Sisa Kuota: " FontSize="Caption" TranslationY="1" ></Label>
-                                        <Label Text="200" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
+                                        <Label Text="{Binding kuota}" Grid.Column="1" TranslationY="1" FontSize="Caption" FontFamily="FontBold"></Label>
                                     </StackLayout>
 
-                                    <Label Text="Rp 100.000" Grid.Column="2" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"
-                           Grid.Row="1" Grid.RowSpan="2" VerticalTextAlignment="Center" HorizontalTextAlignment="End"></Label>
+                                    <Label Text="{Binding nilai_string}" Grid.Column="2" FontFamily="FontBold" FontSize="Subtitle" TextColor="#075E54"
+                                            Grid.Row="1" Grid.RowSpan="2" VerticalTextAlignment="Center" HorizontalTextAlignment="End"></Label>
 
 
 
