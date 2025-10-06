@@ -25,30 +25,39 @@
         </Grid>
 
 
-
-        <Border VerticalOptions="Start" HorizontalOptions="Start" Grid.Row="1" WidthRequest="450" Stroke="LightGray" StrokeThickness="0.2" StrokeShape="RoundRectangle 8" Background="White" Padding="15,10">
-            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="0">
-                <Label Text="POS-14-2510060001" FontFamily="FontBold" FontSize="Caption" TextColor="#333" Grid.Column="0" Grid.Row="0"></Label>
-                <Label Text="Rp 50.000.000" FontFamily="FontBold" TextColor="#075E54" HorizontalOptions="EndAndExpand" 
+        <CollectionView x:Name="CV_List" Grid.Column="0" Grid.Row="1">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" VerticalItemSpacing="10" HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border VerticalOptions="Start" HorizontalOptions="Start"  Stroke="LightGray" StrokeThickness="0.2" StrokeShape="RoundRectangle 8" Background="White" Padding="15,10">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="0">
+                            <Label Text="{Binding kode_payment}" FontFamily="FontBold" FontSize="Caption" TextColor="#333" Grid.Column="0" Grid.Row="0"></Label>
+                            <Label Text="{Binding total_cart_string}" FontFamily="FontBold" TextColor="#075E54" HorizontalOptions="EndAndExpand" 
                        Grid.Column="1" Grid.Row="0"></Label>
 
-                <Label Text="Nama Konsumen" FontSize="Caption" Grid.Column="0" Grid.Row="1"></Label>
-                <Label Text="2025-10-06" FontSize="Caption" Grid.Column="1" Grid.Row="1" HorizontalOptions="EndAndExpand"></Label>
+                            <Label Text="Nama Konsumen" FontSize="Caption" Grid.Column="0" Grid.Row="1"></Label>
+                            <Label Text="{Binding tanggal_payment}" FontSize="Caption" Grid.Column="1" Grid.Row="1" HorizontalOptions="EndAndExpand"></Label>
 
-                <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
-                    <Image Source="dine.png" HeightRequest="18"></Image>
-                    <Label Text="DINE IN: 20" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
-                    <Label Text="" Margin="15,0,0,0"></Label>
-                    <Image Source="time.png" HeightRequest="18"></Image>
-                    <Label Text="NO. ANTRI: 100" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
+                            <StackLayout Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
+                                <Image Source="{Binding mode_pesanan}" HeightRequest="18"></Image>
+                                <Label Text="{Binding nomor_meja}" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
 
-                </StackLayout>
+                                <Label Text="" Margin="15,0,0,0"></Label>
 
-                <Border Grid.Column="1"  Margin="0,15,0,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 10" Background="OrangeRed" Padding="12,5">
-                    <Label Text="BELUM BAYAR" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
-                </Border>
-            </Grid>
-        </Border>
+                                <Image Source="time.png" HeightRequest="18"></Image>
+                                <Label Text="{Binding nomor_antri,StringFormat='NO. ANTRI: {0}'}" FontSize="Caption" FontFamily="FontBold" VerticalOptions="Center"></Label>
 
+                            </StackLayout>
+
+                            <Border Grid.Column="1"  Margin="0,15,0,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 10" Background="{Binding warna_bg_terbayar}" Padding="12,5">
+                                <Label Text="{Binding keterangan}" FontSize="Caption" TextColor="White" FontFamily="FontBold"></Label>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </Grid>
 </ContentPage>
