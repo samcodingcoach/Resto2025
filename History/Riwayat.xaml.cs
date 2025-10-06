@@ -52,9 +52,6 @@ public partial class Riwayat : ContentPage
         return "Rp " + amount.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
     }
 
-
-
-
     private async void get_list()
     {
        string url = App.API_HOST + "riwayat/list_riwayat.php?tgl=" + TGL_PAYMENT;
