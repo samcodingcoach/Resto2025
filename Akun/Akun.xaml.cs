@@ -2,6 +2,8 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Resto2025.Akun;
 
@@ -230,7 +232,39 @@ public partial class Akun : ContentPage
 
     private async void B_Update_Clicked(object sender, EventArgs e)
     {
-        
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100);
+            await image.FadeTo(1, 200);
+        }
+
+        string nama = L_Nama.Text?.Trim() ?? string.Empty;
+        string jabatan = L_Jabatan.Text?.Trim() ?? string.Empty;
+        string nomorHp = L_NoHP.Text?.Trim() ?? string.Empty;
+        string email = L_Email.Text?.Trim() ?? string.Empty;
+        string password = L_Password.Text?.Trim() ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(nama) || string.IsNullOrWhiteSpace(jabatan) ||
+            string.IsNullOrWhiteSpace(nomorHp) || string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            await DisplayAlert("Validasi", "Semua field wajib diisi.", "OK");
+            return;
+        }
+
+        if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            await DisplayAlert("Validasi", "Format email tidak valid.", "OK");
+            return;
+        }
+
+        if (!nomorHp.StartsWith("08") || nomorHp.Length < 11 || !nomorHp.All(char.IsDigit))
+        {
+            await DisplayAlert("Validasi", "Nomor handphone harus diawali 08 dan minimal 11 digit.", "OK");
+            return;
+        }
+
+        await update_akun();
     }
 
     private async void B_UbahPassword_Clicked(object sender, EventArgs e)
@@ -258,8 +292,7 @@ public partial class Akun : ContentPage
 
         PASSWORD_DEC = result.Trim();
         PASSWORD_ENC = encrypted;
-        //L_Password.Text = PASSWORD_DEC;
-        simpan_password();
+        await simpan_password();
     }
 
     private void B_Logout_Tapped(object sender, TappedEventArgs e)
@@ -275,10 +308,10 @@ public partial class Akun : ContentPage
 
 
 
-    private async void simpan_password()
+    private async Task simpan_password()
     {
         //staffID sementara nanti ganti sama temp login
-      
+
         var data = new Dictionary<string, string>
                 {
                     { "id_user", ID_USER },
@@ -286,7 +319,7 @@ public partial class Akun : ContentPage
                 };
 
         var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-        var client = new HttpClient();
+        using var client = new HttpClient();
         string ip = App.API_HOST + "kasir/update_pw.php";
 
         var response = await client.PostAsync(ip, jsonData);
@@ -300,4 +333,58 @@ public partial class Akun : ContentPage
         }
     }
 
+    private async Task update_akun()
+    {
+        string nama = L_Nama.Text?.Trim() ?? string.Empty;
+        string jabatan = L_Jabatan.Text?.Trim() ?? string.Empty;
+        string nomorHp = L_NoHP.Text?.Trim() ?? string.Empty;
+        string email = L_Email.Text?.Trim() ?? string.Empty;
+        string plainPassword = L_Password.Text?.Trim();
+
+        if (string.IsNullOrEmpty(plainPassword))
+        {
+            plainPassword = PASSWORD_DEC;
+        }
+
+        if (string.IsNullOrEmpty(plainPassword))
+        {
+            await DisplayAlert("Validasi", "Password tidak boleh kosong.", "OK");
+            return;
+        }
+
+        string encryptedPassword = EncryptPassword(plainPassword, nomorHp);
+
+        if (string.IsNullOrEmpty(encryptedPassword))
+        {
+            await DisplayAlert("Gagal", "Enkripsi password gagal.", "OK");
+            return;
+        }
+
+        PASSWORD_DEC = plainPassword;
+        PASSWORD_ENC = encryptedPassword;
+
+        var data = new Dictionary<string, string>
+        {
+            { "id_user", ID_USER },
+            { "password", PASSWORD_ENC },
+            { "nama_lengkap", nama },
+            { "email", email },
+            { "nomor_hp", nomorHp },
+         
+        };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        using var client = new HttpClient();
+        string ip = App.API_HOST + "kasir/update_akun.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject["status"] == "success")
+        {
+            await DisplayAlert("Update Info", responseObject["message"], "OK");
+
+        }
+    }
 }
