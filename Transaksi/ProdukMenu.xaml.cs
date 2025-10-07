@@ -1987,11 +1987,13 @@ public partial class ProdukMenu : ContentPage
                             });
                         }
                     }
+                    KODE_PAYMENT_BANK = responseObject["kode_payment"];
                     await DisplayAlert("Sukses", successMessage, "OK");
+
                     HapusPesananSementara();
                     ResetHalaman();
 
-                    KODE_PAYMENT_BANK = responseObject["kode_payment"];
+                    
                     System.Diagnostics.Debug.WriteLine($"BANK: {KODE_PAYMENT_BANK}");
                     
 
@@ -2026,7 +2028,7 @@ public partial class ProdukMenu : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error Proses Dan Simpan", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
+           // await DisplayAlert("Error Proses Dan Simpan", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
         }
     }
 
