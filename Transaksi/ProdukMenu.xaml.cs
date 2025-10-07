@@ -81,6 +81,48 @@ public partial class ProdukMenu : ContentPage
 
         Task.Run(async () => await MuatPesananSementaraAsync());
     }
+    
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        
+        // Subscribe ke message dari CekPesanan_Modal
+        MessagingCenter.Subscribe<object, Dictionary<string, object>>(this, "LoadPesananData", (sender, data) =>
+        {
+            // Handle data di main thread
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    // Ambil data dari dictionary
+                    var pesananDetail = data["PesananDetail"] as List<CekPesanan_Modal.PesananDetailInfo>;
+                    var idMeja = data["IdMeja"] as string;
+                    var kodePayment = data["KodePayment"] as string;
+                    
+                    Console.WriteLine($"Debug: Received data in ProdukMenu with kode_payment: {kodePayment}");
+                    
+                    // Set KODE_PAYMENT
+                    this.KODE_PAYMENT = kodePayment;
+                    
+                    // Inisialisasi dari pesanan
+                    await InisialisasiDariPesananAsync(pesananDetail, idMeja);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading pesanan data: {ex.Message}");
+                    await DisplayAlert("Error", $"Gagal memuat data pesanan: {ex.Message}", "OK");
+                }
+            });
+        });
+    }
+    
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        
+        // Unsubscribe untuk menghindari memory leak
+        MessagingCenter.Unsubscribe<object, Dictionary<string, object>>(this, "LoadPesananData");
+    }
 
 
     public ProdukMenu(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja = "0", string kodePayment = "")
@@ -2177,6 +2219,9 @@ public partial class ProdukMenu : ContentPage
 
     private async Task InisialisasiDariPesananAsync(List<CekPesanan_Modal.PesananDetailInfo> pesananDetail, string idMeja)
     {
+        // Reset keranjang dan state sebelum load data baru
+        keranjang.Clear();
+        
         // Panggil dan TUNGGU semua data yang dibutuhkan, terutama PPN
         await get_ppn();
 
@@ -2204,11 +2249,28 @@ public partial class ProdukMenu : ContentPage
             keranjang.Add(newItem);
         }
 
-        // Update ID_MEJA jika diperlukan
+        // Update ID_MEJA dan mode pesanan
         if (idMeja != "0")
         {
             this.ID_MEJA = idMeja;
             Summary_ModePesanan.Text = $"Dine In - Meja #{idMeja.PadLeft(2, '0')}";
+            
+            // Set radio button ke Dine-in
+            if (RadioDine != null)
+            {
+                RadioDine.IsChecked = true;
+            }
+        }
+        else
+        {
+            this.ID_MEJA = "0";
+            Summary_ModePesanan.Text = "Takeaway";
+            
+            // Set radio button ke Takeaway
+            if (RadioTakeaway != null)
+            {
+                RadioTakeaway.IsChecked = true;
+            }
         }
 
         // Panggil UpdateTotalBelanja SETELAH get_ppn

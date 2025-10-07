@@ -354,15 +354,24 @@ public partial class CekPesanan_Modal : Popup
 					kodePayment = cekPesananData.Pesanan.Pembayaran[0].KodePayment;
 				}
 				
-				// Navigasi kembali ke ProdukMenu dan isi keranjang dengan data dari pesanan
-					var produkMenu = new ProdukMenu(cekPesananData.Pesanan.PesananDetail, cekPesananData.Pesanan.IdMeja, kodePayment);
-					Console.WriteLine($"Debug: ProdukMenu created with kode_payment: {kodePayment}");
+				// Buat data untuk dikirim ke ProdukMenu
+				var pesananData = new Dictionary<string, object>
+				{
+					{ "PesananDetail", cekPesananData.Pesanan.PesananDetail },
+					{ "IdMeja", cekPesananData.Pesanan.IdMeja },
+					{ "KodePayment", kodePayment }
+				};
 				
-				// Pindah ke halaman ProdukMenu
-				Application.Current.MainPage = new NavigationPage(produkMenu);
+				Console.WriteLine($"Debug: Sending data with kode_payment: {kodePayment}");
+				
+				// Kirim message ke ProdukMenu dengan data pesanan
+				MessagingCenter.Send<object, Dictionary<string, object>>(this, "LoadPesananData", pesananData);
 				
 				// Tutup popup ini
 				Close();
+				
+				// Navigate ke tab Order (ProdukMenu) menggunakan Shell
+				Shell.Current.GoToAsync("//Order");
 			}
 		}
 		else if(Submit_Bayar.Text == "RILIS MEJA")
