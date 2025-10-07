@@ -21,8 +21,6 @@ public partial class Akun : ContentPage
         get_profile();
     }
 
-
-
     public class list_profile
     {
         public string id_user { get; set; } = string.Empty;

@@ -141,6 +141,9 @@ public partial class ProdukMenu : ContentPage
         [JsonProperty("id_user")]
         public string IdUser { get; set; }
 
+        [JsonProperty("id_promo")]
+        public string IdPromo { get; set; }
+
         [JsonProperty("status")]
         public string Status { get; set; }
 
@@ -1865,6 +1868,7 @@ public partial class ProdukMenu : ContentPage
 
     private async Task ProsesDanSimpanTransaksiAsync(double uangDiterima, MetodePembayaran.Qris_Modal qrisModal = null)
     {
+
         // 1. Kumpulkan data untuk detail pembayaran
         var pembayaranDetail = new ProsesPembayaranDetailPayload
         {
@@ -1880,6 +1884,7 @@ public partial class ProdukMenu : ContentPage
         {
             IdBayar = this.ID_BAYAR,
             IdUser = this.ID_USER,
+            IdPromo = this.ID_PROMO,
             Status = this.STATUS_BAYAR.ToString(),
             JumlahDibayarkan = this.grandTotalFinal,       // Total tagihan
             JumlahUang = uangDiterima,                   // Uang dari konsumen
