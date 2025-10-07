@@ -1,6 +1,8 @@
 using System.Text;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Security.Cryptography;
+
 namespace Resto2025.Akun;
 
 public partial class Akun : ContentPage
@@ -8,6 +10,7 @@ public partial class Akun : ContentPage
     private List<list_promo> _listpromo;
     string ID_USER = "4";
     string PASSWORD_ENC = string.Empty;
+    string PASSWORD_DEC = string.Empty;
     public Akun()
 	{
 		InitializeComponent();
@@ -26,6 +29,7 @@ public partial class Akun : ContentPage
         public string nomor_hp { get; set; }= string.Empty;
         public string email { get;set; }= string.Empty;
         public string password { get; set; }= string.Empty;
+        
     }
 
     public class list_promo
@@ -71,17 +75,17 @@ public partial class Akun : ContentPage
                         L_Jabatan.Text = row.jabatan;
                         L_Email.Text = row.email;
                         PASSWORD_ENC = row.password;
-
+                        PASSWORD_DEC = DecryptPassword(PASSWORD_ENC, row.nomor_hp);
+                        System.Diagnostics.Debug.WriteLine($"OLD:{PASSWORD_ENC}");
+                        System.Diagnostics.Debug.WriteLine($"PW: {PASSWORD_DEC}");
+                        L_Password.Text = PASSWORD_DEC;
                     }
                     else
                     {
-                      
-
                     }
                 }
                 else
                 {
-
                 }
             }
         }
@@ -89,6 +93,51 @@ public partial class Akun : ContentPage
         catch (Exception ex)
         {
 
+        }
+    }
+
+    private string DecryptPassword(string encryptedPassword, string key)
+    {
+        if (string.IsNullOrEmpty(encryptedPassword) || string.IsNullOrEmpty(key))
+        {
+            return string.Empty;
+        }
+
+        try
+        {
+            byte[] cipherBytes = Convert.FromBase64String(encryptedPassword);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] aesKey = new byte[32];
+            Array.Clear(aesKey, 0, aesKey.Length);
+            Array.Copy(keyBytes, aesKey, Math.Min(keyBytes.Length, aesKey.Length));
+
+            byte[] ivBytes;
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] keyHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+                string hashHex = BitConverter.ToString(keyHash).Replace("-", string.Empty).ToLowerInvariant();
+                ivBytes = Encoding.UTF8.GetBytes(hashHex.Substring(0, 16));
+            }
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.KeySize = 256;
+                aes.BlockSize = 128;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Key = aesKey;
+                aes.IV = ivBytes;
+
+                using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                {
+                    byte[] plainBytes = decryptor.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                    return Encoding.UTF8.GetString(plainBytes);
+                }
+            }
+        }
+        catch
+        {
+            return string.Empty;
         }
     }
 
