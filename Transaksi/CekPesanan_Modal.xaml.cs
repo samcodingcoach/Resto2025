@@ -87,9 +87,16 @@ public partial class CekPesanan_Modal : Popup
 	{
 		if (cekPesananData?.Pesanan != null)
 		{
+			// Hitung total invoice dari SUM (qty * harga_jual) di pesanan_detail
+			double totalInvoice = 0;
+			if (cekPesananData.Pesanan.PesananDetail != null && cekPesananData.Pesanan.PesananDetail.Any())
+			{
+				totalInvoice = cekPesananData.Pesanan.PesananDetail.Sum(item => item.Qty * item.HargaJual);
+			}
+			
 			// Update label-label UI sesuai permintaan
 			if (L_TotalInvoice != null)
-				L_TotalInvoice.Text = cekPesananData.Pesanan.FormattedTotalCart;
+				L_TotalInvoice.Text = $"Rp {totalInvoice:N0}";
 				
 			if (L_NamaMember != null)
 				L_NamaMember.Text = cekPesananData.Pesanan.NamaKonsumen;
