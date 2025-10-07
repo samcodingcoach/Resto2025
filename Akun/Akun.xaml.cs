@@ -12,31 +12,31 @@ public partial class Akun : ContentPage
     string PASSWORD_ENC = string.Empty;
     string PASSWORD_DEC = string.Empty;
     public Akun()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         _listpromo = new List<list_promo>(); // taruh di public load 
         get_listpromo();
-        get_profile();  
+        get_profile();
     }
 
 
 
     public class list_profile
     {
-        public string id_user { get; set; }= string.Empty;
-        public string nama_lengkap { get; set; }= string.Empty;
+        public string id_user { get; set; } = string.Empty;
+        public string nama_lengkap { get; set; } = string.Empty;
         public string jabatan { get; set; } = string.Empty;
-        public string nomor_hp { get; set; }= string.Empty;
-        public string email { get;set; }= string.Empty;
-        public string password { get; set; }= string.Empty;
-        
+        public string nomor_hp { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string password { get; set; } = string.Empty;
+
     }
 
     public class list_promo
     {
         public string id_promo { get; set; } = string.Empty;
-        public string nama_promo { get;set; } = string.Empty;
-        public string kode_promo { get; set; }  = string.Empty ;
+        public string nama_promo { get; set; } = string.Empty;
+        public string kode_promo { get; set; } = string.Empty;
         public string pilihan_promo { get; set; } = string.Empty;
         public string tanggalmulai_promo { get; set; } = string.Empty;
         public string tanggalselesai_promo { get; set; } = string.Empty;
@@ -48,16 +48,12 @@ public partial class Akun : ContentPage
 
     }
 
-
-   
     private async void get_profile()
     {
         try
         {
 
-
             string url = App.API_HOST + "kasir/pegawai.php?id_user=" + ID_USER;
-
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage response = await client.GetAsync(url);
@@ -141,7 +137,50 @@ public partial class Akun : ContentPage
         }
     }
 
+    private string EncryptPassword(string plainPassword, string key)
+    {
+        if (string.IsNullOrEmpty(plainPassword) || string.IsNullOrEmpty(key))
+        {
+            return string.Empty;
+        }
 
+        try
+        {
+            byte[] plainBytes = Encoding.UTF8.GetBytes(plainPassword);
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+            byte[] aesKey = new byte[32];
+            Array.Clear(aesKey, 0, aesKey.Length);
+            Array.Copy(keyBytes, aesKey, Math.Min(keyBytes.Length, aesKey.Length));
+
+            byte[] ivBytes;
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] keyHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+                string hashHex = BitConverter.ToString(keyHash).Replace("-", string.Empty).ToLowerInvariant();
+                ivBytes = Encoding.UTF8.GetBytes(hashHex.Substring(0, 16));
+            }
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.KeySize = 256;
+                aes.BlockSize = 128;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+                aes.Key = aesKey;
+                aes.IV = ivBytes;
+
+                using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                {
+                    byte[] cipherBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
+                    return Convert.ToBase64String(cipherBytes);
+                }
+            }
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
 
     private async void get_listpromo()
     {
@@ -156,29 +195,29 @@ public partial class Akun : ContentPage
             string json = await response.Content.ReadAsStringAsync();
             List<list_promo> rowData = JsonConvert.DeserializeObject<List<list_promo>>(json);
 
-            _listpromo.Clear(); 
+            _listpromo.Clear();
 
-           
+
             for (int i = 0; i < rowData.Count; i++)
             {
                 if (rowData[i].pilihan_promo == "persen")
                 {
                     rowData[i].nilai_string = $"{rowData[i].nilai}%";
                 }
-                else if(rowData[i].pilihan_promo == "nominal")
+                else if (rowData[i].pilihan_promo == "nominal")
                 {
                     rowData[i].nilai_string = FormatCurrency(rowData[i].nilai);
                 }
-                    _listpromo.Add(rowData[i]);
+                _listpromo.Add(rowData[i]);
             }
 
             //total = rowData.Count;
-            lv_promo.ItemsSource = _listpromo; 
-            
+            lv_promo.ItemsSource = _listpromo;
+
         }
         else
         {
-            
+
         }
 
     }
@@ -189,14 +228,38 @@ public partial class Akun : ContentPage
         return "Rp " + amount.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
     }
 
-    private void B_Update_Clicked(object sender, EventArgs e)
+    private async void B_Update_Clicked(object sender, EventArgs e)
     {
-
+        
     }
 
-    private void B_UbahPassword_Clicked(object sender, EventArgs e)
+    private async void B_UbahPassword_Clicked(object sender, EventArgs e)
     {
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100);
+            await image.FadeTo(1, 200);
+        }
 
+        string result = await DisplayPromptAsync("Password Baru", "Inputkan Password Baru");
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            return;
+        }
+
+        string key = (L_NoHP.Text ?? string.Empty).Trim();
+        string encrypted = EncryptPassword(result.Trim(), key);
+
+        if (string.IsNullOrEmpty(encrypted))
+        {
+            await DisplayAlert("Gagal", "Enkripsi password gagal.", "OK");
+            return;
+        }
+
+        PASSWORD_DEC = result.Trim();
+        PASSWORD_ENC = encrypted;
+        //L_Password.Text = PASSWORD_DEC;
+        simpan_password();
     }
 
     private void B_Logout_Tapped(object sender, TappedEventArgs e)
@@ -208,4 +271,33 @@ public partial class Akun : ContentPage
     {
 
     }
+
+
+
+
+    private async void simpan_password()
+    {
+        //staffID sementara nanti ganti sama temp login
+      
+        var data = new Dictionary<string, string>
+                {
+                    { "id_user", ID_USER },
+                    { "password", PASSWORD_ENC }
+                };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "kasir/update_pw.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject["status"] == "success")
+        {
+            await DisplayAlert("Update Info", responseObject["message"], "OK");
+
+        }
+    }
+
 }
