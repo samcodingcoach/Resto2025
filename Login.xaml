@@ -12,7 +12,7 @@
             <Grid Grid.Row="0" RowDefinitions="Auto,*" RowSpacing="10">
 <!--informasi-->
                 <Label Text="Informasi Terkini" TextColor="#333" FontFamily="FontBold" Grid.Row="0"></Label>
-                <Border Grid.Row="1" Stroke="WhiteSmoke" StrokeThickness="0.2" StrokeShape="RoundRectangle 5" Background="White" Padding="10">
+                <Border Grid.Row="1" Stroke="WhiteSmoke" StrokeThickness="0.2" StrokeShape="RoundRectangle 10" Background="White" Padding="10">
 
                     <ListView  HasUnevenRows="True" x:Name="lv_info" SeparatorVisibility="None" SelectionMode="None">
                         <ListView.ItemTemplate>
