@@ -265,6 +265,8 @@ public partial class Qris_Modal : Popup
             LoadingIndicator.IsRunning = false;
             
             QrisWebView.Source = ImageSource.FromUri(new Uri(qrCodeUrl));
+            //opsi print // telegram QR
+
             
             // Tampilkan countdown UI
             HitungMundur.IsVisible = true;
