@@ -6,7 +6,7 @@ namespace Resto2025.Beranda;
 
 public partial class Dashboard : ContentPage
 {
-    string ID_USER = "4"; //Preferences.Get("ID_USER", string.Empty);
+    string ID_USER = Preferences.Get("ID_USER", string.Empty);
     private List<list_order> _listorder; private List<list_invoice> _listinvoice;
     public Dashboard()
     {

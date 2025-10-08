@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Globalization;
 
 
 namespace Resto2025;
@@ -19,13 +20,47 @@ public partial class Login : ContentPage
 		
 		// Set the version from the project properties
 		SetVersion();
-	}
+    }
 	
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
 		UpdateNamaApp();
+		CheckExistingSession();
 	}
+	private void CheckExistingSession()
+	{
+		bool hasId = Preferences.ContainsKey("ID_USER");
+		bool hasName = Preferences.ContainsKey("NAMA_LENGKAP");
+		bool hasTimestamp = Preferences.ContainsKey("TIMESTAMP");
+
+		if (!hasId || !hasName || !hasTimestamp)
+		{
+			return;
+		}
+
+		string storedTimestamp = Preferences.Get("TIMESTAMP", string.Empty);
+		string today = DateTime.Now.ToString("yyyyMMdd", CultureInfo.InvariantCulture);
+		string timestampDatePart = string.Empty;
+
+		if (!string.IsNullOrEmpty(storedTimestamp))
+		{
+			var parts = storedTimestamp.Split('_');
+			if (parts.Length > 0)
+			{
+				timestampDatePart = parts[0];
+			}
+		}
+
+		if (!string.IsNullOrEmpty(timestampDatePart) && timestampDatePart == today)
+		{
+			Application.Current.MainPage = new MainPage();
+			return;
+		}
+
+		Preferences.Clear();
+	}
+
 	
 	private void UpdateNamaApp()
 	{
@@ -166,6 +201,9 @@ public partial class Login : ContentPage
 
             Preferences.Set("ID_USER", responseObject["id_user"]);
             Preferences.Set("NAMA_LENGKAP", responseObject["nama_lengkap"]);
+            Preferences.Set("TIMESTAMP", $"{DateTime.Now:yyyyMMdd}_{responseObject["id_user"]}");
+
+            Application.Current.MainPage = new MainPage();
 
 
         }

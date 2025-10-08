@@ -10,7 +10,7 @@ namespace Resto2025.Akun;
 public partial class Akun : ContentPage
 {
     private List<list_promo> _listpromo;
-    string ID_USER = "4";
+    string ID_USER = Preferences.Get("ID_USER", string.Empty);
     string PASSWORD_ENC = string.Empty;
     string PASSWORD_DEC = string.Empty;
     public Akun()

@@ -13,7 +13,7 @@
         </Grid>
 <!--kolom kanan-->
         <Grid Grid.Column="1" Padding="0">
-            <Border Stroke="pink" StrokeThickness="0.2" StrokeShape="RoundRectangle 10" Background="Transparent" Padding="10">
+            <Border Stroke="WhiteSmoke" StrokeThickness="0.2" StrokeShape="RoundRectangle 10" Background="White" Padding="10">
                 <StackLayout >
                     <ActivityIndicator x:Name="LoadingIndicator" Margin="40,180" IsVisible="False" IsRunning="False" 
                                        Color="Red" VerticalOptions="Center" HorizontalOptions="Center"
