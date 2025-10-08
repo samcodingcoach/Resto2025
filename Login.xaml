@@ -6,10 +6,58 @@
   
     <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Padding="16">
 <!--kolom kiri-->       
-        <Grid Grid.Column="0">
-           
+        <Grid Grid.Column="0" RowDefinitions="*,Auto" RowSpacing="10">
+
+            <Grid Grid.Row="0">
+            </Grid>
+
+
+            <Grid Grid.Row="1" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10" ColumnSpacing="10">
+
+                <Label Text="Status Meja" TextColor="#333" FontFamily="FontBold" Grid.Row="0"></Label>
+
+                <Border Stroke="WhiteSmoke" Grid.Row="1" Grid.Column="0" StrokeThickness="0.2" 
+                        StrokeShape="RoundRectangle 5" Background="White" Padding="20,15">
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+                        <Image Source="dine_black.png" Grid.Column="0" HeightRequest="32" VerticalOptions="Center"></Image>
+                        <StackLayout Grid.Column="1">
+                            <Label Text="Meja Aktif" FontSize="Caption" HorizontalTextAlignment="End"></Label>
+                            <Label Text="0" x:Name="L_MejaAktif" HorizontalTextAlignment="End" FontFamily="FontBold" TextColor="#333"></Label>
+                        </StackLayout>
+                    </Grid>
+                   
+                </Border>
+
+                <Border Stroke="WhiteSmoke"  Grid.Row="1" Grid.Column="1" StrokeThickness="0.2" 
+                            StrokeShape="RoundRectangle 5" Background="White" Padding="20,15">
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+                        <Image Source="dine_red.png" Grid.Column="0" HeightRequest="32" VerticalOptions="Center"></Image>
+                        <StackLayout Grid.Column="1">
+                            <Label Text="Meja Terpakai" FontSize="Caption" HorizontalTextAlignment="End"></Label>
+                            <Label Text="0" x:Name="L_MejaTerpakai" TextColor="#C52222" HorizontalTextAlignment="End" FontFamily="FontBold" ></Label>
+                        </StackLayout>
+                    </Grid>
+
+                </Border>
+
+                <Border Stroke="WhiteSmoke"  Grid.Row="1" Grid.Column="2" StrokeThickness="0.2" 
+                        StrokeShape="RoundRectangle 5" Background="White" Padding="20,15">
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="20">
+                        <Image Source="dine_green.png" Grid.Column="0" HeightRequest="32" VerticalOptions="Center"></Image>
+                        <StackLayout Grid.Column="1">
+                            <Label Text="Meja Kosong" FontSize="Caption" HorizontalTextAlignment="End"></Label>
+                            <Label Text="0" x:Name="L_MejaKosong" TextColor="#22864A" HorizontalTextAlignment="End" FontFamily="FontBold" ></Label>
+                        </StackLayout>
+                    </Grid>
+
+                </Border>
+
+
+            </Grid>
                 
-         
         </Grid>
 <!--kolom kanan-->
         <Grid Grid.Column="1" Padding="0">
