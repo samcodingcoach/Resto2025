@@ -18,7 +18,7 @@
 
                     <Label Text="Jabatan" FontSize="Caption" Margin="0,10,0,0"></Label>
                     <Frame Padding="0" CornerRadius="5" BorderColor="LightGrey" BackgroundColor="Transparent">
-                        <Entry PlaceholderColor="LightGrey" x:Name="L_Jabatan"></Entry>
+                        <Entry PlaceholderColor="LightGrey" x:Name="L_Jabatan" IsEnabled="False"></Entry>
                     </Frame>
 
                     <Label Text="Nomor Handphone" FontSize="Caption" Margin="0,10,0,0"></Label>
@@ -41,11 +41,21 @@
                         <Button Text="Update Info Akun" x:Name="B_Update" Clicked="B_Update_Clicked" CornerRadius="5" Grid.Column="1"></Button>
                     </Grid>
 
-                    <Label Text="Logout" HorizontalTextAlignment="Center" Margin="0,25,0,0">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer x:Name="B_Logout" Tapped="B_Logout_Tapped"></TapGestureRecognizer>
-                        </Label.GestureRecognizers>
-                    </Label>
+                    <HorizontalStackLayout Margin="0,25,0,0" Spacing="15">
+                        <Label Text="Logout"  FontFamily="FontBold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="B_Logout" Tapped="B_Logout_Tapped"></TapGestureRecognizer>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Label Text="Closing"  FontFamily="FontBold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer x:Name="B_Closing" Tapped="B_Closing_Tapped"></TapGestureRecognizer>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    
                 </StackLayout>
                 
             </Border>

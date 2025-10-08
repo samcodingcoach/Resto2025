@@ -293,18 +293,33 @@ public partial class Akun : ContentPage
         await simpan_password();
     }
 
-    private void B_Logout_Tapped(object sender, TappedEventArgs e)
+    private async void B_Logout_Tapped(object sender, TappedEventArgs e)
     {
+        if (sender is VisualElement element)
+        {
+            await element.FadeTo(0.3, 100);
+            await element.FadeTo(1, 200);
+        }
+        else if (sender is TapGestureRecognizer gesture && gesture.Parent is VisualElement parentElement)
+        {
+            await parentElement.FadeTo(0.3, 100);
+            await parentElement.FadeTo(1, 200);
+        }
 
+        bool confirm = await DisplayAlert("Konfirmasi", "Apakah anda ingin logout?", "Ya", "Tidak");
+        if (!confirm)
+        {
+            return;
+        }
+
+        Preferences.Clear();
+        Application.Current.MainPage = new NavigationPage(new global::Resto2025.Login());
     }
 
     private void TapPromo_Tapped(object sender, EventArgs e)
     {
 
     }
-
-
-
 
     private async Task simpan_password()
     {
@@ -368,7 +383,7 @@ public partial class Akun : ContentPage
             { "nama_lengkap", nama },
             { "email", email },
             { "nomor_hp", nomorHp },
-         
+
         };
 
         var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
@@ -385,4 +400,66 @@ public partial class Akun : ContentPage
 
         }
     }
+
+    private async void B_Closing_Tapped(object sender, TappedEventArgs e)
+    {
+
+
+
+        if (sender is Image image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+
+        bool confirm = await DisplayAlert("Konfirmasi", "Yakin untuk melakukan closing?", "Yes", "No");
+
+        if (confirm)
+        {
+            // code
+        }
+
+
+    }
+
+
+
+    private async void simpan()
+    {
+        //staffID sementara nanti ganti sama temp login
+        string nama = "ValueXXX";
+        var data = new Dictionary<string, string>
+        {
+            { "id_user", ID_USER }
+                    
+        };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "kasir/closing.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject["status"] == "success")
+        {
+
+            string total_pembayaran = responseObject["total_pembayaran"];
+            string total_tunai = responseObject["total_tunai"];
+
+            //jadikan 2 varible diatas berformat contoh rupiah Rp 500.000
+            //buatkan pesan yang menyertakan 2 informasi diatas.
+            //Kembali ke Login.xaml.cs
+            //hapus semua References
+        }
+
+        else
+        {
+            await DisplayAlert("ERROR CLOSING", responseObject["message"], "OK");
+        }
+    }
+
+
 }

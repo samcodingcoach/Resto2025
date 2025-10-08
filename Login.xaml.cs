@@ -202,6 +202,7 @@ public partial class Login : ContentPage
             Preferences.Set("ID_USER", responseObject["id_user"]);
             Preferences.Set("NAMA_LENGKAP", responseObject["nama_lengkap"]);
             Preferences.Set("TIMESTAMP", $"{DateTime.Now:yyyyMMdd}_{responseObject["id_user"]}");
+			Preferences.Set("ID_OPEN", responseObject["id_open"]);
 
             Application.Current.MainPage = new MainPage();
 
