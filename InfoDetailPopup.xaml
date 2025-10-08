@@ -4,29 +4,25 @@
              xmlns:popup="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
              x:Class="Resto2025.InfoDetailPopup"
-             Size="400,600"
+             Size="400,600" Color="Transparent"
              CanBeDismissedByTappingOutsideOfPopup="True">
 
-    <Border BackgroundColor="White" 
-            StrokeShape="RoundRectangle 15"
-            Padding="20"
-            Margin="10">
+    <Border BackgroundColor="White"  StrokeThickness="0"
+            StrokeShape="RoundRectangle 10"
+            Padding="20">
         
         <Grid RowDefinitions="Auto,*,Auto" RowSpacing="15">
             
             <!-- Header dengan tombol close -->
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="10">
                 <Label Text="Detail Informasi" 
-                       FontFamily="FontBold" 
-                       FontSize="Large" 
-                       TextColor="#333"
+                       FontFamily="FontBold" TextColor="#333"
                        VerticalOptions="Center"/>
                 
                 <Button Grid.Column="1"
                         Text="✕" 
                         BackgroundColor="Transparent"
                         TextColor="#666"
-                        FontSize="Large"
                         WidthRequest="40"
                         HeightRequest="40"
                         Clicked="CloseButton_Clicked"
