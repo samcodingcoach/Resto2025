@@ -25,8 +25,10 @@ public partial class Login : ContentPage
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
+        get_infomeja();
 		UpdateNamaApp();
 		CheckExistingSession();
+
 	}
 	private void CheckExistingSession()
 	{
@@ -170,9 +172,6 @@ public partial class Login : ContentPage
 
     }
 
-
-
-
     private async void cek_login()
     {
       
@@ -215,5 +214,54 @@ public partial class Login : ContentPage
             LoadingIndicator.IsVisible = false; LoadingIndicator.IsRunning = false;
         }
     }
+
+
+
+
+	public class list_meja
+	{
+		public int meja_terpakai { get; set; } = 0;
+		public int meja_aktif { get; set; } = 0;
+		public int meja_kosong { get; set;} = 0;
+	}
+
+
+   
+    private async void get_infomeja()
+    {
+        try
+        {
+            string url = App.API_HOST + "meja/hitung.php";
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    List<list_meja> rowData = JsonConvert.DeserializeObject<List<list_meja>>(json);
+
+                    if (rowData != null && rowData.Count > 0)
+                    {
+                        list_meja row = rowData[0];
+                        L_MejaAktif.Text = row.meja_aktif.ToString();
+                        L_MejaKosong.Text = row.meja_kosong.ToString();
+                        L_MejaTerpakai.Text = row.meja_terpakai.ToString();
+                    }
+                }
+                else
+                {
+
+                }
+            }
+        }
+
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+        }
+    }
+
+
 
 }
