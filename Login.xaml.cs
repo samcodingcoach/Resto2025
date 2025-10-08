@@ -212,6 +212,8 @@ public partial class Login : ContentPage
             await Task.Delay(3000);
             FormLogin.IsVisible = true;
             LoadingIndicator.IsVisible = false; LoadingIndicator.IsRunning = false;
+            await DisplayAlert("Informasi Login", responseObject["message"], "OK");
+
         }
     }
 
