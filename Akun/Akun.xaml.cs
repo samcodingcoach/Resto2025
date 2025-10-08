@@ -1,4 +1,5 @@
 using System.Text;
+using System.Globalization;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -418,6 +419,7 @@ public partial class Akun : ContentPage
         if (confirm)
         {
             // code
+            simpan_closing();
         }
 
 
@@ -425,10 +427,9 @@ public partial class Akun : ContentPage
 
 
 
-    private async void simpan()
+    private async void simpan_closing()
     {
-        //staffID sementara nanti ganti sama temp login
-        string nama = "ValueXXX";
+        
         var data = new Dictionary<string, string>
         {
             { "id_user", ID_USER }
@@ -449,16 +450,30 @@ public partial class Akun : ContentPage
             string total_pembayaran = responseObject["total_pembayaran"];
             string total_tunai = responseObject["total_tunai"];
 
-            //jadikan 2 varible diatas berformat contoh rupiah Rp 500.000
-            //buatkan pesan yang menyertakan 2 informasi diatas.
-            //Kembali ke Login.xaml.cs
-            //hapus semua References
+            string formattedPembayaran = TryFormatRupiah(total_pembayaran);
+            string formattedTunai = TryFormatRupiah(total_tunai);
+
+            string message = $"Total Pembayaran: {formattedPembayaran}\nTotal Tunai: {formattedTunai}";
+            await DisplayAlert("Closing Berhasil", message, "OK");
+
+            Preferences.Clear();
+            Application.Current.MainPage = new NavigationPage(new global::Resto2025.Login());
         }
 
         else
         {
             await DisplayAlert("ERROR CLOSING", responseObject["message"], "OK");
         }
+    }
+
+    private string TryFormatRupiah(string value)
+    {
+        if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+        {
+            return FormatCurrency(result);
+        }
+
+        return $"Rp {value}";
     }
 
 
