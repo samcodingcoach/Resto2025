@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
              x:Class="Resto2025.Transaksi.ProdukMenu" NavigationPage.HasNavigationBar="False">
 
     <Grid ColumnDefinitions="0.60*,0.40*" ColumnSpacing="0" Padding="0" VerticalOptions="FillAndExpand">
@@ -171,11 +172,9 @@
                                                 <VerticalStackLayout>
 
                                                     <Grid>
-                                                        <Image Aspect="AspectFit">
-                                                            <Image.Source>
-                                                                <UriImageSource Uri="{Binding url_gambar}" CacheValidity="30.00:00:00" />
-                                                            </Image.Source>
-                                                        </Image>
+                                                        <ffimageloading:CachedImage Aspect="AspectFit" Source="{Binding url_gambar}">
+                                                           
+                                                        </ffimageloading:CachedImage>
 
                                                         <Border HorizontalOptions="End" VerticalOptions="Start" Margin="8" Padding="8,4" BackgroundColor="#99000000" StrokeThickness="0" StrokeShape="RoundRectangle 15">
                                                             <HorizontalStackLayout Spacing="4">
@@ -310,7 +309,7 @@
                                             <Grid Padding="0,0,1.2,10" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="15">
 
                                                 <Border Grid.Column="0" WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
-                                                    <Image Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                                                    <ffimageloading:CachedImage Source="{Binding UrlGambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
                                                 </Border>
                                                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
                                                     <Label Text="{Binding NamaProduk}" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1" FontSize="Caption" TextColor="#333"/>

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using FFImageLoading.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace Resto2025
@@ -10,6 +11,7 @@ namespace Resto2025
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseFFImageLoading()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {

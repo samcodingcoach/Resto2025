@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Login" NavigationPage.HasNavigationBar="False" BackgroundColor="#F9F9F9"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
              >
   
     <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Padding="16">
@@ -19,7 +20,7 @@
                                 <ViewCell>
                                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="12" Margin="0,0,0,10">
                                         <Border StrokeShape="RoundRectangle 8" Grid.Column="0" Grid.Row="0" HeightRequest="80" WidthRequest="80" StrokeThickness="0">
-                                            <Image Source="{Binding url_gambar}" Aspect="Fill"></Image>
+                                            <ffimageloading:CachedImage Source="{Binding url_gambar}" Aspect="Fill"></ffimageloading:CachedImage>
                                         </Border>
                                         <StackLayout Grid.Row="0" Grid.Column="1">
                                             <Label Text="{Binding judul}" TextColor="#333" FontFamily="FontBold" Margin="0,0,0,5"></Label>
