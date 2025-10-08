@@ -3,13 +3,15 @@ using System.Text;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Globalization;
+using System.Numerics;
 
 
 namespace Resto2025;
 
 public partial class Login : ContentPage
 {
-	public Login()
+    private List<list_info> _listinfo;
+    public Login()
 	{
 		InitializeComponent();
 		// Don't set the text immediately since data might not be loaded yet
@@ -20,9 +22,65 @@ public partial class Login : ContentPage
 		
 		// Set the version from the project properties
 		SetVersion();
+        _listinfo = new List<list_info>(); // taruh di public load 
+        get_listinfo();
     }
-	
-	protected override void OnAppearing()
+
+
+   
+    
+
+        
+    public class list_info
+    {
+        public string id_info { get; set; } = string.Empty;
+        public string judul { get; set; } = string.Empty;
+        public string isi { get; set; } = string.Empty;
+        public string divisi { get; set; } = string.Empty;
+        public string gambar { get; set; } = string.Empty;
+        public string url_gambar { get { return App.IMAGE_HOST + "info/" + gambar; } }
+        public string link { get; set; } = string.Empty;
+        public string nama_lengkap { get; set; } = string.Empty;
+        public string waktu_tampil { get; set; } = string.Empty;
+
+    }
+
+    private async void get_listinfo()
+    {
+
+
+        string url = App.API_HOST + "informasi/list.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            List<list_info> rowData = JsonConvert.DeserializeObject<List<list_info>>(json);
+
+            _listinfo.Clear(); 
+
+          
+            for (int i = 0; i < rowData.Count; i++)
+            {
+
+                _listinfo.Add(rowData[i]); 
+            }
+
+            //total = rowData.Count;
+            lv_info.ItemsSource = _listinfo; 
+
+        }
+        else
+        {
+           
+        }
+
+    }
+
+
+
+    protected override void OnAppearing()
 	{
 		base.OnAppearing();
         get_infomeja();
@@ -263,6 +321,9 @@ public partial class Login : ContentPage
             System.Diagnostics.Debug.WriteLine(ex.Message);
         }
     }
+
+
+    
 
 
 
