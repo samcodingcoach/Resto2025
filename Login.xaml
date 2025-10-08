@@ -28,7 +28,11 @@
                                                    FontSize="Caption" LineBreakMode="TailTruncation" MaxLines="2">
                                             </Label>
                                             <StackLayout Orientation="Horizontal"  Margin="0,13,0,0">
-                                                <Label Text="Baca Selengkapnya" FontFamily="FontBold" FontSize="Caption" TextColor="CadetBlue"></Label>
+                                                <Label Text="Baca Selengkapnya" FontFamily="FontBold" FontSize="Caption" TextColor="CadetBlue">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer x:Name="TapReadMore" Tapped="TapReadMore_Tapped"></TapGestureRecognizer>
+                                                    </Label.GestureRecognizers>
+                                                </Label>
                                                 <Label Text="{Binding waktu_tampil}" TranslationX="-2" HorizontalTextAlignment="End" FontSize="Caption" HorizontalOptions="EndAndExpand"></Label>
                                             </StackLayout>
 

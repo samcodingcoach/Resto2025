@@ -322,9 +322,8 @@ public partial class Login : ContentPage
         }
     }
 
+    private void TapReadMore_Tapped(object sender, TappedEventArgs e)
+    {
 
-    
-
-
-
+    }
 }
