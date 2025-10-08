@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Globalization;
 using System.Numerics;
+using CommunityToolkit.Maui.Views;
 
 
 namespace Resto2025;
@@ -322,8 +323,12 @@ public partial class Login : ContentPage
         }
     }
 
-    private void TapReadMore_Tapped(object sender, TappedEventArgs e)
+    private async void TapReadMore_Tapped(object sender, TappedEventArgs e)
     {
-
+        if (sender is Label label && label.BindingContext is list_info info)
+        {
+            var popup = new InfoDetailPopup(info);
+            await this.ShowPopupAsync(popup);
+        }
     }
 }
