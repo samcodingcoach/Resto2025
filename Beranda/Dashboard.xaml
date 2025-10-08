@@ -18,7 +18,7 @@
                 <Grid RowDefinitions="Auto" ColumnSpacing="10" ColumnDefinitions="*,Auto">
                     <StackLayout Grid.Column="0" VerticalOptions="Center">
                         <Label Text="Awal Kas" TextColor="#333" FontSize="Caption"></Label>
-                        <Label Text="Rp 50.000.000" x:Name="L_TunaiAwal" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
+                        <Label Text="Rp 0" x:Name="L_TunaiAwal" TextColor="#075E54" FontSize="Subtitle" FontFamily="FontBold"></Label>
                     </StackLayout>
                     <Image Source="kas_awal.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
                 </Grid>
