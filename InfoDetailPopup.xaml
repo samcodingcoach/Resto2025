@@ -4,8 +4,8 @@
              xmlns:popup="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
              x:Class="Resto2025.InfoDetailPopup"
-             Size="400,600" Color="Transparent"
-             CanBeDismissedByTappingOutsideOfPopup="True">
+             Size="700,650" Color="Transparent"
+             CanBeDismissedByTappingOutsideOfPopup="False">
 
     <Border BackgroundColor="White"  StrokeThickness="0"
             StrokeShape="RoundRectangle 10"
@@ -22,66 +22,40 @@
                 <Button Grid.Column="1"
                         Text="✕" 
                         BackgroundColor="Transparent"
-                        TextColor="#666"
+                        TextColor="#333"
                         WidthRequest="40"
                         HeightRequest="40"
-                        Clicked="CloseButton_Clicked"
-                        BorderColor="#E0E0E0"
-                        CornerRadius="8"/>
+                        Clicked="CloseButton_Clicked"/>
             </Grid>
             
             <!-- Konten Artikel -->
             <ScrollView Grid.Row="1" Orientation="Vertical">
-                <StackLayout Spacing="15">
+                <StackLayout Spacing="0">
                     <!-- Gambar -->
                     <Border StrokeShape="RoundRectangle 10" 
                             StrokeThickness="0" 
-                            HeightRequest="200"
+                            HeightRequest="400"
                             HorizontalOptions="Fill">
                         <ffimageloading:CachedImage Source="{Binding InfoItem.url_gambar}" 
                                                    Aspect="AspectFill"/>
                     </Border>
                     
                     <!-- Judul -->
-                    <Label Text="{Binding InfoItem.judul}"
-                           FontFamily="FontBold"
-                           FontSize="Medium"
-                           TextColor="#333"
-                           LineBreakMode="WordWrap"/>
-                    
-                    <!-- Metadata -->
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                        <Label Text="Oleh:"
-                               FontSize="Small"
-                               TextColor="#666"
-                               VerticalOptions="Center"/>
-                        <Label Text="{Binding InfoItem.nama_lengkap}"
-                               Grid.Column="1"
-                               FontSize="Small"
-                               TextColor="#666"/>
-                    </Grid>
-                    
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                        <Label Text="Waktu:"
-                               FontSize="Small"
-                               TextColor="#666"
-                               VerticalOptions="Center"/>
-                        <Label Text="{Binding InfoItem.waktu_tampil}"
-                               Grid.Column="1"
-                               FontSize="Small"
-                               TextColor="#666"/>
-                    </Grid>
-                    
+                    <Label Text="{Binding InfoItem.judul}" FontFamily="FontBold" Margin="0,10,0,0" TextColor="#333" LineBreakMode="WordWrap"/>
+                    <Label Text="{Binding InfoItem.isi}" Margin="0,5,0,0" FontSize="Caption" TextColor="#333" LineBreakMode="WordWrap"/>
+
                     <!-- Divider -->
-                    <BoxView HeightRequest="1"
-                             BackgroundColor="#E0E0E0"
-                             Margin="0,10"/>
+                    <BoxView HeightRequest="1" BackgroundColor="#E0E0E0" Margin="0,10,0,5"/>
+                    <!-- Metadata -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                       
+                        <Label Text="{Binding InfoItem.nama_lengkap}" Grid.Column="0" FontSize="Caption" TextColor="#666"/>
+                        <Label Text="{Binding InfoItem.waktu_tampil}" HorizontalOptions="End" Grid.Column="1" FontSize="Caption" TextColor="#666"/>
+                        
+                    </Grid>
                     
-                    <!-- Isi konten -->
-                    <Label Text="{Binding InfoItem.isi}"
-                           FontSize="Small"
-                           TextColor="#333"
-                           LineBreakMode="WordWrap"/>
+                   
+                 
                     
                     <!-- Link jika ada -->
                     <StackLayout BindableLayout.ItemsSource="{Binding Links}">
