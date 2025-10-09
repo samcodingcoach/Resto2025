@@ -26,6 +26,9 @@ public partial class Qris_Modal : Popup
     // Kode Payment
     private string kode_payment = string.Empty;
     
+    // QR Code URL untuk Telegram
+    private string _qrCodeUrl = string.Empty;
+    
     // Telegram Bot Configuration
     private readonly string _telegramBotToken = App.API_TELEGRAM;
     private readonly string _telegramChatId = "-4887355399";
@@ -271,10 +274,11 @@ public partial class Qris_Modal : Popup
             LoadingIndicator.IsVisible = false;
             LoadingIndicator.IsRunning = false;
             
+            // Simpan URL QR code untuk pengiriman Telegram
+            _qrCodeUrl = qrCodeUrl;
             QrisWebView.Source = ImageSource.FromUri(new Uri(qrCodeUrl));
             
-            //jika gambar muncul lakukan pengiriman ke Telegram
-            _ = Task.Run(async () => await SendQRCodeToTelegramAsync(qrCodeUrl));
+            //jika gambar muncul, tunggu kode payment terisi lalu kirim ke Telegram
             
             // Tampilkan countdown UI
             HitungMundur.IsVisible = true;
@@ -291,6 +295,13 @@ public partial class Qris_Modal : Popup
     {
         kode_payment = kodePayment;
         Debug.WriteLine($"Kode payment di-update di Qris_Modal: {kode_payment}");
+        
+        // Kirim QR Code ke Telegram setelah kode payment terisi
+        if (!string.IsNullOrEmpty(_qrCodeUrl))
+        {
+            Debug.WriteLine($"Mengirim QR Code ke Telegram dengan kode payment: {kode_payment}");
+            _ = Task.Run(async () => await SendQRCodeToTelegramAsync(_qrCodeUrl));
+        }
     }
 
     private async void Button_CekStatus_Clicked(object sender, EventArgs e)
