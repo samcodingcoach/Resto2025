@@ -89,10 +89,24 @@
             <!--footer submit-->
             <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15" Padding="0" VerticalOptions="Center">
 
-                <Button Grid.Column="0" x:Name="B_ImportMeja" Clicked="B_ImportMeja_Clicked" TextColor="White" Text="Impor Meja"
-                         BackgroundColor="#075E54" CornerRadius="8"  />
+                <StackLayout Grid.Column="0" Spacing="5">
+                    <HorizontalStackLayout>
+                        <CheckBox IsChecked="False" x:Name="CB_Import" CheckedChanged="CB_Import_CheckedChanged"></CheckBox>
+                        <Label Text="Import pesanan dari meja lain" VerticalTextAlignment="Center" FontSize="Caption" TextColor="#b3b3b3"></Label>
+                        
+                    </HorizontalStackLayout>
 
-                <HorizontalStackLayout Grid.Column="2"  Spacing="15" VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="5" x:Name="Form_PickerMeja" IsVisible="False">
+                        <Picker x:Name="PickerMejaAktif"></Picker>
+                        <Button x:Name="B_ImportMeja" Clicked="B_ImportMeja_Clicked" TextColor="White" Text="Impor Meja"
+                                BackgroundColor="#075E54" CornerRadius="8"  />
+                    </HorizontalStackLayout>
+                   
+                </StackLayout>
+                
+               
+
+                <HorizontalStackLayout Grid.Column="2"  Spacing="15" VerticalOptions="Start">
 
                     <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="End">
                         <Label Text="Total (Belum Pajak)" TextColor="#b3b3b3" FontSize="Caption" HorizontalTextAlignment="End" />
