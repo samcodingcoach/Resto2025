@@ -7,8 +7,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Views;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Resto2025.Transaksi;
+
+public class MejaData
+{
+	public string id_meja { get; set; }
+	public string nomor_meja { get; set; }
+}
 
 public partial class CekPesanan_Modal : Popup
 {
@@ -431,16 +438,44 @@ public partial class CekPesanan_Modal : Popup
 
 	}
 
-    private void CB_Import_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-		if (e.Value == true)
+    
+
+
+
+	private async void get_data_meja()
+	{
+		string url = App.API_HOST + "impor_meja/listmeja_aktif.php?id_meja=" + ID_MEJA;
+		HttpClient client = new HttpClient();
+		HttpResponseMessage response = await client.GetAsync(url);
+
+		if (response.IsSuccessStatusCode)
 		{
-			Form_PickerMeja.IsVisible = true;
-			//load data meja
-        }
+			string jsonContent = await response.Content.ReadAsStringAsync();
+			var mejaList = System.Text.Json.JsonSerializer.Deserialize<List<MejaData>>(jsonContent);
+			
+			PickerMejaAktif.Items.Clear();
+			foreach (var meja in mejaList)
+			{
+				PickerMejaAktif.Items.Add(meja.nomor_meja);
+			}
+		}
 		else
 		{
-			Form_PickerMeja.IsVisible = false;
+			
+		}
+	}
+
+    private void CB_Import_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (e.Value == true)
+        {
+            Form_PickerMeja.IsVisible = true;
+            //load data meja
+            get_data_meja();
+        }
+        else
+        {
+            Form_PickerMeja.IsVisible = false;
         }
     }
 }
