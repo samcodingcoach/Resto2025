@@ -23,6 +23,7 @@ public partial class CekPesanan_Modal : Popup
 {
 	public int ID_MEJA;
 	string id_pesanan_terpilih = string.Empty;
+	string id_pesanan_existing = string.Empty;
     private CekPesananResponse cekPesananData;
 	private List<KeranjangItem> keranjangItems;
 	private readonly Action _onMejaReleasedCallback;
@@ -70,6 +71,10 @@ public partial class CekPesanan_Modal : Popup
 
 					if (cekPesananData?.Pesanan != null)
 					{
+						// Ambil id_pesanan yang existing
+						id_pesanan_existing = cekPesananData.Pesanan.IdPesanan;
+						System.Diagnostics.Debug.WriteLine("ID Pesanan Existing: " + id_pesanan_existing);
+						
 						// Update UI di main thread
 						MainThread.BeginInvokeOnMainThread(() =>
 						{
