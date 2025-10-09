@@ -22,6 +22,7 @@ public class MejaData
 public partial class CekPesanan_Modal : Popup
 {
 	public int ID_MEJA;
+	string selectedMeja = string.Empty;
 	string id_pesanan_terpilih = string.Empty;
 	string id_pesanan_existing = string.Empty;
     private CekPesananResponse cekPesananData;
@@ -484,7 +485,7 @@ public partial class CekPesanan_Modal : Popup
     private void PickerMejaAktif_SelectedIndexChanged(object sender, EventArgs e)
     {
         //ambil id_pesanan dari meja yang dipilih
-		var selectedMeja = PickerMejaAktif.SelectedItem as string;
+		selectedMeja = PickerMejaAktif.SelectedItem as string;
 		
 		System.Diagnostics.Debug.WriteLine("Selected Meja: " + selectedMeja);
 
@@ -496,10 +497,10 @@ public partial class CekPesanan_Modal : Popup
 		//staffID sementara nanti ganti sama temp login
 
 		var data = new Dictionary<string, string>
-				{
-					{ "id_meja", ID_MEJA.ToString() },
+		{
+			{ "id_meja", selectedMeja },
 
-				};
+		};
 
 		var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
 		var client = new HttpClient();
