@@ -443,6 +443,16 @@ public partial class CekPesanan_Modal : Popup
 
 
 
+        bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", "Yakin untuk melakukan?", "Yes", "No");
+
+
+        if (confirm)
+		{
+			update_import();
+		}
+
+
+
 	}
 
 	private async void get_data_meja()
@@ -494,7 +504,6 @@ public partial class CekPesanan_Modal : Popup
 
 	private async void cek_id()
 	{
-		//staffID sementara nanti ganti sama temp login
 
 		var data = new Dictionary<string, string>
 		{
@@ -510,7 +519,7 @@ public partial class CekPesanan_Modal : Popup
 		var responseContent = await response.Content.ReadAsStringAsync();
 		var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
 
-		if (responseObject["status"] == "success")
+		if (responseObject?["status"] == "success")
 		{
 
 			id_pesanan_terpilih = responseObject["id_pesanan"].ToString();
@@ -519,8 +528,43 @@ public partial class CekPesanan_Modal : Popup
 		}
 		else
 		{
-			System.Diagnostics.Debug.WriteLine($"{responseObject["message"]}");
+			System.Diagnostics.Debug.WriteLine($"{responseObject?["message"]}");
         }
 	}
+
+    private async void update_import()
+    {
+
+
+        var data = new Dictionary<string, string>
+        {
+            { "id_pesanan", id_pesanan_existing },
+            { "id_importer", id_pesanan_terpilih }
+
+        };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "impor_meja/import.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject?["status"] == "success")
+        {
+
+            System.Diagnostics.Debug.WriteLine($"Info: {responseObject?["message"]} ");
+			//refresh data listview
+			LV_Keranjang.ItemsSource = null;
+			UpdateUI();
+
+
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine($"{responseObject?["message"]}");
+        }
+    }
 
 }
