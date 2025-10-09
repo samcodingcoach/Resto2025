@@ -97,7 +97,7 @@
                     </HorizontalStackLayout>
 
                     <HorizontalStackLayout Spacing="5" x:Name="Form_PickerMeja" IsVisible="False">
-                        <Picker x:Name="PickerMejaAktif"></Picker>
+                        <Picker x:Name="PickerMejaAktif" SelectedIndexChanged="PickerMejaAktif_SelectedIndexChanged"></Picker>
                         <Button x:Name="B_ImportMeja" Clicked="B_ImportMeja_Clicked" TextColor="White" Text="Impor Meja"
                                 BackgroundColor="#075E54" CornerRadius="8"  />
                     </HorizontalStackLayout>

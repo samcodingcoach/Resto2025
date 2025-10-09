@@ -17,10 +17,13 @@ public class MejaData
 	public string nomor_meja { get; set; }
 }
 
+
+
 public partial class CekPesanan_Modal : Popup
 {
 	public int ID_MEJA;
-	private CekPesananResponse cekPesananData;
+	string id_pesanan_terpilih = string.Empty;
+    private CekPesananResponse cekPesananData;
 	private List<KeranjangItem> keranjangItems;
 	private readonly Action _onMejaReleasedCallback;
 
@@ -438,10 +441,6 @@ public partial class CekPesanan_Modal : Popup
 
 	}
 
-    
-
-
-
 	private async void get_data_meja()
 	{
 		string url = App.API_HOST + "impor_meja/listmeja_aktif.php?id_meja=" + ID_MEJA;
@@ -478,4 +477,47 @@ public partial class CekPesanan_Modal : Popup
             Form_PickerMeja.IsVisible = false;
         }
     }
+
+    private void PickerMejaAktif_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        //ambil id_pesanan dari meja yang dipilih
+		var selectedMeja = PickerMejaAktif.SelectedItem as string;
+		
+		System.Diagnostics.Debug.WriteLine("Selected Meja: " + selectedMeja);
+
+		cek_id();
+    }
+
+
+
+	private async void cek_id()
+	{
+		//staffID sementara nanti ganti sama temp login
+
+		var data = new Dictionary<string, string>
+				{
+					{ "id_meja", ID_MEJA.ToString() },
+
+				};
+
+		var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+		var client = new HttpClient();
+		string ip = App.API_HOST + "impor_meja/ambil_id.php";
+
+		var response = await client.PostAsync(ip, jsonData);
+		var responseContent = await response.Content.ReadAsStringAsync();
+		var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+		if (responseObject["status"] == "success")
+		{
+
+			id_pesanan_terpilih = responseObject["id_pesanan"].ToString();
+			System.Diagnostics.Debug.WriteLine("ID Pesanan Terpilih: " + id_pesanan_terpilih);
+		}
+		else
+		{
+			System.Diagnostics.Debug.WriteLine($"{responseObject["message"]}");
+        }
+	}
+
 }
