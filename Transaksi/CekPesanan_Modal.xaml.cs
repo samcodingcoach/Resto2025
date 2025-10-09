@@ -555,9 +555,8 @@ public partial class CekPesanan_Modal : Popup
         {
 
             System.Diagnostics.Debug.WriteLine($"Info: {responseObject?["message"]} ");
-			//refresh data listview
-			LV_Keranjang.ItemsSource = null;
-			UpdateUI();
+			//refresh data listview dengan memuat ulang data dari server
+			await LoadCekPesananDataAsync();
 
 
         }
