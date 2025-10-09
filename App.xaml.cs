@@ -11,6 +11,7 @@ namespace Resto2025
         public static string IMAGE_HOST { get; set; }
         public static string NAMA_APLIKASI { get; set; }
         public static string API_LOGIN { get; set; }
+        public static string API_TELEGRAM { get; set; } 
         public App()
         {
             InitializeComponent();
@@ -25,6 +26,7 @@ namespace Resto2025
             API_HOST = publik + "api/";
             IMAGE_HOST = publik + "public/images/";
             API_LOGIN = publik + "config/login.php";
+            API_TELEGRAM = "8285693076:AAGiIbDuUEKT0fr8DlYsj-JJmi6zy3TPOzw";
             // Start loading the app data in background since it's async
             _ = Task.Run(async () => await LoadAppDataAsync());
 

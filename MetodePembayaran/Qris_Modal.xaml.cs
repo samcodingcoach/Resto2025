@@ -6,9 +6,12 @@ using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 
 namespace Resto2025.MetodePembayaran;
 
@@ -22,6 +25,10 @@ public partial class Qris_Modal : Popup
     
     // Kode Payment
     private string kode_payment = string.Empty;
+    
+    // Telegram Bot Configuration
+    private readonly string _telegramBotToken = App.API_TELEGRAM;
+    private readonly string _telegramChatId = "-4887355399";
     
     // Countdown Timer
     private System.Timers.Timer _countdownTimer;
@@ -265,8 +272,9 @@ public partial class Qris_Modal : Popup
             LoadingIndicator.IsRunning = false;
             
             QrisWebView.Source = ImageSource.FromUri(new Uri(qrCodeUrl));
-            //opsi print // telegram QR
-
+            
+            //jika gambar muncul lakukan pengiriman ke Telegram
+            _ = Task.Run(async () => await SendQRCodeToTelegramAsync(qrCodeUrl));
             
             // Tampilkan countdown UI
             HitungMundur.IsVisible = true;
@@ -488,6 +496,67 @@ public partial class Qris_Modal : Popup
                 Close();
             }
         });
+    }
+
+    private async Task<byte[]> DownloadImageFromUrl(string imageUrl)
+    {
+        try
+        {
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetAsync(imageUrl);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error downloading image: {ex.Message}");
+            return null;
+        }
+    }
+
+    private async Task SendQRCodeToTelegramAsync(string qrCodeUrl)
+    {
+        try
+        {
+            Debug.WriteLine($"Starting Telegram send - Token: {_telegramBotToken?.Substring(0, 10)}..., ChatID: {_telegramChatId}");
+            
+            if (string.IsNullOrEmpty(_telegramBotToken) || _telegramBotToken == "YOUR_BOT_TOKEN_HERE" ||
+                string.IsNullOrEmpty(_telegramChatId) || _telegramChatId == "YOUR_CHAT_ID_HERE")
+            {
+                Debug.WriteLine("Telegram Bot Token or Chat ID not configured");
+                return;
+            }
+
+            var botClient = new TelegramBotClient(_telegramBotToken);
+            Debug.WriteLine("Bot client created successfully");
+            
+            // Download QR code image
+            Debug.WriteLine($"Downloading QR code from: {qrCodeUrl}");
+            var imageBytes = await DownloadImageFromUrl(qrCodeUrl);
+            if (imageBytes == null)
+            {
+                Debug.WriteLine("Failed to download QR code image");
+                return;
+            }
+
+            Debug.WriteLine($"QR code downloaded successfully, size: {imageBytes.Length} bytes");
+            
+            // Send photo to Telegram
+            using var ms = new MemoryStream(imageBytes);
+            Debug.WriteLine("Sending photo to Telegram...");
+            await botClient.SendPhoto(
+                chatId: long.Parse(_telegramChatId),
+                photo: new Telegram.Bot.Types.InputFileStream(ms, "qrcode.png"),
+                caption: $"QR Code Pembayaran\nKode Payment: {kode_payment}\nAmount: Rp {grossAmount:N0}",
+                parseMode: ParseMode.Html
+            );
+
+            Debug.WriteLine("QR Code successfully sent to Telegram");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error sending QR Code to Telegram: {ex.Message}");
+        }
     }
 
 }
