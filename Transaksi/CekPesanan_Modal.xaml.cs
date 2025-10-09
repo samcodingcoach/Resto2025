@@ -79,16 +79,14 @@ public partial class CekPesanan_Modal : Popup
 				}
 				else
 				{
-					// Dalam konteks popup, kita bisa menangani error dengan cara lain
-					// Misalnya menampilkan pesan error di komponen UI di popup atau hanya mencatatnya
+				
 					System.Diagnostics.Debug.WriteLine($"Gagal Terhubung: Tidak dapat mengambil data dari server. Status: {response.StatusCode}");
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			// Dalam konteks popup, kita bisa menangani error dengan cara lain
-			// Misalnya menampilkan pesan error di komponen UI di popup atau hanya mencatatnya
+		
 			System.Diagnostics.Debug.WriteLine($"Error: Terjadi kesalahan saat mengambil data: {ex.Message}");
 		}
 	}
@@ -488,8 +486,6 @@ public partial class CekPesanan_Modal : Popup
 		cek_id();
     }
 
-
-
 	private async void cek_id()
 	{
 		//staffID sementara nanti ganti sama temp login
@@ -513,6 +509,7 @@ public partial class CekPesanan_Modal : Popup
 
 			id_pesanan_terpilih = responseObject["id_pesanan"].ToString();
 			System.Diagnostics.Debug.WriteLine("ID Pesanan Terpilih: " + id_pesanan_terpilih);
+			
 		}
 		else
 		{
