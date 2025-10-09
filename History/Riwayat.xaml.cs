@@ -94,7 +94,11 @@ public partial class Riwayat : ContentPage
 
                     if (rowData[i].id_meja == "0")
                     {
-                        rowData[i].nomor_meja = $"MEJA: {rowData[i].id_meja}";
+                        rowData[i].nomor_meja = "TAKEAWAY";
+                    }
+                    else
+                    {
+                        rowData[i].nomor_meja = "DINE IN: " + rowData[i].id_meja;
                     }
 
                     _listriwayat.Add(rowData[i]);
