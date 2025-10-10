@@ -36,6 +36,7 @@ public partial class DetailOrder : Popup
         public string ta_dinein { get; set; } = string.Empty;    
         public string mode_pesanan { get; set; } = string.Empty;
         public string id_order { get; set; } = string.Empty;
+        public string id_pesanan_detail { get; set; } = string.Empty;
         public string waktu_batal { get; set; } = "-";
         public string waktu_ready { get; set; } = "-";
         public string waktu_delivered { get; set; } = "-";
@@ -134,5 +135,29 @@ public partial class DetailOrder : Popup
     private async void TapClose_Tapped(object sender, TappedEventArgs e)
     {
         Close();
+    }
+
+    private async void B_Siap_Clicked(object sender, EventArgs e)
+    {
+
+
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+
+
+        var button = sender as Button;
+        if (button?.CommandParameter is list_order item)
+        {
+            string id_order = item.id_order;
+            string id_pesanan_detail = item.id_pesanan_detail;
+            System.Diagnostics.Debug.WriteLine($"ID ORDER: {id_order} \n ID_PESANAN_DETAIL: {id_pesanan_detail}");
+        }
+
+       
+
     }
 }

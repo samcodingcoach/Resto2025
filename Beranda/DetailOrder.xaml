@@ -25,7 +25,7 @@
                     <DataTemplate>
                         <Border  HorizontalOptions="Start" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
 
-                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
 
                                 <Border Grid.Column="0" VerticalOptions="Start" Grid.Row="0"  WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
                                     <Image Source="{Binding url_gambar}" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
@@ -62,7 +62,11 @@
                                     <Label Text="{Binding waktu_batal}" FontSize="Caption" TextColor="#ED0D58" FontFamily="FontBold"></Label>
                                 </StackLayout>
 
-
+                                <Grid ColumnDefinitions="*,*,*" Margin="0,10,0,0" ColumnSpacing="10" Grid.Row="3" Grid.ColumnSpan="3">
+                                    <Button x:Name="B_Siap" Clicked="B_Siap_Clicked" Text="SIAP DIAMBIL" TextColor="White" BackgroundColor="#1A86F2" Grid.Column="0"></Button>
+                                    <Button Text="SAJIKAN" TextColor="White" BackgroundColor="#52D356" Grid.Column="1"></Button>
+                                    <Button Text="BATAL" TextColor="White" BackgroundColor="#ED0D58" Grid.Column="2"></Button>
+                                </Grid>
 
                             </Grid>
                         </Border>
