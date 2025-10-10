@@ -235,15 +235,70 @@ public partial class DetailOrder : Popup
                 string id_order = item.id_order;
                 string id_pesanan_detail = item.id_pesanan_detail;
                 string ready = "3"; // Set ke 3 untuk batal
-
-                // Konfirmasi pembatalan
-                bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan pesanan ini?", "Ya", "Tidak");
-                if (confirm)
-                {
-                    
-                }
+                string id_user = Preferences.Get("ID_USER", "0");
+                string qty = item.qty.ToString();
+                string id_pesanan = item.id_pesanan;
+                string order_detail = item.id_order_detail;
+                
+                FormBatal.IsVisible = true;
+                
             }
 
         }
+    }
+
+
+
+    private async void simpan(string order_detail,string id_pesanan,string qty,string id_user,string status_dapur)
+    {
+        
+        var data = new Dictionary<string, string>
+        {
+            { "id_order_detail", order_detail },
+            { "id_pesanan", id_pesanan},
+            { "alasan" , E_AlasanBatal.Text}, 
+            { "qty" ,qty},
+            { "id_user", id_user  },
+            {"status_dapur",status_dapur}
+        };
+
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "dapur/batal.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+       if(responseObject?["status"] == "success")
+       {
+         
+              await Application.Current.MainPage.DisplayAlert("Informasi", responseObject?["message"], "OK");
+              FormBatal.IsVisible = false;
+              get_listorder();
+
+        }
+       else
+       {
+
+        }
+    }
+    private async void B_Proses_Clicked(object sender, EventArgs e)
+    {
+
+
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        // Konfirmasi pembatalan
+        bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan pesanan ini?", "Ya", "Tidak");
+        if (confirm)
+        {
+
+        }
+
     }
 }

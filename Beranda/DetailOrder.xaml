@@ -73,7 +73,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <Grid ColumnDefinitions="*,Auto,Auto" Grid.Row="2" ColumnSpacing="10">
+            <Grid ColumnDefinitions="*,Auto,Auto" Grid.Row="2" ColumnSpacing="10" x:Name="FormBatal" IsVisible="False">
                 <StackLayout Grid.Column="0" Spacing="5">
                     <Label Text="Alasan pembatalan" TextColor="#333" FontFamily="FontBold"></Label>
 
@@ -97,7 +97,7 @@
 
 
                 </StackLayout>
-                <Button Text="PROSES" Grid.Column="2" HeightRequest="50" VerticalOptions="End">
+                <Button Text="PROSES" x:Name="B_Proses" Clicked="B_Proses_Clicked" Grid.Column="2" HeightRequest="50" VerticalOptions="End">
                     
                 </Button>
             </Grid>
