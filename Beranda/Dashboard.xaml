@@ -112,22 +112,25 @@
                                 </Border.Shadow>
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10">
 
+                                  
+                                    
                                     <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
                                         <Label Text="{Binding kode_payment,StringFormat='Order #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
-                                        <StackLayout Orientation="Horizontal" Spacing="15">
+                                        <StackLayout Orientation="Horizontal" Spacing="10">
+                                            <Label Text="NO. ANTRI: " FontSize="Caption" FontFamily="FontBold" TextColor="#333" HorizontalTextAlignment="Center" 
+                                                        VerticalTextAlignment="Center"></Label>
+                                            <Label Text="{Binding nomor_antri}" TranslationX="-5" FontSize="Caption" FontFamily="FontBold" TextColor="#ED0D58" HorizontalTextAlignment="Center" 
+                                                        VerticalTextAlignment="Center"></Label>
                                             <Label Text="{Binding waktu_terima_jam}" FontSize="Caption"></Label>
                                             <Label Text="{Binding jumlah_menit_tampil}" FontSize="Caption" IsVisible="{Binding jumlah_menit_is_visible}"></Label>
                                         </StackLayout>
-
-
                                     </StackLayout>
-
 
                                     <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Center">
                                         <Label Text="{Binding total_item,StringFormat='Total item: {0}'}" HorizontalTextAlignment="End" FontFamily="FontBold"></Label>
                                     </StackLayout>
 
-                                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3" BackgroundColor="Gray" Opacity="0.1" Grid.Row="1"></BoxView>
+                                    <BoxView HeightRequest="0.5" Grid.ColumnSpan="3"  BackgroundColor="Gray" Opacity="0.1" Grid.Row="1"></BoxView>
 
                                     <Grid Grid.Row="2" ColumnDefinitions="*,*,*" Grid.ColumnSpan="3">
                                         <StackLayout Grid.Column="0" HorizontalOptions="Center" Spacing="5">

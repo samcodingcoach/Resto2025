@@ -43,6 +43,7 @@ public partial class Dashboard : ContentPage
         public int siap { get; set; } = 0;
         public int tersaji { get; set; } = 0;
         public int batal { get; set; } = 0;
+        public int nomor_antri { get; set; } = 0;
 
         // Hanya jam-menit dari waktu_terima (contoh: 14:07)
         public string waktu_terima_jam
