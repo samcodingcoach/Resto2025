@@ -44,6 +44,10 @@ public partial class DetailOrder : Popup
         public string warna_bg_ready { get; set; } = string.Empty;
         public string warna_tx_ready { get; set; } = string.Empty;
 
+        public string visible_btn_siap { get; set; } = "True";
+        public string visible_btn_sajikan { get; set; } = "True";
+        public string visible_btn_batal { get; set; } = "True";
+
     }
 
 
@@ -72,18 +76,25 @@ public partial class DetailOrder : Popup
                             produk.ready_string = "SIAP DIAMBIL";
                             produk.warna_tx_ready = "#1A86F2";
                             produk.warna_bg_ready = "#8AC1F8";
+                            produk.visible_btn_siap = "False";
                         }
                         else if (produk.ready == "2")
                         {
                             produk.ready_string = "DISAJIKAN";
                             produk.warna_tx_ready = "#52D356";
                             produk.warna_bg_ready = "#B3F1B5";
+                            produk.visible_btn_siap = "False";
+                            produk.visible_btn_sajikan = "False";
+
                         }
                         else if (produk.ready == "3")
                         {
                             produk.ready_string = "BATAL";
                             produk.warna_tx_ready = "#ED0D58";
                             produk.warna_bg_ready = "#EAA6BD";
+                            produk.visible_btn_siap = "False";
+                            produk.visible_btn_sajikan = "False";
+                            produk.visible_btn_batal = "False";
                         }
                         else if(produk.ready == "0")
                         {
