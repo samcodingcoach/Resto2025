@@ -9,7 +9,12 @@ public partial class DetailOrder : Popup
     private List<list_order> _listorder;
     string ID_ORDER = "0";
     string KODE_PAYMENT=string.Empty;
-   
+    string id_pesanan_detail = string.Empty;
+    string id_user = Preferences.Get("ID_USER", "0");
+    string qty_existing = string.Empty;
+    string id_pesanan = string.Empty;
+    string order_detail = string.Empty;
+    string status_dapur = string.Empty;
 
     public DetailOrder(string idOrder, string kodePayment)
     {
@@ -232,14 +237,15 @@ public partial class DetailOrder : Popup
 
             if (button.CommandParameter is list_order item)
             {
-                string id_order = item.id_order;
-                string id_pesanan_detail = item.id_pesanan_detail;
-                string ready = "3"; // Set ke 3 untuk batal
-                string id_user = Preferences.Get("ID_USER", "0");
-                string qty = item.qty.ToString();
-                string id_pesanan = item.id_pesanan;
-                string order_detail = item.id_order_detail;
-                
+             
+                id_pesanan_detail = item.id_pesanan_detail;
+                qty_existing = item.qty.ToString();
+                id_pesanan = item.id_pesanan;
+                order_detail = item.id_order_detail;
+                status_dapur = item.ready;
+
+    
+
                 FormBatal.IsVisible = true;
                 
             }
@@ -249,7 +255,7 @@ public partial class DetailOrder : Popup
 
 
 
-    private async void simpan(string order_detail,string id_pesanan,string qty,string id_user,string status_dapur)
+    private async void simpan()
     {
         
         var data = new Dictionary<string, string>
@@ -257,7 +263,7 @@ public partial class DetailOrder : Popup
             { "id_order_detail", order_detail },
             { "id_pesanan", id_pesanan},
             { "alasan" , E_AlasanBatal.Text}, 
-            { "qty" ,qty},
+            { "qty" ,E_Qty.Text},
             { "id_user", id_user  },
             {"status_dapur",status_dapur}
         };
@@ -280,7 +286,7 @@ public partial class DetailOrder : Popup
         }
        else
        {
-
+            await Application.Current.MainPage.DisplayAlert("Gagal", responseObject?["message"], "OK");
         }
     }
     private async void B_Proses_Clicked(object sender, EventArgs e)
@@ -293,11 +299,23 @@ public partial class DetailOrder : Popup
             await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
         }
 
+        // Validasi input qty harus berupa angka dan tidak boleh kosong
+        if (string.IsNullOrWhiteSpace(E_AlasanBatal.Text))
+        {
+            await Application.Current.MainPage.DisplayAlert("Validasi", "Alasan batal tidak boleh kosong.", "OK");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(E_Qty.Text) || !int.TryParse(E_Qty.Text, out int qty) || qty <= 0)
+        {
+            await Application.Current.MainPage.DisplayAlert("Validasi", "Qty harus berupa angka lebih dari 0.", "OK");
+            return;
+        }
+
         // Konfirmasi pembatalan
         bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan pesanan ini?", "Ya", "Tidak");
         if (confirm)
         {
-
+            simpan();
         }
 
     }

@@ -64,7 +64,7 @@
                                 <Grid ColumnDefinitions="*,*,*" Margin="0,10,0,0" ColumnSpacing="10" Grid.Row="3" Grid.ColumnSpan="3">
                                     <Button IsVisible="{Binding visible_btn_siap}" x:Name="B_Siap" Clicked="B_Siap_Clicked" CommandParameter="{Binding .}" Text="SIAP DIAMBIL" TextColor="White" BackgroundColor="#1A86F2" Grid.Column="0"></Button>
                                     <Button IsVisible="{Binding visible_btn_sajikan}" x:Name="B_Sajikan" Clicked="B_Sajikan_Clicked" CommandParameter="{Binding .}" Text="SAJIKAN" TextColor="White" BackgroundColor="#52D356" Grid.Column="1"></Button>
-                                    <Button IsVisible="{Binding visible_btn_batal}"  x:Name="B_Batal" Clicked="B_Batal_Clicked" Text="BATAL" TextColor="White" BackgroundColor="#ED0D58" Grid.Column="2"></Button>
+                                    <Button IsVisible="{Binding visible_btn_batal}"  x:Name="B_Batal" Clicked="B_Batal_Clicked" CommandParameter="{Binding .}" Text="BATAL" TextColor="White" BackgroundColor="#ED0D58" Grid.Column="2"></Button>
                                 </Grid>
 
                             </Grid>
