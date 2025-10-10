@@ -141,23 +141,77 @@ public partial class DetailOrder : Popup
     {
 
 
-        if (sender is Button image)
+        if (sender is Button button)
         {
-            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
-            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+            await button.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await button.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+
+            if (button.CommandParameter is list_order item)
+            {
+                string id_order = item.id_order;
+                string id_pesanan_detail = item.id_pesanan_detail;
+                string ready = "1"; // Set ke 1 untuk siap diambil
+
+               update_order(id_order, id_pesanan_detail, ready);
+            }
+
         }
 
+    }
 
 
-        var button = sender as Button;
-        if (button?.CommandParameter is list_order item)
+
+    private async void update_order(string s_id_order,string s_id_pesanan_detail,string ready)
+    {
+        //staffID sementara nanti ganti sama temp login
+        
+        var data = new Dictionary<string, string>
         {
-            string id_order = item.id_order;
-            string id_pesanan_detail = item.id_pesanan_detail;
-            System.Diagnostics.Debug.WriteLine($"ID ORDER: {id_order} \n ID_PESANAN_DETAIL: {id_pesanan_detail}");
-        }
+            { "id_order", s_id_order },
+            { "id_pesanan_detail", s_id_pesanan_detail },
+            { "ready", ready  }
+        };
 
-       
+        var jsonData = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+        var client = new HttpClient();
+        string ip = App.API_HOST + "dapur/order_update.php";
+
+        var response = await client.PostAsync(ip, jsonData);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseContent);
+
+        if (responseObject?["status"] == "success")
+        {        
+            await Application.Current.MainPage.DisplayAlert("Informasi", responseObject?["message"], "OK");
+        }
+        else
+        {
+            
+        }
+    }
+
+
+    private async void B_Sajikan_Clicked(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            await button.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await button.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+
+            if (button.CommandParameter is list_order item)
+            {
+                string id_order = item.id_order;
+                string id_pesanan_detail = item.id_pesanan_detail;
+                string ready = "2"; // Set ke 1 untuk siap diambil
+
+                update_order(id_order, id_pesanan_detail, ready);
+            }
+
+        }
+    }
+
+    private void B_Batal_Clicked(object sender, EventArgs e)
+    {
 
     }
 }
