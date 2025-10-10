@@ -37,6 +37,8 @@ public partial class DetailOrder : Popup
         public string mode_pesanan { get; set; } = string.Empty;
         public string id_order { get; set; } = string.Empty;
         public string id_pesanan_detail { get; set; } = string.Empty;
+        public string id_pesanan { get; set; } = string.Empty;
+        public string id_order_detail { get; set; } = string.Empty;
         public string waktu_batal { get; set; } = "-";
         public string waktu_ready { get; set; } = "-";
         public string waktu_delivered { get; set; } = "-";
@@ -163,7 +165,7 @@ public partial class DetailOrder : Popup
                 string id_pesanan_detail = item.id_pesanan_detail;
                 string ready = "1"; // Set ke 1 untuk siap diambil
 
-               update_order(id_order, id_pesanan_detail, ready);
+                update_order(id_order, id_pesanan_detail, ready);
             }
 
         }
@@ -221,8 +223,27 @@ public partial class DetailOrder : Popup
         }
     }
 
-    private void B_Batal_Clicked(object sender, EventArgs e)
+    private async void B_Batal_Clicked(object sender, EventArgs e)
     {
+        if (sender is Button button)
+        {
+            await button.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await button.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
 
+            if (button.CommandParameter is list_order item)
+            {
+                string id_order = item.id_order;
+                string id_pesanan_detail = item.id_pesanan_detail;
+                string ready = "3"; // Set ke 3 untuk batal
+
+                // Konfirmasi pembatalan
+                bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", "Apakah Anda yakin ingin membatalkan pesanan ini?", "Ya", "Tidak");
+                if (confirm)
+                {
+                    
+                }
+            }
+
+        }
     }
 }

@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Beranda.DetailOrder" 
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-             Color="Transparent" Size="990,550"
+             Color="Transparent" Size="990,550" CanBeDismissedByTappingOutsideOfPopup="False"
              >
     <Frame BackgroundColor="#F9F9F9" CornerRadius="15" Padding="0" BorderColor="Transparent">
-        <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="20">
+        <Grid RowDefinitions="Auto,*,Auto" Padding="20" RowSpacing="20">
 
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
                 <Image Source="back.png" Grid.Column="0" HeightRequest="26">
@@ -38,7 +38,6 @@
                                     <Label Text="Kuantitas / QTY" FontSize="Caption" Margin="0,12,0,0"></Label>
                                     <Label Text="Mode Pesanan" FontSize="Caption" Margin="0,0,0,0"></Label>
                                 </StackLayout>
-
 
                                 <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Start">
                                     <Border VerticalOptions="Center" StrokeThickness="0.1" StrokeShape="RoundRectangle 5" Background="{Binding warna_bg_ready}" Padding="12,5">
@@ -73,6 +72,35 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
+            <Grid ColumnDefinitions="*,Auto,Auto" Grid.Row="2" ColumnSpacing="10">
+                <StackLayout Grid.Column="0" Spacing="5">
+                    <Label Text="Alasan pembatalan" TextColor="#333" FontFamily="FontBold"></Label>
+
+
+                    <Border  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" HeightRequest="50" Background="White" Padding="10">
+                        <Entry x:Name="E_AlasanBatal" Placeholder="Masukkan alasan pembatalan..." 
+                               BackgroundColor="Transparent" FontSize="Body" TextColor="#333" FontFamily="FontRegular" />
+                    </Border>
+
+
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Spacing="5">
+                    <Label Text="Jumlah Batal" TextColor="#333" FontFamily="FontBold"></Label>
+
+
+                    <Border  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" HeightRequest="50" Background="White" Padding="10">
+                        <Entry x:Name="E_Qty" Placeholder="Masukkan jumlah batal" Keyboard="Numeric"
+                               BackgroundColor="Transparent" FontSize="Body" TextColor="#333" FontFamily="FontRegular" />
+                    </Border>
+
+
+                </StackLayout>
+                <Button Text="PROSES" Grid.Column="2" HeightRequest="50" VerticalOptions="End">
+                    
+                </Button>
+            </Grid>
 
         </Grid>
     </Frame>
