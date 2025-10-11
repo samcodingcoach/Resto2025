@@ -78,7 +78,14 @@ public partial class DetailOrder : Popup
 
                     foreach (var produk in rowData)
                     {
-                        if (produk.ready == "1")
+                        if (produk.ready == "0")
+                        {
+                            produk.ready_string = "DALAM PROSES";
+                            produk.warna_tx_ready = "Grey";
+                            produk.warna_bg_ready = "LightGrey";
+                            
+                        }
+                        else if (produk.ready == "1")
                         {
                             produk.ready_string = "SIAP DIAMBIL";
                             produk.warna_tx_ready = "#1A86F2";
@@ -93,6 +100,7 @@ public partial class DetailOrder : Popup
                             produk.visible_btn_siap = "False";
                             produk.visible_btn_sajikan = "False";
 
+
                         }
                         else if (produk.ready == "3")
                         {
@@ -103,12 +111,7 @@ public partial class DetailOrder : Popup
                             produk.visible_btn_sajikan = "False";
                             produk.visible_btn_batal = "False";
                         }
-                        else if(produk.ready == "0")
-                        {
-                            produk.ready_string = "DALAM PROSES";
-                            produk.warna_tx_ready = "Grey";
-                            produk.warna_bg_ready = "LightGrey";
-                        }
+                       
 
                         if (produk.ta_dinein == "1")
                         {
