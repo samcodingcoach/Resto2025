@@ -33,6 +33,8 @@ public partial class Dashboard : ContentPage
         get_listorder();
         lv_invoice.ItemsSource = null;
         get_listinvoice();
+        lv_batal.ItemsSource = null;
+        get_listbatal();
     }
 
     public class list_order
@@ -154,14 +156,20 @@ public partial class Dashboard : ContentPage
 
     public class list_batal
     {
-        public string id_batal { get; set; } = string.Empty;
+        public string id_batal { get; } = string.Empty;
         public string waktu { get; set; } = string.Empty;
-        public string alasan { get; set; } = string.Empty;
-        public int qty { get; set; } = 0;
-        public string status_dapur { get; set; } = string.Empty;
+        public string alasan { get; } = string.Empty;
+        public int qty { get; } = 0;
+        public string status_dapur { get; } = string.Empty;
         public string ta_dinein { get; set; } = string.Empty;
         public double harga_jual { get; set; } = 0;
+        public string harga_jual_string { get; set; } = string.Empty;
         public string kode_produk { get; set; } = string.Empty;
+        public string url_gambar
+        {
+            get => $"{App.IMAGE_HOST}/{kode_produk}.jpg";
+          
+        }
         public string nama_produk { get; set; } = string.Empty;
         public string nama_kategori { get; set; } = string.Empty;
         public string id_meja { get; set; } = string.Empty;
@@ -185,7 +193,7 @@ public partial class Dashboard : ContentPage
 
             for (int i = 0; i < rowData.Count; i++)
             {
-
+                rowData[i].harga_jual_string = FormatCurrency(rowData[i].harga_jual);
                 _listbatal.Add(rowData[i]);
             }
 
@@ -339,5 +347,10 @@ public partial class Dashboard : ContentPage
         {
 
         }
+    }
+
+    private void B_More_Clicked(object sender, EventArgs e)
+    {
+
     }
 }
