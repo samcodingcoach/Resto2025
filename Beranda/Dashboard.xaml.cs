@@ -1,6 +1,7 @@
 using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using CommunityToolkit.Maui.Views;
 namespace Resto2025.Beranda;
 
@@ -158,9 +159,9 @@ public partial class Dashboard : ContentPage
     {
         public string id_batal { get; } = string.Empty;
         public string waktu { get; set; } = string.Empty;
-        public string alasan { get; } = string.Empty;
-        public int qty { get; } = 0;
-        public string status_dapur { get; } = string.Empty;
+        public string alasan { get; set; } = string.Empty;
+        public int qty { get; set; } = 0;
+        public string status_dapur { get; set; } = string.Empty;
         public string ta_dinein { get; set; } = string.Empty;
         public double harga_jual { get; set; } = 0;
         public string harga_jual_string { get; set; } = string.Empty;
@@ -358,6 +359,7 @@ public partial class Dashboard : ContentPage
         {
             string nm_produk = item.nama_produk;
             string alasan = item.alasan;
+            System.Diagnostics.Debug.WriteLine($"Alasan: {alasan}");
             string waktu = item.waktu;
             string qty = item.qty.ToString();
             string harga = item.harga_jual_string;
@@ -366,13 +368,23 @@ public partial class Dashboard : ContentPage
             string kode_payment = item.kode_payment;
             if (item.ta_dinein == "0")
             {
-                mode_pesanan = $"DINE-IN{meja}";
+                mode_pesanan = $"DINE-IN#{meja}";
             }
             else
             {
                 mode_pesanan = "TAKEAWAY";
             }
-            //memanggil popup  DetailBatal.xaml dan mengirim data ke popup (nm_produk,alasan,waktu,harga,mode_pesanan,kode_payment)
+            
+            //memanggil popup DetailBatal.xaml dan mengirim data ke popup
+            try
+            {
+                var popup = new DetailBatal(nm_produk, alasan, waktu, harga, mode_pesanan, kode_payment);
+                await this.ShowPopupAsync(popup);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error showing DetailBatal popup: {ex.Message}");
+            }
         }
 
     }

@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Beranda.DetailBatal"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-             Color="Transparent" Size="600,450" CanBeDismissedByTappingOutsideOfPopup="False"
+             Color="Transparent" Size="600,750" CanBeDismissedByTappingOutsideOfPopup="False"
              >
 
-    <Frame BackgroundColor="#F9F9F9" CornerRadius="15" Padding="0" BorderColor="Transparent">
+    <Frame BackgroundColor="#F9F9F9" CornerRadius="15" Padding="20" BorderColor="Transparent">
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" Padding="0" RowSpacing="10">
 
             <!-- Header -->
@@ -78,19 +78,27 @@
 
             <StackLayout Grid.Row="5" Spacing="15" VerticalOptions="EndAndExpand">
 
-                <Border StrokeThickness="0.1" StrokeShape="RoundRectangle 8" 
-                    Background="#FF2D2D" Padding="20" >
+                <Border StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="#FF2D2D" Padding="20" >
                     <Border.Shadow>
                         <Shadow Brush="#333" Offset="1,1" Radius="10" Opacity="0.1"/>
                     </Border.Shadow>
-                    <StackLayout Spacing="10">
-                        <StackLayout Orientation="Horizontal" Spacing="10">
-                            <Label Text="Alasan Pembatalan" FontSize="Body" FontFamily="FontBold" 
-                               TextColor="White"/>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Image Source="warning.png" HeightRequest="60" WidthRequest="60" Grid.Column="1" VerticalOptions="Center" />
+
+
+
+                        <StackLayout Spacing="10">
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <Label Text="Alasan Pembatalan" FontSize="Body" FontFamily="FontBold" TextColor="White"/>
+                            </StackLayout>
+                            <Label Text="Permintaan pelanggan - Menunggu terlalu lama" FontSize="Caption" TextColor="White" x:Name="L_Alasan"/>
                         </StackLayout>
-                        <Label Text="Permintaan pelanggan - Menunggu terlalu lama" FontSize="Caption" 
-                           TextColor="White" x:Name="L_Alasan"/>
-                    </StackLayout>
+
+                    </Grid>
+                    
+                    
+                   
                 </Border>
 
             </StackLayout>
