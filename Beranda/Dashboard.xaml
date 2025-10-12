@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.Beranda.Dashboard" NavigationPage.HasNavigationBar="False" BackgroundColor="#f9f9f9"
              >
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="20" RowSpacing="10">
+    <Grid RowDefinitions="Auto,Auto,Auto,*,*" Padding="20" RowSpacing="10">
 
         <StackLayout Grid.Row="0" Spacing="5">
             <Label Text="Ringkasan Penjualan Hari Ini" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
             <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
         </StackLayout>
-        
+
         <FlexLayout Direction="Row" Grid.Row="1" Wrap="Wrap" AlignItems="Start" >
             <Border WidthRequest="240"  StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
                 <Border.Shadow>
@@ -75,7 +75,7 @@
                     <Image Source="jumlah_transksi.png" Grid.Column="1" HeightRequest="30" TranslationX="-5"></Image>
                 </Grid>
             </Border>
-<!--Total Transaksi-->
+            <!--Total Transaksi-->
             <Border  WidthRequest="240" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15" Margin="0,0,10,10">
                 <Border.Shadow>
                     <Shadow Brush="#333" Offset="1,1" Radius="1" Opacity="0.1" />
@@ -97,11 +97,11 @@
             </StackLayout>
             <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
         </StackLayout>
-<!--daftar orderan-->
+        <!--daftar orderan-->
         <Grid ColumnDefinitions="0.50*,0.50*" ColumnSpacing="10" Grid.Row="3">
 
-           
-<!--listview orderan-->
+
+            <!--listview orderan-->
             <ListView HasUnevenRows="True" Grid.Column="0" x:Name="lv_dapurorder" SeparatorVisibility="None" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -112,8 +112,8 @@
                                 </Border.Shadow>
                                 <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10">
 
-                                  
-                                    
+
+
                                     <StackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Spacing="5">
                                         <Label Text="{Binding kode_payment,StringFormat='Order #{0}'}" FontFamily="FontBold" TextColor="#333"></Label>
                                         <StackLayout Orientation="Horizontal" Spacing="10">
@@ -155,7 +155,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-<!--listview invoice-->
+            <!--listview invoice-->
 
             <ListView Grid.Column="1" HasUnevenRows="True"  x:Name="lv_invoice" SeparatorVisibility="None" SelectionMode="None">
                 <ListView.ItemTemplate>
@@ -197,6 +197,50 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
+
+        </Grid>
+
+        <Grid ColumnDefinitions="0.50*,0.50*" RowDefinitions="Auto,*" ColumnSpacing="10" RowSpacing="10"  Grid.Row="4">
+            <StackLayout Grid.Row="0" Spacing="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Daftar Order Batal" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>
+                    <!--<Label Text="Daftar Invoice" HorizontalOptions="EndAndExpand" FontSize="Title" FontFamily="FontBold" TextColor="#333"></Label>-->
+                </StackLayout>
+                <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1"></BoxView>
+            </StackLayout>
+
+            <Border Margin="0,0,0,8" Grid.Row="1" Grid.Column="0" VerticalOptions="Start" StrokeThickness="0.1" StrokeShape="RoundRectangle 8" Background="White" Padding="15">
+                <Border.Shadow>
+                    <Shadow Brush="#333" Offset="1,1" Radius="5" Opacity="0.1" />
+                </Border.Shadow>
+
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                    <Border Grid.Column="0" VerticalOptions="Center" Grid.Row="0"  WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                        <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" >
+                        <Label Text="Makanan"  FontSize="Caption" TextColor="#333"/>
+                        <Label Text="Nasi Pecel Enak Banget" TextColor="#075E54" LineBreakMode="TailTruncation" FontFamily="FontBold" MaxLines="1"/>
+
+                        <HorizontalStackLayout Spacing="5" TranslationY="2">
+                            <Image Source="time.png" HeightRequest="14"></Image>
+                            <Label Text="14:23" FontSize="Caption"></Label>
+
+                            <Image Margin="15,0,0,0" Source="order.png" HeightRequest="14"></Image>
+                            <Label Text="14:23" FontSize="Caption"></Label>
+
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <StackLayout Grid.Column="2" Grid.Row="0" Spacing="5">
+                        <Label Text="- Rp 50.000" FontSize="Subtitle" TextColor="#FF2D2D" FontFamily="FontBold" ></Label>
+                        <Button Text="More Info" FontSize="Caption" HeightRequest="30" WidthRequest="110" ImageSource="more_white.png" ContentLayout="Right, 5" CornerRadius="5" TextColor="White" BackgroundColor="#297FE0" ></Button>
+                    </StackLayout>
+                    
+                </Grid>
+                
+            </Border>
 
 
         </Grid>

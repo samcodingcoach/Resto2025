@@ -204,6 +204,7 @@ public partial class DetailOrder : Popup
         if (responseObject?["status"] == "success")
         {        
             await Application.Current.MainPage.DisplayAlert("Informasi", responseObject?["message"], "OK");
+            get_listorder();
         }
         else
         {
