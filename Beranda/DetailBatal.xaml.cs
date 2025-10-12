@@ -1,7 +1,9 @@
+using CommunityToolkit.Maui.Views;
+
 namespace Resto2025.Beranda;
 
-public partial class DetailBatal : ContentPage
-{
+public partial class DetailBatal : Popup
+{	
 	public DetailBatal()
 	{
 		InitializeComponent();

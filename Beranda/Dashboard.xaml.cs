@@ -255,16 +255,11 @@ public partial class Dashboard : ContentPage
         }
     }
 
-    
-
     private string FormatCurrency(double amount)
     {
         // Format the amount as Indonesian Rupiah with thousand separators
         return "Rp " + amount.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
     }
-
-
-
 
     private async void get_listorder()
     {
@@ -349,8 +344,36 @@ public partial class Dashboard : ContentPage
         }
     }
 
-    private void B_More_Clicked(object sender, EventArgs e)
+    private async void B_More_Clicked(object sender, EventArgs e)
     {
+
+        if (sender is Button image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        var button = sender as Button;
+        if (button?.CommandParameter is list_batal item)
+        {
+            string nm_produk = item.nama_produk;
+            string alasan = item.alasan;
+            string waktu = item.waktu;
+            string qty = item.qty.ToString();
+            string harga = item.harga_jual_string;
+            string meja = item.id_meja;
+            string mode_pesanan = string.Empty;
+            string kode_payment = item.kode_payment;
+            if (item.ta_dinein == "0")
+            {
+                mode_pesanan = $"DINE-IN{meja}";
+            }
+            else
+            {
+                mode_pesanan = "TAKEAWAY";
+            }
+            //memanggil popup  DetailBatal.xaml dan mengirim data ke popup (nm_produk,alasan,waktu,harga,mode_pesanan,kode_payment)
+        }
 
     }
 }
