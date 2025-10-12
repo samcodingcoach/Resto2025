@@ -215,7 +215,7 @@
                     <Shadow Brush="#333" Offset="1,1" Radius="5" Opacity="0.1" />
                 </Border.Shadow>
 
-                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" RowSpacing="5" ColumnSpacing="10">
                     <Border Grid.Column="0" VerticalOptions="Center" Grid.Row="0"  WidthRequest="50" HeightRequest="50" StrokeShape="RoundRectangle 8" StrokeThickness="0">
                         <Image Source="pecel.jpg" Aspect="AspectFill" HeightRequest="50" WidthRequest="50"/>
                     </Border>
@@ -237,9 +237,11 @@
                         <Label Text="- Rp 50.000" FontSize="Subtitle" TextColor="#FF2D2D" FontFamily="FontBold" ></Label>
                         <Button Text="More Info" FontSize="Caption" HeightRequest="30" WidthRequest="110" ImageSource="more_white.png" ContentLayout="Right, 5" CornerRadius="5" TextColor="White" BackgroundColor="#297FE0" ></Button>
                     </StackLayout>
-                    
+                    <BoxView HeightRequest="0.5" BackgroundColor="Gray" Opacity="0.1" Grid.Row="1" Grid.ColumnSpan="3"></BoxView>
                 </Grid>
+
                 
+
             </Border>
 
 
