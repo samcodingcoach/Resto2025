@@ -8,6 +8,7 @@ public partial class Dashboard : ContentPage
 {
     string ID_USER = Preferences.Get("ID_USER", string.Empty);
     private List<list_order> _listorder; private List<list_invoice> _listinvoice;
+    private List<list_batal> _listbatal; 
     public Dashboard()
     {
         InitializeComponent();
@@ -19,8 +20,9 @@ public partial class Dashboard : ContentPage
       
 
         _listinvoice = new List<list_invoice>();
+        _listbatal = new List<list_batal>();
 
-      
+
     }
 
     protected override void OnAppearing()
@@ -146,6 +148,55 @@ public partial class Dashboard : ContentPage
         public double tunai { get; set; } = 0;
         public int jumlah_transaksi { get; set; } = 0;
 
+    }
+
+    
+
+    public class list_batal
+    {
+        public string id_batal { get; set; } = string.Empty;
+        public string waktu { get; set; } = string.Empty;
+        public string alasan { get; set; } = string.Empty;
+        public int qty { get; set; } = 0;
+        public string status_dapur { get; set; } = string.Empty;
+        public string ta_dinein { get; set; } = string.Empty;
+        public double harga_jual { get; set; } = 0;
+        public string kode_produk { get; set; } = string.Empty;
+        public string nama_produk { get; set; } = string.Empty;
+        public string nama_kategori { get; set; } = string.Empty;
+        public string id_meja { get; set; } = string.Empty;
+        public string id_tagihan { get; set; } = string.Empty;
+        public string kode_payment { get; set; } = string.Empty;
+    }
+
+    private async void get_listbatal()
+    {
+        string url = App.API_HOST + "dapur/list_batal.php";
+        HttpClient client = new HttpClient();
+        HttpResponseMessage response = await client.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            string json = await response.Content.ReadAsStringAsync();
+            List<list_batal> rowData = JsonConvert.DeserializeObject<List<list_batal>>(json);
+
+            _listbatal.Clear(); // Hapus list sebelum diisi
+
+
+            for (int i = 0; i < rowData.Count; i++)
+            {
+
+                _listbatal.Add(rowData[i]);
+            }
+
+            //total = rowData.Count;
+            lv_batal.ItemsSource = _listbatal;
+
+        }
+        else
+        {
+
+        }
     }
 
     private async void get_summary()
