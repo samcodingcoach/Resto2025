@@ -189,7 +189,7 @@ public partial class Dashboard : ContentPage
             string json = await response.Content.ReadAsStringAsync();
             List<list_batal> rowData = JsonConvert.DeserializeObject<List<list_batal>>(json);
 
-            _listbatal.Clear(); // Hapus list sebelum diisi
+            _listbatal.Clear();
 
 
             for (int i = 0; i < rowData.Count; i++)
@@ -198,9 +198,13 @@ public partial class Dashboard : ContentPage
                 _listbatal.Add(rowData[i]);
             }
 
-            //total = rowData.Count;
+            int total = rowData.Count;
             lv_batal.ItemsSource = _listbatal;
-
+            if(total>0) 
+            {
+              FrameBorder_Batal.IsVisible = true;
+            }
+           
         }
         else
         {
