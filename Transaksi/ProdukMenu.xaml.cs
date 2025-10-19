@@ -1002,7 +1002,7 @@ public partial class ProdukMenu : ContentPage
             List<string> nama = JsonConvert.DeserializeObject<List<string>>(json);
 
             Picker_Kategori.ItemsSource = nama;
-            System.Diagnostics.Debug.WriteLine("Load Kategori Menu Berhasil");
+           
         }
         else
         {
