@@ -27,6 +27,41 @@ public partial class Print1 : ContentPage
        
     }
 
+    public class list_struk
+    {
+        public string kode_payment { get; set; } = string.Empty;
+        public string id_pesanan { get; set; } = string.Empty; 
+        public string id_tagihan { get; set; } = string.Empty;
+        public string kategori { get; set; } = string.Empty;
+        public string nama_konsumen { get; set; } = string.Empty; // nama konsumen
+        public string tanggal_payment { get; set; } = string.Empty;
+        public string kasir { get; set; } = string.Empty;
+       
+        public double grand_total { get; set; } = 0;
+        public double jumlah_dibayarkan { get; set; } = 0;
+        public double kembalian { get; set; } = 0;
+        public double subtotal { get; set; } = 0;
+        public double packing { get; set; } = 0;
+        public double service { get; set; } = 0;
+        public double promo { get; set; } = 0;
+        public double ppn { get; set; } = 0;
+        public double nomor_antri { get; set; } = 0;
+        public string mode_pesanan { get; set; } = string.Empty;
+        public string nilai_diskon { get; set; } = string.Empty;
+        public double diskon { get; set; } = 0;
+
+
+        //detail produk
+        public string nama_produk { get; set; } = string.Empty;
+        public double harga { get; set; } = 0;
+        public double qty { get; set; } = 0;
+        public double subtotal_produk { get; set; } = 0;
+        public string sub_mode_pesanan { get; set; } = string.Empty;
+
+
+    }
+
+
     public string AlignRight(string label, string value, int totalLength = 32)
     {
         int spacing = totalLength - (label.Length + value.Length);
@@ -137,9 +172,11 @@ public partial class Print1 : ContentPage
         }
     }
 
+
+#endif
+
     private async void Button_Clicked(object sender, EventArgs e)
     {
         await PrintReceipt();
     }
-#endif
 }
