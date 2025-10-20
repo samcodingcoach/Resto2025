@@ -1732,8 +1732,7 @@ public partial class ProdukMenu : ContentPage
             switch (ID_BAYAR)
             {
                 case "1":
-                    // Panggil ProsesDanSimpanTransaksiAsync dan simpan kode pembayaran yang dikembalikan
-                await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, async (uangDiterima) => await ProsesDanSimpanTransaksiAsync(uangDiterima)));
+                    await this.ShowPopupAsync(new MetodePembayaran.Tunai_Modal(this.grandTotalFinal, async (uangDiterima) => await ProsesDanSimpanTransaksiAsync(uangDiterima)));
                     break;
 
                 case "2":
@@ -1908,8 +1907,9 @@ public partial class ProdukMenu : ContentPage
         }
     }
 
-    private async Task ProsesDanSimpanTransaksiAsync(double uangDiterima, MetodePembayaran.Qris_Modal qrisModal = null)
+    private async Task<string> ProsesDanSimpanTransaksiAsync(double uangDiterima, MetodePembayaran.Qris_Modal qrisModal = null)
     {
+        string kodePaymentResult = null;
 
         // 1. Kumpulkan data untuk detail pembayaran
         var pembayaranDetail = new ProsesPembayaranDetailPayload
@@ -2029,7 +2029,11 @@ public partial class ProdukMenu : ContentPage
                             });
                         }
                     }
-                    KODE_PAYMENT_BANK = responseObject["kode_payment"];
+                    if (responseObject != null && responseObject.ContainsKey("kode_payment"))
+                    {
+                        KODE_PAYMENT_BANK = responseObject["kode_payment"]; // reuse for any payment type
+                        kodePaymentResult = KODE_PAYMENT_BANK;
+                    }
                     await DisplayAlert("Sukses", successMessage, "OK");
 
                     HapusPesananSementara();
@@ -2072,6 +2076,8 @@ public partial class ProdukMenu : ContentPage
         {
            // await DisplayAlert("Error Proses Dan Simpan", $"Terjadi kesalahan jaringan: {ex.Message}", "OK");
         }
+
+        return kodePaymentResult;
     }
 
     private async Task SimpanSebagaiInvoiceAsync()

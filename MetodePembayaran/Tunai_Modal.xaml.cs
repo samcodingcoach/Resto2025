@@ -1,15 +1,17 @@
 using CommunityToolkit.Maui.Views;
+using Resto2025.Struk;
+using System.Threading.Tasks;
 
 namespace Resto2025.MetodePembayaran;
 
 public partial class Tunai_Modal : Popup
 {
-    private readonly Func<double, Task> _onPaymentSuccessCallback;
+    private readonly Func<double, Task<string>> _onPaymentSuccessCallback;
     private double totalBelanja = 0;
     private double kembalian = 0;
     private double uangKonsumenValue = 0;
     private string statusBayar = "0";
-    public Tunai_Modal(double totalBelanja, Func<double, Task> onPaymentSuccessCallback)
+    public Tunai_Modal(double totalBelanja, Func<double, Task<string>> onPaymentSuccessCallback)
     {
         InitializeComponent();
         this.totalBelanja = totalBelanja;
@@ -88,8 +90,12 @@ public partial class Tunai_Modal : Popup
     {
         if (_onPaymentSuccessCallback != null)
         {
-            // Panggil callback sambil mengirimkan nilai uang yang diinput
-            await _onPaymentSuccessCallback(this.uangKonsumenValue);
+            var kode = await _onPaymentSuccessCallback(this.uangKonsumenValue);
+            if (!string.IsNullOrWhiteSpace(kode))
+            {
+                var printer = new Print1();
+                await printer.PrintByKodeAsync(kode);
+            }
         }
         await CloseAsync();
     }

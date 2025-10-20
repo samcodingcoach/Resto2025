@@ -16,6 +16,7 @@ namespace Resto2025.Struk;
 public partial class Print1 : ContentPage
 {
     string kode_payment = string.Empty;
+    private bool _autoPrinted = false;
 #if ANDROID
     private static readonly UUID SPP_UUID = UUID.FromString("00001101-0000-1000-8000-00805f9b34fb");
 #endif
@@ -26,6 +27,11 @@ public partial class Print1 : ContentPage
         //panggil tes print
 
        
+    }
+
+    public Print1(string kodePayment) : this()
+    {
+        kode_payment = kodePayment ?? string.Empty;
     }
 
     public class ApiResponse
@@ -102,14 +108,14 @@ public partial class Print1 : ContentPage
                 }
                 else
                 {
-                    await DisplayAlert("Error", "Gagal mengambil data struk", "OK");
+                    await ShowAlert("Error", "Gagal mengambil data struk");
                     return null;
                 }
             }
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Error fetching data: {ex.Message}", "OK");
+            await ShowAlert("Error", $"Error fetching data: {ex.Message}");
             return null;
         }
     }
@@ -118,7 +124,7 @@ public partial class Print1 : ContentPage
     {
         if (receiptData == null)
         {
-            await DisplayAlert("Error", "Data struk tidak tersedia", "OK");
+            await ShowAlert("Error", "Data struk tidak tersedia");
             return;
         }
 
@@ -162,18 +168,17 @@ public partial class Print1 : ContentPage
         if (header.promo > 0)
             strukBuilder.Append(AlignRight("Promo", "-" + FormatNominal(header.promo)) + "\n");
         
-        if (header.diskon > 0)
-            strukBuilder.Append(AlignRight("Diskon", "-" + FormatNominal(header.diskon)) + "\n");
+      
 
         strukBuilder.Append(
             "\n--------------------------------\n" +
             "\x1B\x21\x08" + "TOTAL HARGA\n" +
             "\x1B\x61\x01" +
-            "\x1D\x21\x11" + FormatNominal(header.grand_total) + "\n" +
+            "\x1D\x21\x11" + FormatNominal(header.jumlah_dibayarkan) + "\n" +
             "\x1D\x21\x00" +
             "\x1B\x61\x00" +
             "--------------------------------\n" +
-            AlignRight(header.kategori, FormatNominal(header.jumlah_dibayarkan)) + "\n" +
+            AlignRight(header.kategori, FormatNominal(header.grand_total)) + "\n" +
             AlignRight("Kembalian", FormatNominal(header.kembalian)) + "\n" +
             $"Kasir: {header.kasir}\n" +
             $"Konsumen: {header.nama_konsumen}\n" +
@@ -188,8 +193,32 @@ public partial class Print1 : ContentPage
 #if ANDROID
         await Print("RPP02N", buffer);
 #else
-        await DisplayAlert("Error", "Bluetooth hanya didukung di Android!", "OK");
+        await ShowAlert("Error", "Bluetooth hanya didukung di Android!");
 #endif
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (!_autoPrinted && !string.IsNullOrWhiteSpace(kode_payment))
+        {
+            _autoPrinted = true;
+            var receiptData = await FetchReceiptData(kode_payment);
+            if (receiptData != null)
+            {
+                await PrintReceipt(receiptData);
+            }
+        }
+    }
+
+    public async Task PrintByKodeAsync(string kodePayment)
+    {
+        if (string.IsNullOrWhiteSpace(kodePayment)) return;
+        var receiptData = await FetchReceiptData(kodePayment);
+        if (receiptData != null)
+        {
+            await PrintReceipt(receiptData);
+        }
     }
 
 #if ANDROID
@@ -198,14 +227,14 @@ public partial class Print1 : ContentPage
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.DefaultAdapter;
         if (bluetoothAdapter == null || !bluetoothAdapter.IsEnabled)
         {
-            await DisplayAlert("Error", "Bluetooth tidak tersedia atau belum diaktifkan.", "OK");
+            await ShowAlert("Error", "Bluetooth tidak tersedia atau belum diaktifkan.");
             return;
         }
 
         BluetoothDevice device = bluetoothAdapter.BondedDevices?.FirstOrDefault(bd => bd.Name == deviceName);
         if (device == null)
         {
-            await DisplayAlert("Error", "Printer tidak ditemukan.", "OK");
+            await ShowAlert("Error", "Printer tidak ditemukan.");
             return;
         }
 
@@ -230,7 +259,7 @@ public partial class Print1 : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await ShowAlert("Error", ex.Message);
         }
     }
 
@@ -241,7 +270,7 @@ public partial class Print1 : ContentPage
     {
         if (string.IsNullOrEmpty(kode_payment))
         {
-            await DisplayAlert("Error", "Kode payment tidak tersedia", "OK");
+            await ShowAlert("Error", "Kode payment tidak tersedia");
             return;
         }
 
@@ -249,6 +278,26 @@ public partial class Print1 : ContentPage
         if (receiptData != null)
         {
             await PrintReceipt(receiptData);
+        }
+    }
+
+    private async Task ShowAlert(string title, string message)
+    {
+        try
+        {
+            var page = Application.Current?.MainPage;
+            if (page != null)
+            {
+                await page.DisplayAlert(title, message, "OK");
+            }
+            else
+            {
+                Debug.WriteLine($"ALERT [{title}]: {message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to show alert: {ex.Message}");
         }
     }
 
