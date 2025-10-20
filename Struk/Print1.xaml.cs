@@ -15,6 +15,7 @@ namespace Resto2025.Struk;
 
 public partial class Print1 : ContentPage
 {
+    string kode_payment = string.Empty;
 #if ANDROID
     private static readonly UUID SPP_UUID = UUID.FromString("00001101-0000-1000-8000-00805f9b34fb");
 #endif
@@ -179,4 +180,6 @@ public partial class Print1 : ContentPage
     {
         await PrintReceipt();
     }
+
+
 }
