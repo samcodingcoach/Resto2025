@@ -28,38 +28,49 @@ public partial class Print1 : ContentPage
        
     }
 
-    public class list_struk
+    public class ApiResponse
     {
-        public string kode_payment { get; set; } = string.Empty;
-        public string id_pesanan { get; set; } = string.Empty; 
-        public string id_tagihan { get; set; } = string.Empty;
-        public string kategori { get; set; } = string.Empty;
-        public string nama_konsumen { get; set; } = string.Empty; // nama konsumen
-        public string tanggal_payment { get; set; } = string.Empty;
-        public string kasir { get; set; } = string.Empty;
-       
-        public double grand_total { get; set; } = 0;
-        public double jumlah_dibayarkan { get; set; } = 0;
-        public double kembalian { get; set; } = 0;
-        public double subtotal { get; set; } = 0;
-        public double packing { get; set; } = 0;
-        public double service { get; set; } = 0;
-        public double promo { get; set; } = 0;
-        public double ppn { get; set; } = 0;
-        public double nomor_antri { get; set; } = 0;
-        public string mode_pesanan { get; set; } = string.Empty;
-        public string nilai_diskon { get; set; } = string.Empty;
-        public double diskon { get; set; } = 0;
+        public bool success { get; set; }
+        public Receipt receipt { get; set; }
+    }
 
+    public class Receipt
+    {
+        public Header header { get; set; }
+        public List<ReceiptItem> items { get; set; }
+    }
 
-        //detail produk
-        public string nama_produk { get; set; } = string.Empty;
-        public double harga { get; set; } = 0;
-        public double qty { get; set; } = 0;
-        public double subtotal_produk { get; set; } = 0;
-        public string sub_mode_pesanan { get; set; } = string.Empty;
+    public class Header
+    {
+        public string kode_payment { get; set; }
+        public int id_pesanan { get; set; }
+        public int? id_tagihan { get; set; }
+        public string kategori { get; set; }
+        public string nama_lengkap { get; set; }
+        public string tanggal_payment { get; set; }
+        public string kasir { get; set; }
+        public string nama_konsumen { get; set; }
+        public double grand_total { get; set; }
+        public double jumlah_dibayarkan { get; set; }
+        public double kembalian { get; set; }
+        public double subtotal { get; set; }
+        public double packing { get; set; }
+        public double service { get; set; }
+        public double promo { get; set; }
+        public double ppn { get; set; }
+        public string nilai_diskon { get; set; }
+        public double diskon { get; set; }
+        public string mode_pesanan { get; set; }
+        public int nomor_antri { get; set; }
+    }
 
-
+    public class ReceiptItem
+    {
+        public string nama_produk { get; set; }
+        public int qty { get; set; }
+        public string mode_pesanan { get; set; }
+        public double harga { get; set; }
+        public double subtotal_produk { get; set; }
     }
 
 
@@ -75,50 +86,100 @@ public partial class Print1 : ContentPage
         return new string(' ', padding) + text + new string(' ', padding);
     }
 
-    public async Task PrintReceipt()
+    public async Task<Receipt> FetchReceiptData(string kodePayment)
     {
-        StringBuilder strukBuilder = new StringBuilder();
+        try
+        {
+            string url = App.API_HOST + "struk/print1.php?kode=" + kodePayment;
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetStringAsync(url);
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(response);
+                
+                if (apiResponse != null && apiResponse.success)
+                {
+                    return apiResponse.receipt;
+                }
+                else
+                {
+                    await DisplayAlert("Error", "Gagal mengambil data struk", "OK");
+                    return null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Error fetching data: {ex.Message}", "OK");
+            return null;
+        }
+    }
 
-        // Helper untuk format nominal
-        string FormatNominal(decimal value) => value.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
+    public async Task PrintReceipt(Receipt receiptData)
+    {
+        if (receiptData == null)
+        {
+            await DisplayAlert("Error", "Data struk tidak tersedia", "OK");
+            return;
+        }
+
+        StringBuilder strukBuilder = new StringBuilder();
+        var header = receiptData.header;
+
+        string FormatNominal(double value) => value.ToString("N0", new System.Globalization.CultureInfo("id-ID"));
 
         // Header Struk
         strukBuilder.Append(
             "\x1B\x21\x08" + "STRUK PEMBELIAN\n" + "\x1B\x21\x00" +
-            "No: INV-20251019 | Makanan\n" +
-            "19-10-2025. Samsu Bahri\n\n" +
+            $"No: {header.kode_payment} | {header.kategori}\n" +
+            $"{header.tanggal_payment}. {header.kasir}\n\n" +
             "\x1B\x21\x08" + "RINCIAN\n" + "\x1B\x21\x00"
         );
 
-        // Detail Produk (statis dengan format nominal)
-        strukBuilder.Append(
-            "Nasi Goreng Spesial\n" +
-            AlignRight("2x 25.000", FormatNominal(50_000m)) + "\n\n" +
-
-            "Es Teh Manis\n" +
-            AlignRight("1x 8.000", FormatNominal(8_000m)) + "\n\n"
-        );
+        // Detail Produk dari API
+        foreach (var item in receiptData.items)
+        {
+            strukBuilder.Append(
+                $"{item.nama_produk}\n" +
+                AlignRight($"{item.qty}x {FormatNominal(item.harga)}", FormatNominal(item.subtotal_produk)) + "\n\n"
+            );
+        }
 
         // Subtotal dan Total Harga
         strukBuilder.Append(
             "\x1B\x21\x08" + "SUBTOTAL\n" + "\x1B\x21\x00" +
-            AlignRight("Produk", FormatNominal(58_000m)) + "\n" +
-            AlignRight("Take Away", FormatNominal(2_000m)) + "\n" +
-            AlignRight("Service Charge", FormatNominal(3_000m)) + "\n" +
-            AlignRight("PPN Resto", FormatNominal(5_800m)) + "\n" +
-            AlignRight("Promo", FormatNominal(-5_000m)) + "\n\n" +
+            AlignRight("Produk", FormatNominal(header.subtotal)) + "\n"
+        );
+
+        if (header.packing > 0)
+            strukBuilder.Append(AlignRight("Packing", FormatNominal(header.packing)) + "\n");
+        
+        if (header.service > 0)
+            strukBuilder.Append(AlignRight("Service Charge", FormatNominal(header.service)) + "\n");
+        
+        if (header.ppn > 0)
+            strukBuilder.Append(AlignRight("PPN Resto", FormatNominal(header.ppn)) + "\n");
+        
+        if (header.promo > 0)
+            strukBuilder.Append(AlignRight("Promo", "-" + FormatNominal(header.promo)) + "\n");
+        
+        if (header.diskon > 0)
+            strukBuilder.Append(AlignRight("Diskon", "-" + FormatNominal(header.diskon)) + "\n");
+
+        strukBuilder.Append(
+            "\n--------------------------------\n" +
+            "\x1B\x21\x08" + "TOTAL HARGA\n" +
+            "\x1B\x61\x01" +
+            "\x1D\x21\x11" + FormatNominal(header.grand_total) + "\n" +
+            "\x1D\x21\x00" +
+            "\x1B\x61\x00" +
             "--------------------------------\n" +
-            "\x1B\x21\x08" + "TOTAL HARGA\n" +  // Bold
-            "\x1B\x61\x01" +  // Center
-            "\x1D\x21\x11" + FormatNominal(63_800m) + "\n" +  // Font lebih besar
-            "\x1D\x21\x00" +  // Reset ukuran normal
-            "\x1B\x61\x00" +  // Reset align kiri
-            "--------------------------------\n" +
-            AlignRight("Cash", FormatNominal(100_000m)) + "\n" +
-            AlignRight("Kembalian", FormatNominal(36_200m)) + "\n" +
-            "Kasir: Admin\n\n" +
+            AlignRight(header.kategori, FormatNominal(header.jumlah_dibayarkan)) + "\n" +
+            AlignRight("Kembalian", FormatNominal(header.kembalian)) + "\n" +
+            $"Kasir: {header.kasir}\n" +
+            $"Konsumen: {header.nama_konsumen}\n" +
+            $"Mode: {header.mode_pesanan}\n\n" +
             "\x1B\x21\x08" + "Terimakasih atas\npembayaran Anda!\n" + "\x1B\x21\x00" +
-            "19-10-2025 15:30:45" + "\n\n\n"
+            $"{header.tanggal_payment}" + "\n\n\n"
         );
 
         string struk = strukBuilder.ToString();
@@ -127,7 +188,7 @@ public partial class Print1 : ContentPage
 #if ANDROID
         await Print("RPP02N", buffer);
 #else
-    await DisplayAlert("Error", "Bluetooth hanya didukung di Android!", "OK");
+        await DisplayAlert("Error", "Bluetooth hanya didukung di Android!", "OK");
 #endif
     }
 
@@ -178,7 +239,17 @@ public partial class Print1 : ContentPage
 
     private async void Button_Clicked(object sender, EventArgs e)
     {
-        await PrintReceipt();
+        if (string.IsNullOrEmpty(kode_payment))
+        {
+            await DisplayAlert("Error", "Kode payment tidak tersedia", "OK");
+            return;
+        }
+
+        var receiptData = await FetchReceiptData(kode_payment);
+        if (receiptData != null)
+        {
+            await PrintReceipt(receiptData);
+        }
     }
 
 
