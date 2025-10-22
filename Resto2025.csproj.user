@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net8.0-android</ActiveDebugFramework>
-    <ActiveDebugProfile>Nexus 9 - API 35 (Android 15.0 - API 35)</ActiveDebugProfile>
+    <ActiveDebugProfile>ITEL P10003L (Android 14.0 - API 34)</ActiveDebugProfile>
     <SelectedPlatformGroup>Emulator</SelectedPlatformGroup>
     <DefaultDevice>nexus_9_-_api_35</DefaultDevice>
   </PropertyGroup>
