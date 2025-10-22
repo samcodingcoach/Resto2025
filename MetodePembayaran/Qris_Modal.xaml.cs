@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
+using Resto2025.Struk;
 
 namespace Resto2025.MetodePembayaran;
 
@@ -209,6 +210,16 @@ public partial class Qris_Modal : Popup
             // Stop auto check timer dan QR expired timer
             StopAutoCheckTimer();
             StopCountdownTimer();
+
+            try
+            {
+                var printer = new Print1();
+                await printer.PrintByKodeAsync(kode_payment);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error saat print struk QRIS: {ex.Message}");
+            }
             
             // Tampilkan info sukses di UI dan mulai countdown 5 detik untuk tutup modal
             MainThread.BeginInvokeOnMainThread(() =>

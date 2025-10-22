@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.ApplicationModel;
 using Newtonsoft.Json;
 using SkiaSharp;
+using Resto2025.Struk;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -367,6 +368,8 @@ public partial class TransferBank_Modal : Popup
                 {
                     // Kirim hasil sukses ke halaman sebelumnya
                     _onResultReceived?.Invoke(true, responseObject.message?.ToString() ?? "Data pembayaran berhasil disimpan");
+                    var printer = new Print1();
+                    await printer.PrintByKodeAsync(KODE_PAYMENT);
                     Close();
                 }
                 else
