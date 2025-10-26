@@ -256,7 +256,7 @@ public partial class TransferBank_Modal : Popup
 
     private async void CloseModal_Tapped(object sender, TappedEventArgs e)
     {
-       
+
     }
 
     private void PickerBank_SelectedIndexChanged(object sender, EventArgs e)
@@ -268,6 +268,8 @@ public partial class TransferBank_Modal : Popup
             System.Diagnostics.Debug.WriteLine("Selected Bank: " + selectedBank);
         }
     }
+
+
 
     private async void BTerapkanBank_Clicked(object sender, EventArgs e)
     {

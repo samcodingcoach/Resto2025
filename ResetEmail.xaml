@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Resto2025.ResetEmail" BackgroundColor="#F9F9F9"
+             >
+    <StackLayout Padding="20">
+        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,30,0,0" Padding="10">
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Email" x:Name="L_Email" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" Keyboard="Email" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                <Image Source="email_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+            </StackLayout>
+        </Frame>
+
+        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,10,0,10" Padding="10">
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Nomor Handphone" x:Name="L_NoHp" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" Keyboard="Telephone" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                <Image Source="phone_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+            </StackLayout>
+        </Frame>
+
+        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,10,0,25" Padding="10">
+            <StackLayout Orientation="Horizontal">
+                <Entry Placeholder="Paste Token" x:Name="L_Token" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" Keyboard="Telephone" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                <Image Source="token_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
+            </StackLayout>
+        </Frame>
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+            <Button Text="Batal" Grid.Column="0" HeightRequest="40" CornerRadius="5" TextColor="#333" BackgroundColor="Transparent"></Button>
+            <Button Text="Reset" Grid.Column="1" CornerRadius="5"></Button>
+        </Grid>
+
+    </StackLayout>
+</ContentPage>

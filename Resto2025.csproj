@@ -104,6 +104,9 @@
 	  <MauiXaml Update="MetodePembayaran\Tunai_Modal.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="ResetEmail.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Struk\Print1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
