@@ -2,9 +2,10 @@ using Newtonsoft.Json;
 using System.Text;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using CommunityToolkit.Maui.Views;
 namespace Resto2025;
 
-public partial class ResetEmail : ContentPage
+public partial class ResetEmail : Popup
 {
 	public ResetEmail()
 	{
@@ -25,7 +26,7 @@ public partial class ResetEmail : ContentPage
         string email = L_Email.Text?.Trim();
         if (string.IsNullOrEmpty(email))
         {
-            await DisplayAlert("Error", "Email tidak boleh kosong", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Email tidak boleh kosong", "OK");
             L_Email.Focus();
             return;
         }
@@ -35,7 +36,7 @@ public partial class ResetEmail : ContentPage
         if (!isValidEmail)
         {
           
-            await DisplayAlert("Error", "Format email tidak valid", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Format email tidak valid", "OK");
             L_Email.Focus();
             return;
         }
@@ -44,7 +45,7 @@ public partial class ResetEmail : ContentPage
         string nomorHp = L_NoHp.Text?.Trim();
         if (string.IsNullOrEmpty(nomorHp))
         {
-            await DisplayAlert("Error", "Nomor HP tidak boleh kosong", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Nomor HP tidak boleh kosong", "OK");
             L_NoHp.Focus();
             return;
         }
@@ -53,7 +54,7 @@ public partial class ResetEmail : ContentPage
         bool isNumeric = System.Text.RegularExpressions.Regex.IsMatch(nomorHp, @"^[0-9]+$");
         if (!isNumeric || nomorHp.Length < 10)
         {
-            await DisplayAlert("Error", "Nomor HP harus berupa angka dan minimal 10 digit", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Nomor HP harus berupa angka dan minimal 10 digit", "OK");
             L_NoHp.Focus();
             return;
         }
@@ -64,7 +65,7 @@ public partial class ResetEmail : ContentPage
         }
         else if(B_ResetUbahPassword.Text == "Lihat Password")
         {
-            // await DisplayAlert("Info", "Fitur Ubah Password belum tersedia", "OK");
+            // await Application.Current.MainPage.DisplayAlert("Info", "Fitur Ubah Password belum tersedia", "OK");
             LihatPassword();
         }
 
@@ -94,7 +95,7 @@ public partial class ResetEmail : ContentPage
         if (responseObject?["status"] == "duplikat" || responseObject?["status"] == "error")
         {
 
-            await DisplayAlert("Error", responseObject["message"], "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", responseObject["message"], "OK");
 
         }
         else if (responseObject?["status"] == "success")
@@ -104,7 +105,7 @@ public partial class ResetEmail : ContentPage
             L_Email.Opacity = 0.6;
             L_NoHp.IsEnabled = false;
             L_NoHp.Opacity = 0.6;
-            await DisplayAlert("Success", "Permintaan reset password berhasil. Silakan cek email Anda.", "OK");
+            await Application.Current.MainPage.DisplayAlert("Success", "Permintaan reset password berhasil. Silakan cek email Anda.", "OK");
             Frame_Token.IsVisible = true;
             B_ResetUbahPassword.Text = "Lihat Password";
         }
@@ -118,7 +119,7 @@ public partial class ResetEmail : ContentPage
         string? token = L_Token.Text?.Trim();
         if (string.IsNullOrEmpty(token))
         {
-            await DisplayAlert("Error", "Token tidak boleh kosong", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Token tidak boleh kosong", "OK");
             L_Token.Focus();
             return;
         }
@@ -126,25 +127,25 @@ public partial class ResetEmail : ContentPage
         // Validasi format base64
         if (!IsValidBase64(token))
         {
-            await DisplayAlert("Error", "Format token tidak valid (bukan base64)", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Format token tidak valid (bukan base64)", "OK");
             return;
         }
 
         string phoneNumber = L_NoHp.Text?.Trim();
         if (string.IsNullOrEmpty(phoneNumber))
         {
-            await DisplayAlert("Error", "Nomor HP tidak ditemukan", "OK");
+            await Application.Current.MainPage.DisplayAlert("Error", "Nomor HP tidak ditemukan", "OK");
             return;
         }
 
         try
         {
             string decryptedPassword = DecryptPassword(token, phoneNumber);
-            await DisplayAlert("Password", $"Password: {decryptedPassword}", "OK");
+            await Application.Current.MainPage.DisplayAlert("Password", $"Password: {decryptedPassword}", "OK");
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error",
+            await Application.Current.MainPage.DisplayAlert("Error",
                 $"Dekripsi gagal. Pastikan token dan nomor HP sesuai dengan yang terdaftar.\n\nDetail: {ex.Message}",
                 "OK");
             Debug.WriteLine($"Decryption error: {ex}");

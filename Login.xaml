@@ -141,7 +141,16 @@
                         <!-- Login Button -->
                         <Button Text="LOGIN" TextColor="White" CornerRadius="8" x:Name="B_Login" Clicked="B_Login_Clicked"
                                 Margin="0,30,0,0" HeightRequest="50" VerticalOptions="End" />
-                        
+
+
+                        <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,0">
+                            <Label Text="Lupa Password?" FontSize="Small" VerticalOptions="Center" />
+                            <Label Text=" Reset Disini" FontSize="Small" TextColor="CadetBlue" FontFamily="FontBold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="TapResetPassword" Tapped="TapResetPassword_Tapped"></TapGestureRecognizer>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
                     </StackLayout>
 
                 </StackLayout>

@@ -331,4 +331,9 @@ public partial class Login : ContentPage
             await this.ShowPopupAsync(popup);
         }
     }
+
+    private async void TapResetPassword_Tapped(object sender, TappedEventArgs e)
+    {
+       await this.ShowPopupAsync(new ResetEmail());
+    }
 }
