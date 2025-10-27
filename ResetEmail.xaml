@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Resto2025.ResetEmail" 
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit" 
-             Color="Transparent" Size="390,500"
+             Color="Transparent" Size="390,500" CanBeDismissedByTappingOutsideOfPopup="False"
              >
     <Frame CornerRadius="15" Padding="0" BackgroundColor="#F9F9F9">
         <Grid RowDefinitions="Auto,Auto,*" RowSpacing="10" Padding="20">
@@ -33,12 +33,30 @@
                         <Image Source="token_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
                     </StackLayout>
                 </Frame>
+
+                <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,10,0,25" Padding="15,10" IsVisible="False" x:Name="Frame_Password">
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="10">
+                            <Image Source="icon_info.png" HeightRequest="20" ></Image>
+                            <Label Text="Informasi Password" TranslationY="-2" FontFamily="FontBold"></Label>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
+                            
+                            <Label Text="-" x:Name="L_Pw" FontSize="Subtitle" FontFamily="FontBold" VerticalOptions="Center" TextColor="DeepSkyBlue"></Label>
+                            <Image Source="copy2.png" Opacity="0.3" HeightRequest="24" HorizontalOptions="EndAndExpand">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer x:Name="CopyPassword" Tapped="CopyPassword_Tapped"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
             </StackLayout>
 
 
 
             <Grid Grid.Row="2" VerticalOptions="EndAndExpand" ColumnDefinitions="*,*" ColumnSpacing="10">
-                <Button Text="Batal" Grid.Column="0" HeightRequest="40" CornerRadius="5" TextColor="#333" BackgroundColor="Transparent"></Button>
+                <Button Text="Batal" x:Name="B_Batal" Clicked="B_Batal_Clicked" Grid.Column="0" HeightRequest="40" CornerRadius="5" TextColor="#333" BackgroundColor="Transparent"></Button>
                 <Button Text="Reset" Grid.Column="1" CornerRadius="5" x:Name="B_ResetUbahPassword" Clicked="B_ResetUbahPassword_Clicked"></Button>
             </Grid>
 

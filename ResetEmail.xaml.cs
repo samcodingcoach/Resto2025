@@ -141,7 +141,8 @@ public partial class ResetEmail : Popup
         try
         {
             string decryptedPassword = DecryptPassword(token, phoneNumber);
-            await Application.Current.MainPage.DisplayAlert("Password", $"Password: {decryptedPassword}", "OK");
+            L_Pw.Text = decryptedPassword;
+            Frame_Password.IsVisible = true;
         }
         catch (Exception ex)
         {
@@ -220,4 +221,27 @@ public partial class ResetEmail : Popup
         }
     }
 
+    private async void CopyPassword_Tapped(object sender, TappedEventArgs e)
+    {
+
+
+        if (sender is Image image)
+        {
+            await image.FadeTo(0.3, 100); // Turunkan opacity ke 0.3 dalam 100ms
+            await image.FadeTo(1, 200);   // Kembalikan opacity ke 1 dalam 200ms
+        }
+
+        // Salin password ke clipboard
+        string? pw = L_Pw.Text?.Trim();
+        if (!string.IsNullOrEmpty(pw))
+        {
+            await Clipboard.Default.SetTextAsync(pw);
+            await Application.Current.MainPage.DisplayAlert("Info", "Password telah disalin ke clipboard", "OK");
+        }
+    }
+
+    private async void B_Batal_Clicked(object sender, EventArgs e)
+    {
+        Close();
+    }
 }
