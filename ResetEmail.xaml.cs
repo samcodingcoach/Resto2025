@@ -62,9 +62,10 @@ public partial class ResetEmail : ContentPage
         {
             request_pw();
         }
-        else if(B_ResetUbahPassword.Text == "Ubah Password")
+        else if(B_ResetUbahPassword.Text == "Lihat Password")
         {
-            await DisplayAlert("Info", "Fitur Ubah Password belum tersedia", "OK");
+            // await DisplayAlert("Info", "Fitur Ubah Password belum tersedia", "OK");
+            LihatPassword();
         }
 
     }
@@ -109,20 +110,113 @@ public partial class ResetEmail : ContentPage
         }
     }
 
+   
+
+
     private async void LihatPassword()
     {
-        //validasi input token tidak boleh kosong
-        string token = L_Token.Text?.Trim();
+        string? token = L_Token.Text?.Trim();
         if (string.IsNullOrEmpty(token))
         {
-            await DisplayAlert("Error", "Token tidak boleh kosong", "OK");  
+            await DisplayAlert("Error", "Token tidak boleh kosong", "OK");
             L_Token.Focus();
             return;
         }
 
+        // Validasi format base64
+        if (!IsValidBase64(token))
+        {
+            await DisplayAlert("Error", "Format token tidak valid (bukan base64)", "OK");
+            return;
+        }
+
+        string phoneNumber = L_NoHp.Text?.Trim();
+        if (string.IsNullOrEmpty(phoneNumber))
+        {
+            await DisplayAlert("Error", "Nomor HP tidak ditemukan", "OK");
+            return;
+        }
+
+        try
+        {
+            string decryptedPassword = DecryptPassword(token, phoneNumber);
+            await DisplayAlert("Password", $"Password: {decryptedPassword}", "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error",
+                $"Dekripsi gagal. Pastikan token dan nomor HP sesuai dengan yang terdaftar.\n\nDetail: {ex.Message}",
+                "OK");
+            Debug.WriteLine($"Decryption error: {ex}");
+        }
+    }
 
 
-        await DisplayAlert("Info", "Fitur Lihat Password belum tersedia", "OK");
+    private string DecryptPassword(string encryptedPassword, string key)
+    {
+        try
+        {
+            using (var aes = System.Security.Cryptography.Aes.Create())
+            {
+                aes.KeySize = 256;
+                aes.Mode = System.Security.Cryptography.CipherMode.CBC;
+                aes.Padding = System.Security.Cryptography.PaddingMode.PKCS7;
+
+                // Generate IV: hash SHA256, ambil 16 char pertama hex string, convert ke bytes
+                using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                {
+                    byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(key));
+
+                    // Convert hash ke hex string (seperti PHP hash())
+                    string hashHex = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
+                    // Ambil 16 karakter pertama, convert ke bytes (ini jadi 16 bytes)
+                    string ivHexString = hashHex.Substring(0, 16);
+                    byte[] iv = Encoding.UTF8.GetBytes(ivHexString);
+                    aes.IV = iv;
+
+                    // Key: gunakan key raw langsung, tapi perlu pad/truncate ke 32 bytes
+                    byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+                    byte[] aesKey = new byte[32]; // AES-256 needs 32 bytes
+
+                    // Jika key lebih pendek dari 32 bytes, akan di-pad dengan 0
+                    // Jika lebih panjang, akan di-truncate
+                    Array.Copy(keyBytes, 0, aesKey, 0, Math.Min(keyBytes.Length, 32));
+                    aes.Key = aesKey;
+                }
+
+                // Decode base64 string
+                byte[] encryptedBytes = Convert.FromBase64String(encryptedPassword);
+
+                // Decrypt
+                using (var decryptor = aes.CreateDecryptor())
+                {
+                    byte[] decryptedBytes = decryptor.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
+                    return Encoding.UTF8.GetString(decryptedBytes);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Dekripsi gagal: {ex.Message}", ex);
+        }
+    }
+
+
+    private bool IsValidBase64(string base64String)
+    {
+        if (string.IsNullOrEmpty(base64String))
+            return false;
+
+        try
+        {
+            Convert.FromBase64String(base64String);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
 }
