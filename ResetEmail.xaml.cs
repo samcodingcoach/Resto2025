@@ -109,4 +109,20 @@ public partial class ResetEmail : ContentPage
         }
     }
 
+    private async void LihatPassword()
+    {
+        //validasi input token tidak boleh kosong
+        string token = L_Token.Text?.Trim();
+        if (string.IsNullOrEmpty(token))
+        {
+            await DisplayAlert("Error", "Token tidak boleh kosong", "OK");  
+            L_Token.Focus();
+            return;
+        }
+
+
+
+        await DisplayAlert("Info", "Fitur Lihat Password belum tersedia", "OK");
+    }
+
 }
