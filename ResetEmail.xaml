@@ -18,7 +18,7 @@
             </StackLayout>
         </Frame>
 
-        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,10,0,25" Padding="10">
+        <Frame BorderColor="#E0E0E0" CornerRadius="8" Margin="0,10,0,25" Padding="10" IsVisible="False" x:Name="Frame_Token">
             <StackLayout Orientation="Horizontal">
                 <Entry Placeholder="Paste Token" x:Name="L_Token" PlaceholderColor="#999999" ClearButtonVisibility="WhileEditing" Keyboard="Telephone" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
                 <Image Source="token_icon.png" WidthRequest="24" HeightRequest="24"  Margin="10,0,0,0" />
@@ -27,7 +27,7 @@
 
         <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
             <Button Text="Batal" Grid.Column="0" HeightRequest="40" CornerRadius="5" TextColor="#333" BackgroundColor="Transparent"></Button>
-            <Button Text="Reset" Grid.Column="1" CornerRadius="5"></Button>
+            <Button Text="Reset" Grid.Column="1" CornerRadius="5" x:Name="B_ResetUbahPassword" Clicked="B_ResetUbahPassword_Clicked"></Button>
         </Grid>
 
     </StackLayout>
